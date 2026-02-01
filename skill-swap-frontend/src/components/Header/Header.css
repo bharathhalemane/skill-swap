@@ -1,0 +1,109 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #FCFAF7;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+}
+
+.swap-icon-con {
+    margin-inline-end: 8px;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #E8724B, #F5A623);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.swap-icon {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.logo span {
+    color: #E8724B;
+    background: linear-gradient(90deg, #E8724B, #F5A623);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #E8724B;
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+}
+
+.auth-links a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.sign-up button {
+    color: #fff;
+    background-image: linear-gradient(to right, #E8724B, #F5A623);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.sign-up button:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.login button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+}
+
+.login button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    background-color: #e2e1e0;
+    border: none;
+    outline: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px
+}
