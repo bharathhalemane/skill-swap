@@ -2,6 +2,7 @@ import Header from "../Header/Header";
 import './Dashboard.css'
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import SkillCard from '../Utils/SkillCard/SkillCard';
 
 const categories = [
     { name: "Technology", icon: "💻", count: 234 },
@@ -13,7 +14,7 @@ const categories = [
     { name: "Business", icon: "💼", count: 156 },
     { name: "Cooking", icon: "🍳", count: 134 },
 ];
-const mockSkills = [
+const featuredSkills = [
     {
         id: "1",
         title: "Web Development with React & TypeScript",
@@ -116,20 +117,19 @@ const Dashboard = () => {
              <section className="skills-section">
                 <div className="container">
                     <div className="skills-header">
-                    <div className="head-section">
-                        <h2 className="">Featured Skills</h2>
-                        <p className="">
-                        Discover top-rated skills from our community's best teachers.
-                        </p>
-                    </div>
-                    <Button variant="outline" asChild>
+                        <div className="head-section">
+                            <h2 className="">Featured Skills</h2>
+                            <p className="">
+                            Discover top-rated skills from our community's best teachers.
+                            </p>
+                        </div>
+                        
                         <Link to="/browse">
-                        View All Skills
-                        <FaArrowRight className="" />
+                            <button className="view-all-button">View All Skills <FaArrowRight className="arrow-icon" /></button>
                         </Link>
-                    </Button>
+                        
                     </div>
-                    <div className="">
+                    <div className="skills-grid">
                     {featuredSkills.map((skill) => (
                         <SkillCard key={skill.id} {...skill} />
                     ))}
