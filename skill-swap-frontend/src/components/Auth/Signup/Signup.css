@@ -1,0 +1,244 @@
+
+
+.signup-page {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.input-container {
+    padding: 40px;
+    border-radius: 8px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 2rem;
+    color: #000;
+}
+
+.swap-icon-con {
+    margin-inline-end: 8px;
+    border-radius: 13px;
+    background-image: linear-gradient(to right, #E8724B, #F5A623);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.swap-icon {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.logo span {
+    color: #E8724B;
+    background: linear-gradient(90deg, #E8724B, #F5A623);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.welcome-text h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #000000;
+    font-weight: 600;
+}
+
+.welcome-text p {
+    margin: 0;
+    font-size: 1rem;
+    color: #666666;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.email-input-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.input-with-icon {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 8px;
+    background-color: transparent;
+}
+
+.input-icon{
+    color: #888;
+    font-size: 1.2rem;
+}
+
+input{
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: transparent;
+}
+
+.password-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.password-forgot-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.password-container .forgot-password {
+    font-size: 0.9rem;
+    color: #E8724B;
+    text-decoration: none;
+}
+
+.signup-button{
+    width: 100%;
+    padding: 12px;
+    background-image: linear-gradient(to right, #E8724B, #F5A623);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.signup-button:hover{
+    background-image: linear-gradient(to right, #d9613b, #e08c2a);
+    scale: 1.05;
+}
+
+.or{
+    text-align: center;
+    color: #999;
+    margin: 10px 0;
+    font-size: 0.8rem;
+}
+
+.social-login-container {
+    display: flex;
+    gap: 15px;
+}
+
+.btn{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #E8724B;
+    padding: 10px;
+    border: 1px solid #E8724B;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-image: linear-gradient(to right, #E8724B, #F5A623);
+    color: #fff;
+    border: none;
+    scale: 1.05;
+}
+
+
+.login-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.login-text a {
+    color: #E8724B;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-section{
+    display: none;
+}
+
+.error-message{
+    color: red;
+    font-size: 0.8rem;
+    margin-top: -5px;
+}
+
+@media (min-width: 580px) {    
+    .input-container {
+        width: 50%;
+        padding: 20px;
+        display: flex;        
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .welcome-text h1{
+        text-align: center;
+    }
+
+    .form-container{
+        width: 400px;
+    }
+
+
+    .signup-section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        width: 50%;
+        padding: 40px;
+        height: 100vh;
+        background-image: linear-gradient(135deg, #E8724B, #F5A623);
+    }
+
+    
+    .logo-icon-container{
+        background-color: #ffffff43;
+        padding: 20px;
+        border-radius: 20%;
+    }
+
+    .swap-icon{
+        font-size: 2rem;
+    }
+    .signup-section h1{
+        color: #fff;
+        font-size: 2rem;
+        text-align: center;
+    }
+    .signup-section p{
+        color: #fff;
+        font-size: 1rem;
+        text-align: center;
+        max-width: 300px;
+    }
+}

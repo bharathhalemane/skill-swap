@@ -2,44 +2,45 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import './Dashboard.css'
 import { FaArrowRight } from "react-icons/fa";
-import { LuCoins, LuBookOpen, LuGraduationCap, LuUsers,LuCalendar} from "react-icons/lu";
+import { LuCoins, LuBookOpen, LuGraduationCap, LuUsers, LuCalendar } from "react-icons/lu";
 import { Link } from 'react-router-dom';
+import useScrollReveal from "../Utils/useScrollReveal";
 
 const categories = [
-  { name: "Academics", icon: "📚", count: 312 },
-  { name: "Technology", icon: "💻", count: 234 },
-  { name: "Languages", icon: "🌍", count: 198 },
-  { name: "Career", icon: "💼", count: 156 },
-  { name: "Music", icon: "🎵", count: 145 },
-  { name: "Wellness", icon: "🧘", count: 123 },
-  { name: "Design", icon: "🎨", count: 98 },
-  { name: "Sports", icon: "⚽", count: 87 },
+    { name: "Academics", icon: "📚", count: 312 },
+    { name: "Technology", icon: "💻", count: 234 },
+    { name: "Languages", icon: "🌍", count: 198 },
+    { name: "Career", icon: "💼", count: 156 },
+    { name: "Music", icon: "🎵", count: 145 },
+    { name: "Wellness", icon: "🧘", count: 123 },
+    { name: "Design", icon: "🎨", count: 98 },
+    { name: "Sports", icon: "⚽", count: 87 },
 ];
 
 
 const features = [
     {
-      icon: LuCoins,
-      title: "Credit System",
-      description: "Earn credits by teaching, spend them to learn. Fair exchange for everyone.",
+        icon: LuCoins,
+        title: "Credit System",
+        description: "Earn credits by teaching, spend them to learn. Fair exchange for everyone.",
     },
     {
-      icon: LuUsers,
-      title: "Study Groups",
-      description: "Join or create study groups for collaborative learning with classmates.",
+        icon: LuUsers,
+        title: "Study Groups",
+        description: "Join or create study groups for collaborative learning with classmates.",
     },
     {
-      icon: LuCalendar,
-      title: "Schedule Sync",
-      description: "Set availability around your class schedule. No conflicts, just learning.",
+        icon: LuCalendar,
+        title: "Schedule Sync",
+        description: "Set availability around your class schedule. No conflicts, just learning.",
     },
     {
-      icon: LuGraduationCap,
-      title: "Campus Only",
-      description: "Connect exclusively with students from your university. Safe & verified.",
+        icon: LuGraduationCap,
+        title: "Campus Only",
+        description: "Connect exclusively with students from your university. Safe & verified.",
     },
 ];
-  
+
 const featuredSkills = [
     {
         id: "1",
@@ -104,25 +105,29 @@ const featuredSkills = [
 
 const howItWorksSteps = [
     {
-    step: "01",
-    title: "Teach What You Know",
-    description: "Share your skills—tutor a subject, teach guitar, help with essays. Earn credits for every session.",
-    icon: LuBookOpen,
+        step: "01",
+        title: "Teach What You Know",
+        description: "Share your skills—tutor a subject, teach guitar, help with essays. Earn credits for every session.",
+        icon: LuBookOpen,
     },
     {
-    step: "02",
-    title: "Earn Credits",
-    description: "Get 1-4 credits per session based on duration and complexity. Build up your balance.",
-    icon: LuCoins,
+        step: "02",
+        title: "Earn Credits",
+        description: "Get 1-4 credits per session based on duration and complexity. Build up your balance.",
+        icon: LuCoins,
     },
     {
-    step: "03",
-    title: "Learn Something New",
-    description: "Spend credits to learn from other students. Python, Spanish, photography—anything!",
-    icon: LuGraduationCap,
+        step: "03",
+        title: "Learn Something New",
+        description: "Spend credits to learn from other students. Python, Spanish, photography—anything!",
+        icon: LuGraduationCap,
     },
 ]
 const Dashboard = () => {
+    const howitworksRef = useScrollReveal();
+    const categoriesRef = useScrollReveal();
+    const featuresRef = useScrollReveal();
+    const spaceRef = useScrollReveal();
     return (
         <div className="dashboard-page">
             <Header />
@@ -135,10 +140,10 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="how-it-works-section">
+            <section className="how-it-works-section reveal" ref={howitworksRef}>
                 <div className="container">
                     <div className="head-section">
-                        <h2 className="">How SkillSwap Works</h2>   
+                        <h2 className="">How SkillSwap Works</h2>
                         <p>No money needed. Teach to earn credits, spend credits to learn new skills. It's that simple.</p>
                     </div>
                     <div className="how-it-works-steps">
@@ -152,7 +157,7 @@ const Dashboard = () => {
                                         <h3 className="step-title"> {title}</h3>
                                         <p className="step-description">{description}</p>
                                     </div>
-                                    <h1 className="step-num">{step }</h1>
+                                    <h1 className="step-num">{step}</h1>
                                 </div>
                             ))
                         }
@@ -160,7 +165,7 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="categories-section">
+            <section className="categories-section reveal" ref={categoriesRef}>
                 <div className="container">
                     <div className="head-section">
                         <h2 className="">Explore Categories</h2>
@@ -185,8 +190,8 @@ const Dashboard = () => {
                     </div>
                 </div>
             </section>
-            
-            <section className="features-section">
+
+            <section className="features-section reveal" ref={featuresRef}>
                 <div className="container">
                     <div className="head-section">
                         <h2 className="">Platform Features</h2>
@@ -206,13 +211,13 @@ const Dashboard = () => {
                         ))}
                     </div>
                 </div>
-            </section>             
+            </section>
 
-            <section className="spacer-section">
+            <section className="spacer-section reveal" ref={spaceRef}>
                 <div className="container">
                     <h2>Ready to Start Learning?</h2>
                     <p>Join your campus community. Sign up with your email and start swapping skills today.</p>
-                    <button>Get Started Free</button>
+                    <a href="/signup" className="get-started-button">Get Started Free</a>
                 </div>
             </section>
             <Footer />
@@ -221,24 +226,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-
-// <section className="skills-section">
-//                 <div className="container">
-//                     <div className="skills-header">
-//                         <div className="head-section">
-//                             <h2 className="">Featured Skills</h2>
-//                             <p className="">
-//                             Discover top-rated skills from our community's best teachers.
-//                             </p>
-//                         </div>                        
-//                         <Link to="/browse">
-//                             <button className="view-all-button">View All Skills <FaArrowRight className="arrow-icon" /></button>
-//                         </Link>                        
-//                     </div>
-//                     <div className="skills-grid">
-//                     {featuredSkills.map((skill) => (
-//                         <SkillCard key={skill.id} {...skill} />
-//                     ))}
-//                     </div>
-//                 </div>
-//                 </section>

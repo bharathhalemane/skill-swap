@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Dashboard from "./components/Dashboard/Dashboard"
 import BrowseSkills from './components/BrowseSkills/BrowseSkills'
-import HowItWorks from './components/HowItWorks/HowItWorks'
+import Login from './components/Auth/Login/Login'
+import Signup from './components/Auth/Signup/Signup'
 import './App.css'
 
 function App() {
@@ -9,8 +10,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/browse-skills" element={<BrowseSkills />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/browse-skills" element={<BrowseSkills />} />    
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   )
