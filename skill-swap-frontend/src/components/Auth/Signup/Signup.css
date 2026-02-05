@@ -190,6 +190,12 @@ input{
     margin-top: -5px;
 }
 
+.toggle-password-btn{
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
 @media (min-width: 580px) {    
     .input-container {
         width: 50%;

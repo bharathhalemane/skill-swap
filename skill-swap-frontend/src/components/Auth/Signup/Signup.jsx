@@ -2,9 +2,10 @@ import { IoMdSwap } from "react-icons/io";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { FiLock, FiMail } from "react-icons/fi";
 import { GoPerson } from "react-icons/go";
+import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import "./Signup.css";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
 
 const ApiURL = import.meta.env.VITE_AUTH_API_URL;
@@ -17,6 +18,8 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [passwordShow, setPasswordShow] = useState(false);
+    const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
 
     const onChangeFullname = e => {
         setFullname(e.target.value);
@@ -36,6 +39,14 @@ const Signup = () => {
 
     const onSubmitSuccess = () => {
         navigate("/login");
+    }
+
+    const onClickPasswordShow = () => {
+        setPasswordShow(prevState => !prevState);
+    }
+
+    const onClickConfirmPasswordShow = () => {
+        setConfirmPasswordShow(prevState => !prevState);
     }
 
     const onSubmitForm = async e => {
@@ -100,6 +111,7 @@ const Signup = () => {
                 </div>
                 <form className="form-container" onSubmit={onSubmitForm}>
                     <div className="username-input-container">
+                        
                         <label htmlFor="username">Full Name</label>
                         <div className="input-with-icon">
                             <GoPerson className="input-icon" />
@@ -117,14 +129,16 @@ const Signup = () => {
                         <label htmlFor="password">Password</label>
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
-                            <input type="password" id="password" placeholder="*************" value={password} onChange={onChangePassword} />
+                            <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************" value={password} onChange={onChangePassword} />
+                            <button className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <div className="password-container">
                         <label htmlFor="confirm-password">Confirm Password</label>
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
-                            <input type="password" id="confirm-password" placeholder="*************" value={confirmPassword} onChange={onChangeConfirmPassword} />
+                            <input type={confirmPasswordShow ? "text" : "password"} id="confirm-password" placeholder="*************" value={confirmPassword} onChange={onChangeConfirmPassword} />
+                            <button className="toggle-password-btn" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <button type="submit" className="signup-button">Create Free Account</button>

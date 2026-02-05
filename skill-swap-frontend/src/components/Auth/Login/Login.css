@@ -116,6 +116,7 @@ input{
     font-size: 0.9rem;
     color: #E8724B;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .login-button{
@@ -182,6 +183,12 @@ input{
 
 .login-section{
     display: none;
+}
+
+.error-message{
+    color: red;
+    font-size: 0.8rem;
+    margin-top: -5px;
 }
 
 @media (min-width: 580px) {    
