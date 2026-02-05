@@ -77,7 +77,8 @@ const Signup = () => {
                 setError(true)
             }
         } catch (err) {
-            console.error(err.message)
+            setErrorMessage("Sorry, we are fixing try after sometime")
+            setError(true)   
         }
     }
 

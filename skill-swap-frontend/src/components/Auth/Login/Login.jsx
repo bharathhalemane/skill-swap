@@ -20,7 +20,7 @@ const Login = () => {
         setEmail(e.target.value);
     }
     const onChangePassword = e => {
-        setPassword(e.target.value);
+        setPassword(e.target.value);        
     }
 
     const onClickPasswordShow = () => {
@@ -58,7 +58,8 @@ const Login = () => {
                 setError(true)
             }
         } catch (err) {
-            console.error(err.message)
+            setErrorMessage("Sorry, we are fixing try after sometime")
+            setError(true)   
         }
         
     }
