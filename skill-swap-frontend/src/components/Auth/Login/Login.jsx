@@ -27,8 +27,9 @@ const Login = () => {
         setPasswordShow(prevState => !prevState);
     }
     
-    const onSubmitSuccess = (jwtToken) => {
-        Cookies.set('jwt_token', jwtToken, {expires: 30})
+    const onSubmitSuccess = (data) => {
+        Cookies.set('jwt_token', data.jwtToken, { expires: 1 })
+        Cookies.set("userId", data.userId, {expires: 1})
         navigate("/home", {replace: true});
     }
 
@@ -52,7 +53,7 @@ const Login = () => {
                 setErrorMessage('')
                 setEmail('')
                 setPassword('')
-                onSubmitSuccess(data.jwtToken)
+                onSubmitSuccess(data)
             } else {
                 setErrorMessage(data.message)
                 setError(true)

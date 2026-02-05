@@ -38,7 +38,9 @@ const Signup = () => {
     }
 
     const onSubmitSuccess = () => {
-        navigate("/login");
+        Cookies.set('jwt_token', data.jwtToken, { expires: 1 })
+        Cookies.set("userId", data.userId, {expires: 1})
+        navigate("/home", {replace: true});
     }
 
     const onClickPasswordShow = () => {
@@ -71,7 +73,7 @@ const Signup = () => {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword('')
-                onSubmitSuccess()
+                onSubmitSuccess(data)
             } else {
                 setErrorMessage(data.message)
                 setError(true)

@@ -3,9 +3,9 @@ import { LuMail, LuGithub, LuLinkedin } from "react-icons/lu";
 import './Footer.css'
 
 const contact = [
-    { icon: <LuMail />, link: "mailto:bharathhalemane143@gmail.com" },
+    { icon: <LuMail />, link: "mailto:bharath.halemane.00@gmail.com" },
     { icon: <LuGithub />, link: "https://github.com/bharathhalemane/skill-swap.git" },
-    { icon: <LuLinkedin />, link: "https://www.linkedin.com/in/bharath-halemane-2b4b621b4/" }
+    { icon: <LuLinkedin />, link: "https://www.linkedin.com/in/bharath-halemane-841010287"}
 ]
 const Footer = () => {
     return (
