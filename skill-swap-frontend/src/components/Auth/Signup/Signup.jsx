@@ -133,7 +133,7 @@ const Signup = () => {
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************" value={password} onChange={onChangePassword} />
-                            <button className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button className="toggle-password-btn" type="button" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <div className="password-container">
@@ -141,7 +141,7 @@ const Signup = () => {
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={confirmPasswordShow ? "text" : "password"} id="confirm-password" placeholder="*************" value={confirmPassword} onChange={onChangeConfirmPassword} />
-                            <button className="toggle-password-btn" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button className="toggle-password-btn" type="button" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <button type="submit" className="signup-button">Create Free Account</button>

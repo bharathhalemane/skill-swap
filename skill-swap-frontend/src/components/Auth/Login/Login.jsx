@@ -124,7 +124,7 @@ const Login = () => {
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************"  value={password} onChange={onChangePassword} />
-                            <button className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button className="toggle-password-btn" type='button' onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                         
                     </div>
