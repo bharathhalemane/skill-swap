@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "auth-backend": "file:..",
     "dotenv": "^17.2.3",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.563.0",
