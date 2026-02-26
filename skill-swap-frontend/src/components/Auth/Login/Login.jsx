@@ -2,8 +2,9 @@ import { IoMdSwap } from "react-icons/io";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { FiLock, FiMail } from "react-icons/fi";
 import {useState} from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
+import Cookies from "js-cookie"
 import "./Login.css";
 
 const ApiURL = import.meta.env.VITE_AUTH_API_URL;
@@ -30,7 +31,7 @@ const Login = () => {
     const onSubmitSuccess = (data) => {
         Cookies.set('jwt_token', data.jwtToken, { expires: 1 })
         Cookies.set("userId", data.userId, {expires: 1})
-        navigate("/home", {replace: true});
+        navigate(`/find-skills?token=${data.jwtToken}&userId=${data.userId}`, {replace: true})        
     }
 
     const onSubmitForm = async e => {
@@ -48,7 +49,6 @@ const Login = () => {
             const response = await fetch(url, options)
             const data = await response.json()
             if (response.ok) {
-                console.log("User registered successfully:", data)
                 setError(false)
                 setErrorMessage('')
                 setEmail('')
@@ -92,7 +92,7 @@ const Login = () => {
                 setError(true)  
             }
         } catch (err) {
-            console.log(err.message)
+            setErrorMessage("error")
         }
     }
     return (

@@ -6,7 +6,6 @@ const sendEmail = require('../utils/sendEmail')
 
 exports.signup = async (req, res) => {
     try {
-          console.log('REQ BODY 👉', req.body)
         const { name, email, password, confirmPassword } = req.body || {};
         
 
@@ -32,7 +31,6 @@ exports.signup = async (req, res) => {
 
         res.status(201).json({ message: "User registered successfully", userId: newUser._id});
     } catch (err) {
-         console.error("SIGNUP ERROR 👉", err);
         res.status(500).json({ message: "Server error" });
     }
 }
@@ -62,7 +60,6 @@ exports.login = async (req, res) => {
 
         res.status(200).json({ jwt_token, userId: user._id });
     } catch (err) {
-        console.error("login ERROR 👉", err);
         res.status(500).json({ message: "Server error" });
     }
 }
@@ -96,7 +93,7 @@ exports.forgotPassword = async (req, res) => {
             <h2>Password Reset</h2>
             <p>You requested a password reset.</p>
             <p>Click the link below to reset your password:</p>
-            <a href="${resetUrl}">${resetUrl}</a>
+            <a href="${resetUrl}">Reset Password</a>
             <p>This link expires in 15 minutes.</p>
         `
 
@@ -108,9 +105,8 @@ exports.forgotPassword = async (req, res) => {
 
 
         res.json({message: "Password reset link sent to email if it exists"})
-        console.log(`Password reset link: ${resetUrl}`)
+        
     } catch (error) {
-        console.error('❌ EMAIL ERROR:', error) 
         res.status(500).json({
             message: 'Internal Server Error',
             error: error.message

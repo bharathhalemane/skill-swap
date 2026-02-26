@@ -5,7 +5,6 @@ const BrowseSkills = () => {
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")
 
-    console.log(token, userId)    
     return (
         <div>
             <HomeHeader />
