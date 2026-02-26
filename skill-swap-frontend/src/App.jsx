@@ -4,6 +4,7 @@ import BrowseSkills from './components/BrowseSkills/BrowseSkills'
 import Login from './components/Auth/Login/Login'
 import Signup from './components/Auth/Signup/Signup'
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
+import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
 import './App.css'
 
 function App() {
