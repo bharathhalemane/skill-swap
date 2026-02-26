@@ -93,6 +93,7 @@ exports.forgotPassword = async (req, res) => {
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
 
         const message = `
+            <h1>SkillSwap</h1>
             <h2>Password Reset</h2>
             <p>You requested a password reset.</p>
             <p>Click the link below to reset your password:</p>
