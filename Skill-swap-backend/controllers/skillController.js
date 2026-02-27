@@ -2,11 +2,19 @@ const Skill = require("../models/Skill")
 
 exports.getAllSkills = async (req, res) => {
     try {
-        const { category } = req.query
+        const { category, level, inputValue } = req.query
     
         let filter = {}
         if (category) {
-          filter.category = category
+          filter.category= { $regex: category, $options: "i" }
+        }
+
+        if (level) {
+            filter.level = {$regex: level, $options: 'i'}
+        }
+
+        if (inputValue) {
+            filter.title = {$regex: inputValue, $options: "i"}
         }
     
         const skills = await Skill.find(filter)    

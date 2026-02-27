@@ -1,0 +1,119 @@
+.browse-skill-page{
+    padding-top: 90px;    
+    color: #000;
+}
+
+.dashboard-section{
+    background-color: #FBF6EF;
+    padding: 30px;
+}
+
+.dashboard-section h1{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dashboard-section p{
+    font-size: 15px;
+    color: #a99f98;
+    width: 500px;
+}
+
+/* Main Section */
+.filter-section {
+  background-color: #ffffff;
+  padding: 20px 30px;  
+  font-family: "Segoe UI", sans-serif;
+  border-bottom: 1px solid #a99f98;  
+}
+
+/* Top Container */
+.input-filter-container {
+    display: flex;
+    gap: 20px;
+    align-items: center !important;
+}
+
+/* Search Input */
+.input-filter-container .skill-input-container{
+    border-radius: 12px;
+    border: 1px solid #ddd;    
+    padding: 10px;    
+    outline: none;
+    background-color: #ffffff;
+    transition: 0.2s ease;
+    width: 300px !important;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+.skill-input-container input {
+  border: none;
+}
+
+
+/* Category List */
+.categories-list {
+  list-style: none;
+  display: flex;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+/* Category Button */
+.category-filter-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid #ff7a59;
+  background-color: #fff;
+  color: #ff7a59;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Active Category */
+.category-filter-btn.active,
+.category-filter-btn:hover {
+  background-color: #ff7a59;
+  color: #fff;
+}
+
+/* Level Section */
+.level-filter-container {
+  margin-top: 18px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.level-filter-container ul {
+  list-style: none;
+  display: flex;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+/* Level Button */
+.level-filter-btn {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid #d6d6d6;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.level-filter-btn:hover,
+.level-filter-btn.active {
+  border-color: #ff7a59;
+  color: #ff7a59;
+  background-color: #fff5f2;
+}
