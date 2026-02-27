@@ -21,10 +21,14 @@
 
 /* Main Section */
 .filter-section {
-  background-color: #ffffff;
+  background-color: #ffffff31;
   padding: 20px 30px;  
   font-family: "Segoe UI", sans-serif;
   border-bottom: 1px solid #a99f98;  
+
+  position: sticky;
+  top: 90px;
+  z-index: 1000;
 }
 
 /* Top Container */
@@ -120,4 +124,9 @@
 
 .d-none{
     display: none;
+}
+
+.empty-section{
+    background-color: #333;
+    height: 100vh;
 }

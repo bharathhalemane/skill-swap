@@ -27,6 +27,7 @@ const BrowseSkills = () => {
     const [category, setCategory] = useState("")
     const [level, setLevel] = useState("")
     const [inputValue, setInputValue] = useState("")
+    const [skillData, setSkillData] = useState([])
 
     const onChangeInputValue = e => {
         setInputValue(e.target.value)
@@ -51,7 +52,10 @@ const BrowseSkills = () => {
                 method: "GET"
             }
             const response = await fetch(url, option)
-            const data =await response.json()
+            if(response.ok){
+                const data =await response.json()
+                setSkillData(data)
+            }
             console.log(data)
         } catch {
             console.log(err)
@@ -66,7 +70,7 @@ const BrowseSkills = () => {
 
 
     return (
-        <div>
+        <>
             <HomeHeader />
             <div className="browse-skill-page">
                 <div className="dashboard-section">
@@ -101,7 +105,10 @@ const BrowseSkills = () => {
                     </ul>
                 </div>
             </div>
-        </div>
+            <div className="empty-section">
+                <h1>Showing {skillData.length} Skills</h1>
+            </div>
+        </>
     )
 }
 
