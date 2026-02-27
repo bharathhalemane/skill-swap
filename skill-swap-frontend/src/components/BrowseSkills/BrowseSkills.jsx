@@ -40,6 +40,9 @@ const BrowseSkills = () => {
         setLevel(e.target.value)
     }
 
+    const onClearLevel = () => {
+        setLevel("")
+    }
     const getSkillData = async () => {
         try{
             const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}`
@@ -94,6 +97,7 @@ const BrowseSkills = () => {
                                 <li><button className={`level-filter-btn ${each.name === level ? "active" : ""}`} value={each.name} onClick={onChangeLevel}>{each.name}</button></li>
                             ))
                         }
+                        <li><button className={`level-filter-btn ${level? "" :"d-none"}`} onClick={onClearLevel}>Clear Filter</button></li>
                     </ul>
                 </div>
             </div>

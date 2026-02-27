@@ -117,3 +117,7 @@
   color: #ff7a59;
   background-color: #fff5f2;
 }
+
+.d-none{
+    display: none;
+}
