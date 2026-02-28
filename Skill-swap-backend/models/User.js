@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    jwt_token : {
+    jwt_token: {        
         type: String,        
     },
     googleId: {
@@ -30,7 +30,24 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordExpire: {
         type: Date,
-    }    
+    },
+    profile: {
+        name: {
+            type: String
+        },
+        userName: {
+            type:String
+        },
+        location: {
+            type:String
+        },
+        bio: {
+            type: String
+        },
+        profileImage: {
+            type: String
+        }
+    }
 },
 {timestamps: true})
 

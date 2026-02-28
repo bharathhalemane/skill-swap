@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import './SkillCard.css'
 
-const SkillCard = props => {
+const SkillCard = ({skillsData}) => {
     const {
         id,
         title,
@@ -13,7 +13,7 @@ const SkillCard = props => {
         rating,
         reviews,
         duration
-    } = props;
+    } =skillsData;
     return (
     <Link
       to={`/skill/${id}`}

@@ -1,9 +1,12 @@
 import { useSearchParams } from 'react-router-dom'
 import HomeHeader from '../Header/HomeHeader'
+import Footer from '../Footer/Footer'
 import './BrowseSkills.css'
 import { useState, useEffect } from "react"
 import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import SkillCard from '../Utils/SkillCard/SkillCard';
+
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
     { name: "Technology", icon: "💻", count: 234 },
@@ -84,7 +87,7 @@ const BrowseSkills = () => {
                         <MdSearch size={20}/>
                         <input type="search" placeholder='Search Skills...' value={inputValue} onChange={onChangeInputValue} />
                     </div>
-                    <ul className='categories-list'>
+                    <ul className='categories-filter-list'>
                         <li><button className={`category-filter-btn ${category === "" ? "active" : ""}`} onClick={onChangeCategory} value="">All</button></li>
                         {
                             categories.map(each => (
@@ -105,9 +108,17 @@ const BrowseSkills = () => {
                     </ul>
                 </div>
             </div>
-            <div className="empty-section">
-                <h1>Showing {skillData.length} Skills</h1>
+            <div className="skills-section">
+                <h1 className='skills-length'>Showing { skillData.length} Skills</h1>
+                <ul className="skills-list">
+                    {
+                        skillData.map(each => (
+                            <li key={each.id}><SkillCard skillsData={each} /></li>
+                        ))
+                    }
+                </ul>
             </div>
+            <Footer/>
         </>
     )
 }

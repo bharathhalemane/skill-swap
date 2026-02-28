@@ -3,7 +3,7 @@ const dotenv = require("dotenv")
 const connectDB = require("./config/db")
 const cors = require("cors")
 const passport = require("passport")
-const uploadRoutes = require("./routes/upload")
+const userRoutes = require("./routes/user")
 const skillsRoutes = require("./routes/skillsRoutes")
 const authRoutes = require("./routes/authRoutes")
 
@@ -22,7 +22,7 @@ app.use(passport.initialize())
 
 app.use("/api/auth", authRoutes)
 app.use("/api/skills", skillsRoutes)
-app.use("/api/profile", uploadRoutes)
+app.use("/api/profile", userRoutes)
 
 
 const PORT = process.env.PORT || 5000

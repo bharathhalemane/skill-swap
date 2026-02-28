@@ -21,7 +21,7 @@
 
 /* Main Section */
 .filter-section {
-  background-color: #ffffff31;
+  background-color: #ffffff81;  
   padding: 20px 30px;  
   font-family: "Segoe UI", sans-serif;
   border-bottom: 1px solid #a99f98;  
@@ -58,7 +58,7 @@
 
 
 /* Category List */
-.categories-list {
+.categories-filter-list {
   list-style: none;
   display: flex;
   gap: 14px;
@@ -126,7 +126,18 @@
     display: none;
 }
 
-.empty-section{
-    background-color: #333;
-    height: 100vh;
+.skills-section{    
+    padding: 20px 10px;
+    background-color: #FCFAF7;    
+}
+
+.skills-list{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  
+}
+
+.skills-length{
+  color: #333;
+  padding: 20px;
 }

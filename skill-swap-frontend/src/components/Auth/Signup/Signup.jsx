@@ -38,7 +38,7 @@ const Signup = () => {
     }
 
     const onSubmitSuccess = () => {
-        Cookies.set('jwt_token', data.jwtToken, { expires: 1 })
+        Cookies.set('jwtToken', data.jwtToken, { expires: 1 })
         Cookies.set("userId", data.userId, {expires: 1})
         navigate("/home", {replace: true});
     }
@@ -66,7 +66,6 @@ const Signup = () => {
             const response = await fetch(url, options)
             const data = await response.json()
             if (response.ok) {
-                console.log("User registered successfully:", data)
                 setError(false)
                 setErrorMessage('')
                 setFullname('')

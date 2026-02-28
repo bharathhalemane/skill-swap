@@ -1,0 +1,12 @@
+.categories-list{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    text-align: center;    
+    gap: 30px;
+    padding: 30px;
+}
+
+.features-list{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
