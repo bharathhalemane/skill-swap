@@ -18,7 +18,7 @@ router.get("/google/callback", passport.authenticate("google", { session: false 
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });    
 
     res.redirect(
-      `${process.env.FRONTEND_URL}/find-skills?token=${jwtToken}&userId=${req.user._id}` 
+      `${process.env.FRONTEND_URL}/home?token=${jwtToken}&userId=${req.user._id}` 
     )
 })
 
@@ -31,7 +31,7 @@ router.get('/github/callback', passport.authenticate('github', { session: false 
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });    
 
     res.redirect(
-      `${process.env.FRONTEND_URL}/find-skills?token=${jwtToken}&userId=${req.user._id}` //This URL should match your frontend URL
+      `${process.env.FRONTEND_URL}/home?token=${jwtToken}&userId=${req.user._id}` //This URL should match your frontend URL
     )
 })
 
