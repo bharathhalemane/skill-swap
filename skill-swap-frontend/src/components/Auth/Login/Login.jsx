@@ -31,7 +31,7 @@ const Login = () => {
     const onSubmitSuccess = (data) => {
         Cookies.set('jwtToken', data.jwt_token, { expires: 1 })
         Cookies.set("userId", data.userId, {expires: 1})
-        navigate(`/find-skills?token=${data.jwt_token}&userId=${data.userId}`, {replace: true})        
+        navigate(`/home?token=${data.jwt_token}&userId=${data.userId}`, {replace: true})        
     }
 
     const onSubmitForm = async e => {
