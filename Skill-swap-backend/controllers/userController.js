@@ -3,7 +3,7 @@ const cloudinary = require("../config/cloudinary")
 
 exports.getProfile = async (req, res) => {
     try {
-        const userId = req.uesr.userId 
+        const userId = req.user.userId 
 
         const user = await User.findById(userId).select("-password")
 
