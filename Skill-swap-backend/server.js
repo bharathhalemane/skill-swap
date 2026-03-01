@@ -10,7 +10,6 @@ const authRoutes = require("./routes/authRoutes")
 dotenv.config()
 
 require("./config/passport")
-
 connectDB()
 
 const app = express()

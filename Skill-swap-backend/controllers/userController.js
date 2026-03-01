@@ -23,7 +23,7 @@ exports.updateProfile = async (req, res) => {
 
         if (req.file) {
             const uploadToCloudinary = () => {
-                return new promise((resolve, reject) => {
+                return new Promise((resolve, reject) => {
                     const stream = cloudinary.uploader.upload_stream(
                         {
                             folder: "skill-swap/profile-images",
