@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaCamera } from "react-icons/fa";
@@ -7,6 +7,7 @@ import Cookies from "js-cookie"
 import axios from "axios"
 
 const EditProfileModel = () => {
+  const token = Cookies.get("jwtToken")
   const [isOpen, setIsOpen] = useState(false)
   const [preview, setPreview] = useState(null)
   const [profileData, setProfileData] = useState({
@@ -16,7 +17,6 @@ const EditProfileModel = () => {
     bio: "",
     image: ""
   })
-
   const handleImageChange = e => {
     const file = e.target.files[0]
     if (file) {
@@ -27,7 +27,6 @@ const EditProfileModel = () => {
 
   const onSubmitProfileDetails = async (e) => {
     e.preventDefault()
-    const token = Cookies.get("jwtToken")
     try {
       const url = `${import.meta.env.VITE_PROFILE_API}/profile-update`
       const formData = new FormData()

@@ -11,8 +11,7 @@ exports.getProfile = async (req, res) => {
             return res.status(404).json({message: "User not Found"})
         }
 
-        res.status(200).json({
-            message: "Profile fetched successfully",
+        res.status(200).json({            
             user
         })
     } catch (error) {
