@@ -12,7 +12,7 @@ const EditProfileModel = () => {
   const [preview, setPreview] = useState(null)
   const [profileData, setProfileData] = useState({
     name: "",
-    userName: "",
+    username: "",
     location: "",
     bio: "",
     image: ""
@@ -32,11 +32,11 @@ const EditProfileModel = () => {
       const formData = new FormData()
 
       formData.append("name", profileData.name)
-      formData.append("userName", profileData.userName)
+      formData.append("username", profileData.username)
       formData.append("location", profileData.location)
       formData.append("bio", profileData.bio)
       if (profileData.image) {
-        formData.append("profileImage", profileData.image) // real File object
+        formData.append("profile_image", profileData.image) // real File object
       }
 
       await axios.put(
@@ -110,7 +110,7 @@ const EditProfileModel = () => {
 
           <div className="form-group">
             <label>Username</label>
-            <input type="text" placeholder="Username" value={profileData.userName} onChange={e => setProfileData(prevState => ({ ...prevState, userName: e.target.value }))} />
+            <input type="text" placeholder="Username" value={profileData.username} onChange={e => setProfileData(prevState => ({ ...prevState, userName: e.target.value }))} />
           </div>
 
           <div className="form-group">

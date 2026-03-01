@@ -18,7 +18,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`
             }
         })
-        console.log(response)
+        console.log(response.data.user)
         } catch (err) {
         console.log(err)
         }

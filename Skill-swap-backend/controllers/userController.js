@@ -71,10 +71,10 @@ exports.updateProfile = async (req, res) => {
          const updateData = {}
 
         if (name) updateData.name = name
-        if (userName) updateData["profile.userName"] = userName
+        if (userName) updateData["profile.username"] = userName
         if (location) updateData["profile.location"] = location
         if (bio) updateData["profile.bio"] = bio
-        if (imageUrl) updateData["profile.profileImage"] = imageUrl
+        if (imageUrl) updateData["profile.profile_image"] = imageUrl
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
