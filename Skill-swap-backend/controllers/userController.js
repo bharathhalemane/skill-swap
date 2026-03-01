@@ -1,6 +1,28 @@
 const User = require("../models/User")
 const cloudinary = require("../config/cloudinary")
 
+exports.getProfile = async (req, res) => {
+    try {
+        const userId = req.uesr.userId 
+
+        const user = await User.findById(userId).select("-password")
+
+        if (!user) {
+            return res.status(404).json({message: "User not Found"})
+        }
+
+        res.status(200).json({
+            message: "Profile fetched successfully",
+            user
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error",
+            error: error.message
+        })
+    }
+}
+
 exports.updateProfile = async (req, res) => {
     try {
         const userId = req.user.userId
