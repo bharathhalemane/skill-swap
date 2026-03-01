@@ -5,6 +5,7 @@ import { useState } from "react"
 import EditProfileModal from "./EditProfileModel"
 
 const Profile = () => {
+    
     return <>
         <HomeHeader />
         <div className='profile-page'>

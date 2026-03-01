@@ -5,7 +5,28 @@ import { FaCamera } from "react-icons/fa";
 ReactModal.setAppElement("#root");
 
 const EditProfileModel = () =>{
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)  
+  const [profileData, setProfileData] = useState({
+    name:"",
+    username:"",
+    location:"",
+    bio:"",
+    image:""
+  })
+
+  const handleImageChange = e => {
+    const file = e.target.files[0]
+    if(file) {
+      const imageUrl = URL.createObjectURL(file)
+      setProfileData(prevState => ({...prevState, image: imageUrl}))
+    }
+  }
+
+  const onSubmitProfileDetails = e => {
+    e.preventDefault()     
+    console.log(profileData)
+  }
+  
   
     return (
       <div>
@@ -35,43 +56,44 @@ const EditProfileModel = () =>{
         >
           <h3 className="modal-title">Edit Profile</h3>
 
-            <form className="profile-update-form">
+            <form className="profile-update-form" onSubmit={onSubmitProfileDetails}>
 
             {/* Profile Image Section */}
             <div className="profile-image-wrapper">
                 <label className="avatar-container">
-                    <BsPersonCircle className="avatar-icon" />
+                <div>{profileData.image ? <img src={profileData.image} className="profile-selected-image"/> : <BsPersonCircle className="avatar-icon" />}</div>
 
                     <div className="camera-icon">
                     <FaCamera />
                     </div>
 
                     <input
-                    type="file"
-                    className="profile-image-input"
-                    accept="image/*"
+                      type="file"
+                      className="profile-image-input"
+                      accept="image/*"
+                      onChange={handleImageChange}
                     />
                 </label>
             </div>
 
             <div className="form-group">
                 <label>Name</label>
-                <input type="text" placeholder="Name" />
+          <input type="text" placeholder="Name" value={profileData.name} onChange={e => setProfileData(prevState => ({...prevState, name: e.target.value}))}/>
             </div>
 
             <div className="form-group">
                 <label>Username</label>
-                <input type="text" placeholder="Username" />
+              <input type="text" placeholder="Username" value={profileData.username} onChange={e => setProfileData(prevState => ({...prevState, username: e.target.value}))}/>
             </div>
 
             <div className="form-group">
                 <label>Location</label>
-                <input type="text" placeholder="Location" />
+              <input type="text" placeholder="Location" value={profileData.location} onChange={e => setProfileData(prevState => ({...prevState, location: e.target.value}))} />
             </div>
 
             <div className="form-group">
                 <label>Bio</label>
-                <textarea placeholder="Bio"></textarea>
+              <textarea placeholder="Bio" value={profileData.bio} onChange={e => setProfileData(prevState => ({...prevState, bio: e.target.value}))}></textarea>
             </div>
 
             <div className="modal-buttons">

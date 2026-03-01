@@ -46,6 +46,12 @@
     color: #ff7a00;
 }
 
+.profile-selected-image{
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+}
+
 /* Camera icon */
 .camera-icon {
     position: absolute;
