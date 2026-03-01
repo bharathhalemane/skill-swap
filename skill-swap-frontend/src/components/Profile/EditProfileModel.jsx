@@ -110,7 +110,7 @@ const EditProfileModel = () => {
 
           <div className="form-group">
             <label>Username</label>
-            <input type="text" placeholder="Username" value={profileData.username} onChange={e => setProfileData(prevState => ({ ...prevState, userName: e.target.value }))} />
+            <input type="text" placeholder="Username" value={profileData.username} onChange={e => setProfileData(prevState => ({ ...prevState, username: e.target.value }))} />
           </div>
 
           <div className="form-group">

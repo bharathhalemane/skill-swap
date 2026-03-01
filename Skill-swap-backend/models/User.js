@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
         name: {
             type: String
         },
-        userName: {
+        username: {
             type:String
         },
         location: {
@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
         bio: {
             type: String
         },
-        profileImage: {
+        profile_image: {
             type: String
         }
     }
