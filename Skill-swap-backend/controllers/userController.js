@@ -28,7 +28,7 @@ exports.updateProfile = async (req, res) => {
 
         const {
             name,
-            userName,
+            username,
             location,
             bio
         } = req.body
@@ -71,7 +71,7 @@ exports.updateProfile = async (req, res) => {
          const updateData = {}
 
         if (name) updateData.name = name
-        if (userName) updateData["profile.username"] = userName
+        if (username) updateData["profile.username"] = username
         if (location) updateData["profile.location"] = location
         if (bio) updateData["profile.bio"] = bio
         if (imageUrl) updateData["profile.profile_image"] = imageUrl
