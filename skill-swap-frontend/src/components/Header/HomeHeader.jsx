@@ -3,6 +3,8 @@ import { IoMdSwap } from "react-icons/io";
 import { IoPersonCircle } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
+import { useState, useEffect } from 'react';
+import axios from "axios"
 
 const HomeHeader = () => {
     const location = useLocation();
@@ -14,6 +16,38 @@ const HomeHeader = () => {
         { href: "/stats", label: "Stats" },
     ];
 
+    const token = Cookies.get("jwtToken")
+    const [profileData, setProfileData] = useState()
+
+
+    const getProfileData = async () => {
+        try {
+            const url = `${import.meta.env.VITE_PROFILE_API}/`
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const data = response.data.user
+            setProfileData({
+                email: data.email,
+                name: data.name,
+                profile: {
+                    username: data.profile.username,
+                    bio: data.profile.bio,
+                    location: data.profile.location,
+                    profileImage : data.profile.profile_image
+                }
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        getProfileData()
+    }, [])
+
     const isActive = (path) => {
         return location.pathname === path ? "active-link" : "";
     }
@@ -22,6 +56,7 @@ const HomeHeader = () => {
         Cookies.remove("jwtToken")
         navigate("/")
     }
+
     return (
         <nav className="header">
             <div className="logo"><div className='swap-icon-con'><IoMdSwap className="swap-icon" /></div><h1>Skill<span>Swap</span></h1></div>
@@ -35,7 +70,11 @@ const HomeHeader = () => {
                 }
             </ul>
             <ul className="auth-links">
-                <li><a href="/profile"><button><IoPersonCircle className="profile-icon" /></button></a></li>
+                <li><a href="/profile"><button>
+                    {
+                        profileData?.profile?.profileImage ? <img src={profileData.profile.profileImage} className='profile-image-icon' /> : <IoPersonCircle className="profile-icon" />
+                    }
+                </button></a></li>
                 <li><button className='logout-btn' onClick={onClickLogout}>LogOut</button></li>
             </ul>
         </nav>
