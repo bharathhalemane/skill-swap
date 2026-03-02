@@ -81,7 +81,7 @@ exports.addSkill = async (req, res) => {
         }
 
         const newSkill = await Skill.create({
-            user: req.user.id,
+            user: req.user.userId,
             title,
             category,
             description,
