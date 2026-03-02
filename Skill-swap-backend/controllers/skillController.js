@@ -91,8 +91,11 @@ exports.addSkill = async (req, res) => {
         })
 
         res.status(201).json(newSkill)        
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({error: "Server error"})
+    }catch (error) {
+        console.error("FULL ERROR OBJECT:", error);
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
     }
 }
