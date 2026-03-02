@@ -26,8 +26,7 @@ const skillSchema = new mongoose.Schema({
     default: "Beginner"
   },
   imageUrl: {
-    type: String,
-    required: "true"
+    type: String,    
   }
 
 }, { timestamps: true })
