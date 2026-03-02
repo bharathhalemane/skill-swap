@@ -17,3 +17,11 @@ const auth = async (req, res, next) => {
 }
 
 module.exports = auth
+
+
+// const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+// //     const user = await User.findById(decoded.id);
+// const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//     const user = await User.findById(decoded.id);
