@@ -10,7 +10,6 @@ const apiProgress = {
 };
 
 const CreateSkillModal = () => {
-
   const token = Cookies.get("jwtToken");
   const [isOpen, setIsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiProgress.success);
@@ -40,9 +39,47 @@ const CreateSkillModal = () => {
     }
   }
 
+  const postSkill = async () => {
+    try {
+      setApiStatus(apiProgress.loading)
+
+      const data = new FormData()
+      data.append("title", formData.title)
+      data.append("category", formData.category)
+      data.append("description", formData.description)
+      data.append("duration", formData.duration)
+      data.append("level", formData.level)
+      data.append("image", formData.image)
+
+      console.log(data)
+
+      const url = `${import.meta.env.VITE_SKILL_API}/add-skill`
+      console.log(url)
+      const response = await axios.post(url, data,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      setFormData({
+        title: "",
+        category: "",
+        description: "",
+        duration: "",
+        level: "Beginner",
+        image: null
+      })
+      setPreview(null)
+      setApiStatus(apiProgress.success)
+      setIsOpen(false)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   const onSubmit = e => {
     e.preventDefault()
-    console.log(formData)
+    postSkill()
   }
 
   return (
@@ -67,7 +104,7 @@ const CreateSkillModal = () => {
                 )
               }
 
-              <input type="file" accept="image/*" className="file-input" onChange={handleImageChange} required/>
+              <input type="file" accept="image/*" name="image" className="file-input" onChange={handleImageChange} required/>
             </label>
           </div>
 
@@ -83,15 +120,20 @@ const CreateSkillModal = () => {
             <label htmlFor="">Category</label>
             <select name="category" id="" value={formData.category} onChange={handleChange} required>
               <option value="">Select a category</option>
-              <option value="Programming">Programming</option>
+              <option value="Languages">Languages</option>
+              <option value="Sports">Sports</option>
               <option value="Design">Design</option>
               <option value="Music">Music</option>
+              <option value="Academics">Academics</option>
+              <option value="Technology">Technology</option>
+              <option value="Career">Career</option>
+              <option value="Wellness">Wellness</option>
             </select>
           </div>
 
           <div className="form-group">
             <label htmlFor="">Description</label>
-            <textarea name="description" id="" placeholder="Describe what you'll teach" value={formData.description} onChange={handleChange}></textarea>
+            <textarea name="description" id="" placeholder="Describe what you'll teach" value={formData.description} onChange={handleChange} required></textarea>
           </div>
 
           <div className="row">
@@ -122,7 +164,7 @@ const CreateSkillModal = () => {
               {apiStatus === apiProgress.loading ? (
                 <TailSpin width={20} height={20} color="#fff" />
               ) : (
-                "Save Changes"
+                "Add Skill"
               )}
             </button>
           </div>

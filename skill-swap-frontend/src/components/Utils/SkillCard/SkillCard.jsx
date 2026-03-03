@@ -5,15 +5,13 @@ const SkillCard = ({skillsData}) => {
     const {
         id,
         title,
-        image,
+        imageUrl,
         category,
         level,
-        description,
-        instructor,
-        rating,
-        reviews,
-        duration
-    } =skillsData;
+      description,        
+        user
+  } = skillsData;
+  const {name, profileImage} = user
     return (
     <Link
       to={`/skill/${id}`}
@@ -21,7 +19,7 @@ const SkillCard = ({skillsData}) => {
     >
       <div className="container">
         <img
-          src={image}
+          src={imageUrl}
           alt={title}
           className="skill-image"
         />
@@ -39,19 +37,19 @@ const SkillCard = ({skillsData}) => {
         </h3>
         <p className="skill-description">
           {description}
-        </p>
-
+          </p>       
         <div className="instructor-info">
           <img
-            src={instructor.avatar}
-            alt={instructor.name}
+            src={profileImage}
+            alt={name}
             className="instructor-avatar"
           />
           <span className="instructor-name">
-            {instructor.name}
+            {name}
           </span>
-        </div>       
-      </div>
+        </div>    
+        </div>
+        
     </Link>
     );
 }

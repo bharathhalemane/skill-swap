@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const skillSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    reg: "User",
+    ref: "User",
     required: true
   },
   title: {
@@ -23,7 +23,8 @@ const skillSchema = new mongoose.Schema({
   level: {
     type: String,
     enum: ["Beginner", "Intermediate", "Advanced"],
-    default: "Beginner"
+    default: "Beginner",
+    required: "true"
   },
   imageUrl: {
     type: String,    

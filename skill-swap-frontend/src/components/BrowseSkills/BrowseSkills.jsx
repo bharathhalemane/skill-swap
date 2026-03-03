@@ -41,7 +41,7 @@ const BrowseSkills = () => {
         setCategory(e.target.value)
     }
 
-    const onChangeLevel = e=> {
+    const onChangeLevel = e => {
         setLevel(e.target.value)
     }
 
@@ -49,26 +49,38 @@ const BrowseSkills = () => {
         setLevel("")
     }
     const getSkillData = async () => {
-        try{
+        try {
             const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}`
             console.log(url)
             const option = {
                 method: "GET"
             }
             const response = await fetch(url, option)
-            if(response.ok){
-                const data =await response.json()
-                setSkillData(data)
+            if (response.ok) {
+                const data = await response.json()
+                const formattedSkills = data.map(skill => ({
+                    id: skill._id,
+                    title: skill.title,
+                    description: skill.description,
+                    duration: skill.duration,
+                    imageUrl: skill.imageUrl,
+                    category: skill.category,
+                    level : skill.level,
+                    user: {
+                        name: skill.user.name,
+                        profileImage: skill.user.profile?.profile_image
+                    }
+                }))                
+                setSkillData(formattedSkills)
             }
-            console.log(data)
         } catch {
             console.log(err)
         }
     }
 
-    useEffect(()=>{        
+    useEffect(() => {
         getSkillData()
-    },[inputValue, category, level])
+    }, [inputValue, category, level])
 
     return (
         <>
@@ -82,7 +94,7 @@ const BrowseSkills = () => {
             <div className="filter-section">
                 <div className="input-filter-container">
                     <div className="skill-input-container">
-                        <MdSearch size={20}/>
+                        <MdSearch size={20} />
                         <input type="search" placeholder='Search Skills...' value={inputValue} onChange={onChangeInputValue} />
                     </div>
                     <ul className='categories-filter-list'>
@@ -102,12 +114,12 @@ const BrowseSkills = () => {
                                 <li><button className={`level-filter-btn ${each.name === level ? "active" : ""}`} value={each.name} onClick={onChangeLevel}>{each.name}</button></li>
                             ))
                         }
-                        <li><button className={`level-filter-btn ${level? "" :"d-none"}`} onClick={onClearLevel}>Clear Filter</button></li>
+                        <li><button className={`level-filter-btn ${level ? "" : "d-none"}`} onClick={onClearLevel}>Clear Filter</button></li>
                     </ul>
                 </div>
             </div>
             <div className="skills-section">
-                <h1 className='skills-length'>Showing { skillData.length} Skills</h1>
+                <h1 className='skills-length'>Showing {skillData.length} Skills</h1>
                 <ul className="skills-list">
                     {
                         skillData.map(each => (
@@ -116,7 +128,7 @@ const BrowseSkills = () => {
                     }
                 </ul>
             </div>
-            <Footer/>
+            <Footer />
         </>
     )
 }

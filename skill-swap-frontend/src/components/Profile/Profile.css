@@ -323,7 +323,7 @@
 }
 
 /* Inputs */
-input,
+.form-group input,
 textarea,
 select {
   padding: 12px 14px;
@@ -334,8 +334,7 @@ select {
   transition: 0.2s ease;
   outline: none;
 }
-
-input:focus,
+.form-group input:focus,
 textarea:focus,
 select:focus {
   border-color: #f08a24;

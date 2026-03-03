@@ -23,7 +23,8 @@ exports.getAllSkills = async (req, res) => {
         }
 
 
-        const skills = await Skill.find(filter)
+        const skills = await Skill.find(filter).populate("user","name profile.profile_image").sort({createdAt: -1})
+
         res.status(200).json(skills)
     } catch (error) {
         res.status(500).json({ message: "Server Error", error })
@@ -44,6 +45,39 @@ exports.getSkillById = async (req, res) => {
     }
 }
 
+
+exports.getSkillsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const skills = await Skill.find({ user: userId })      
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Optional: format clean response
+    const formattedSkills = skills.map(skill => ({
+      id: skill._id,
+      title: skill.title,
+      description: skill.description,
+      imageUrl: skill.imageUrl,
+      category: skill.category,
+      level: skill.level      
+    }));
+
+    res.status(200).json({
+      success: true,
+      count: formattedSkills.length,
+      skills: formattedSkills
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 exports.addSkill = async (req, res) => {
     try {
         const { title, category, description, duration, level } = req.body
@@ -59,7 +93,7 @@ exports.addSkill = async (req, res) => {
                 return new Promise((resolve, reject) => {
                     const stream = cloudinary.uploader.upload_stream(
                         {
-                            folder: "skill-swap/skills",
+                            folder: "skill-swap/skills-image",
                             transformation: [
                                 {
                                     width: 500, height: 500, crop: "fill"
@@ -97,5 +131,84 @@ exports.addSkill = async (req, res) => {
             message: error.message,
             stack: error.stack
         });
+    }
+}
+
+exports.deleteSkill = async (req, res) => {
+    try {
+        const { skillId } = req.params 
+        
+        const skill = await Skill.findById(skillId)
+
+        if (!skill) {
+            return res.status(400).json({
+                success: false,
+                message: "Skill not found"
+            })
+        }
+
+        if (skill.user.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Not authorized to delete this skill"
+            })
+        }
+
+        await skill.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Skill deleted successfully"
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: err.message,
+            success: false
+        })   
+    }
+}
+
+
+exports.updateSkill = async (req, res) => {
+    try {
+        const {skillId} = req.params
+
+        const skill = await Skill.findById(skillId)
+
+        if(!skill){
+            res.status(404).json({
+                success: false,
+                message: "Skill not found"
+            })
+        }
+
+        if (skill.user.toString !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Not authorized to update this skill"
+            })
+        }
+
+        const {title, description, category, level, imageUrl} = req.body 
+
+        skill.title = title ?? skill.title;
+        skill.description = description ?? skill.description 
+        skill.category = category ?? skill.category 
+        skill.level = level ?? skill.level 
+        skill.imageUrl = imageUrl ?? skill.imageUrl
+
+        await skill.save() 
+
+        res.status(200).json({
+            success: true,
+            message: "Skill updated successfully",
+            skill
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
     }
 }
