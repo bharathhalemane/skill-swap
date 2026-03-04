@@ -6,12 +6,16 @@ const ProtectedRoute = ({ children }) => {
   const [searchParams] = useSearchParams();
 
   const urlToken = searchParams.get("token");
+  const userId = searchParams.get("userId")
   const cookieToken = Cookies.get("jwtToken");
 
   // Save token from URL → cookie (only once)
   useEffect(() => {
     if (urlToken && !cookieToken) {
       Cookies.set("jwtToken", urlToken, { expires: 7 });
+    }
+    if (userId) {
+      Cookies.set("userId", userId, {expires: 7})
     }
   }, [urlToken, cookieToken]);
 

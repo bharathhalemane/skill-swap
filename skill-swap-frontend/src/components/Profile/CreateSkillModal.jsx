@@ -9,7 +9,7 @@ const apiProgress = {
   success: "SUCCESS"
 };
 
-const CreateSkillModal = () => {
+const CreateSkillModal = ({buttonTitle}) => {
   const token = Cookies.get("jwtToken");
   const [isOpen, setIsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiProgress.success);
@@ -84,7 +84,7 @@ const CreateSkillModal = () => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>Create Skill</button>
+      <button onClick={() => setIsOpen(true)} className="create-skill-button">+ {buttonTitle}</button>
 
       <CommonModal
         isOpen={isOpen}

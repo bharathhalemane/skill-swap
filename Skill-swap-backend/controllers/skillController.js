@@ -147,7 +147,8 @@ exports.deleteSkill = async (req, res) => {
             })
         }
 
-        if (skill.user.toString() !== req.user.id) {
+        if (skill.user.toString() !== req.user.userId) {
+            
             return res.status(403).json({
                 success: false,
                 message: "Not authorized to delete this skill"
@@ -182,7 +183,7 @@ exports.updateSkill = async (req, res) => {
             })
         }
 
-        if (skill.user.toString !== req.user.id) {
+        if (skill.user.toString !== req.user.userId) {
             return res.status(403).json({
                 success: false,
                 message: "Not authorized to update this skill"

@@ -16,7 +16,7 @@ router.get("/:id", getSkillById)
 router.post("/add-skill", auth, upload.single("image"), addSkill)
 
 //GET SKILL BY USERID
-router.get("/user/:userId", getSkillsByUserId)
+router.get("/user/:userId", auth, getSkillsByUserId)
 
 //DELETE SKILL
 router.delete("/delete/:skillId", auth, deleteSkill)

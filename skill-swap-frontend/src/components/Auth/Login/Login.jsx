@@ -66,6 +66,7 @@ const Login = () => {
     }
 
     const googleCallback = () => {
+        
         window.location.href = `${ApiURL}/google`;
     }
 

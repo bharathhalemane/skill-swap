@@ -10,6 +10,7 @@ import SkillDetails from './SkillDetails'
 
 const Profile = () => {
     const token = Cookies.get("jwtToken")
+    // const userId = Cookies.get("userId")
     const [profileData, setProfileData] = useState()
 
 

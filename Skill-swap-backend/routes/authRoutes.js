@@ -13,7 +13,7 @@ router.get("/google", passport.authenticate("google", {
 
 router.get("/google/callback", passport.authenticate("google", { session: false }),async (req, res) => {
     const payload = {
-        userId: req.user._id,
+        id: req.user._id,
     }
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });    
 
@@ -26,7 +26,7 @@ router.get('/github', passport.authenticate('github', { scope: ['user:email'] })
 
 router.get('/github/callback', passport.authenticate('github', { session: false }),async (req, res) => {
     const payload = {
-        userId: req.user._id,
+        id: req.user._id,
     }
     const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });    
 
