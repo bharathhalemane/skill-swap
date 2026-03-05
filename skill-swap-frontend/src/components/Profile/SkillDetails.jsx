@@ -1,12 +1,13 @@
 import CreateSkillModal from "./CreateSkillModal"
+import EditSkillModal from "./EditSkillModal";
 import { useState, useEffect } from "react"
 import { SlBadge } from "react-icons/sl";
-import { HiMiniPencil } from "react-icons/hi2";
 import { BsTrash } from "react-icons/bs";
 import axios from "axios"
 import Cookies from "js-cookie"
 const SkillDetails = () => {
     const [teachingSkillData, setTeachingSkillData] = useState([])
+    const [changes, setChanges] = useState(false)
     const userId = Cookies.get("userId")
     const token = Cookies.get("jwtToken")
     const getUserSkillData = async () => {
@@ -19,8 +20,10 @@ const SkillDetails = () => {
             })
             console.log(response.data.skills)
             setTeachingSkillData(response.data.skills)
+            setChanges(false)
         } catch (err) {
             console.log(err)
+            setChanges(false)
         }
     }
 
@@ -41,10 +44,10 @@ const SkillDetails = () => {
 
     useEffect(() => {
         getUserSkillData()
-    }, [])
+    }, [changes])
 
     return <div className="skills-details-list">
-        <h1><SlBadge color="#f08a24" />Skills I'm Teaching</h1>
+        <h1 className="skill-details-list-header"><SlBadge color="#f08a24" size={30}/>Skills I'm Teaching</h1>
         <ul>
             {
                 teachingSkillData.map(each => (
@@ -58,7 +61,7 @@ const SkillDetails = () => {
                                 </div>
                             </div>
                             <div className="skill-operation-container">
-                                <HiMiniPencil size={20}/>
+                                <EditSkillModal setChanges={setChanges} skillId={each.id} skillData={each} />
                                 <BsTrash size={25} color="#ff0000" onClick={()=>deleteSkill(each.id)}/>
                             </div>
                         </div>
@@ -68,7 +71,7 @@ const SkillDetails = () => {
         </ul>
         {
             teachingSkillData.length > 0 ?
-                <CreateSkillModal buttonTitle="Add Skill" /> : <CreateSkillModal buttonTitle="Create Skill" />
+                <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} /> : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges}/>
         }
     </div>
 }

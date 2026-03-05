@@ -17,12 +17,13 @@ const HomeHeader = () => {
     ];
 
     const token = Cookies.get("jwtToken")
+    const userId = Cookies.get("userId")
     const [profileData, setProfileData] = useState()
 
 
     const getProfileData = async () => {
         try {
-            const url = `${import.meta.env.VITE_PROFILE_API}/`
+            const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`

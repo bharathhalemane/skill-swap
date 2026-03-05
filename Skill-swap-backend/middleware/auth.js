@@ -7,9 +7,8 @@ const auth = async (req, res, next) => {
     if (!token) { return res.status(401).json({ message: "Unauthorized" }) }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)    
-        console.log(decoded)
-        req.user = decoded;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)            
+        req.user = { "userId" : decoded.id };
         next()
     } catch (err) {
         res.status(401).json({ message: "Invalid token" })
@@ -17,11 +16,3 @@ const auth = async (req, res, next) => {
 }
 
 module.exports = auth
-
-
-// const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-// //     const user = await User.findById(decoded.id);
-// const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//     const user = await User.findById(decoded.id);

@@ -6,7 +6,7 @@ const upload = require("../middleware/upload")
 
 router.put("/profile-update", auth, upload.single("profile_image"), updateProfile)
 
-router.get("/",auth, getProfile)
+router.get("/:userId",auth, getProfile)
 
 module.exports = router 
 

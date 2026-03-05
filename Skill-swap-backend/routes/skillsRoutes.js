@@ -10,7 +10,7 @@ const router = express.Router()
 router.get("/", getAllSkills)
 
 // GET SINGLE SKILL BY ID
-router.get("/:id", getSkillById)
+router.get("/:skillId", getSkillById)
 
 //ADD SKILL
 router.post("/add-skill", auth, upload.single("image"), addSkill)
@@ -22,5 +22,5 @@ router.get("/user/:userId", auth, getSkillsByUserId)
 router.delete("/delete/:skillId", auth, deleteSkill)
 
 //UPDATE SKILL
-router.put("/update/:skillId", auth, updateSkill)
+router.put("/update/:skillId", auth,upload.single("image"), updateSkill)
 module.exports = router

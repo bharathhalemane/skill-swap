@@ -9,7 +9,7 @@ const apiProgress = {
   success: "SUCCESS"
 };
 
-const CreateSkillModal = ({buttonTitle}) => {
+const CreateSkillModal = ({buttonTitle, setChanges}) => {
   const token = Cookies.get("jwtToken");
   const [isOpen, setIsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiProgress.success);
@@ -51,8 +51,6 @@ const CreateSkillModal = ({buttonTitle}) => {
       data.append("level", formData.level)
       data.append("image", formData.image)
 
-      console.log(data)
-
       const url = `${import.meta.env.VITE_SKILL_API}/add-skill`
       console.log(url)
       const response = await axios.post(url, data,{
@@ -71,9 +69,11 @@ const CreateSkillModal = ({buttonTitle}) => {
       })
       setPreview(null)
       setApiStatus(apiProgress.success)
+      setChanges(true)
       setIsOpen(false)
     }catch(err){
       console.log(err)
+      setIsOpen(false)
     }
   }
 
@@ -164,7 +164,7 @@ const CreateSkillModal = ({buttonTitle}) => {
               {apiStatus === apiProgress.loading ? (
                 <TailSpin width={20} height={20} color="#fff" />
               ) : (
-                "Add Skill"
+                buttonTitle
               )}
             </button>
           </div>

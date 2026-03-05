@@ -33,7 +33,7 @@ exports.getAllSkills = async (req, res) => {
 
 exports.getSkillById = async (req, res) => {
     try {
-        const skill = await Skill.findById(req.params.id)
+        const skill = await Skill.findById(req.params.skillId)
 
         if (!skill) {
             return res.status(404).json({ message: "skill not found" })
@@ -175,6 +175,17 @@ exports.updateSkill = async (req, res) => {
         const {skillId} = req.params
 
         const skill = await Skill.findById(skillId)
+        
+        const skillUser = skill.user.toString()
+        const tokenUser = req.user.userId.toString()
+
+
+        if (skillUser !== tokenUser) {
+            return res.status(403).json({
+                success: false,
+                message: "Not authorized to update this skill"
+            })
+        }
 
         if(!skill){
             res.status(404).json({
@@ -183,15 +194,15 @@ exports.updateSkill = async (req, res) => {
             })
         }
 
-        if (skill.user.toString !== req.user.userId) {
+        if (skillUser !== tokenUser) {
             return res.status(403).json({
                 success: false,
                 message: "Not authorized to update this skill"
             })
         }
 
-        const {title, description, category, level, imageUrl} = req.body 
-
+        const { title, description, category, level, imageUrl } = req.body || {}
+        
         skill.title = title ?? skill.title;
         skill.description = description ?? skill.description 
         skill.category = category ?? skill.category 
@@ -207,6 +218,7 @@ exports.updateSkill = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             success: false,
             message: error.message
