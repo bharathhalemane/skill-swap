@@ -3,8 +3,13 @@ import { FiLock } from "react-icons/fi";
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import { useState } from "react"
 import './ResetPassword.css'
-
+import {TailSpin} from "react-loader-spinner"
 const apiURL = import.meta.env.VITE_AUTH_API_URL
+
+const apiProgress = {
+    success: "SUCCESS",
+    loading: "LOADING"
+}
 
 const ResetPassword = () => {
     const [password, setPassword] = useState("")
@@ -14,6 +19,7 @@ const ResetPassword = () => {
     const [error, setError] = useState("")
     const navigate = useNavigate()
     const { token } = useParams()
+    const [apiStatus, setApiStatus] = useState(apiProgress.success)
 
     const onChangePassword = e => {
         setPassword(e.target.value)
@@ -37,6 +43,8 @@ const ResetPassword = () => {
 
     const onSubmitSetPassword = async (e) => {
         e.preventDefault()
+        setError(false)
+        setApiStatus(apiProgress.loading)
         try {
             const url = `${apiURL}/reset-password/${token}`
             const option = {
@@ -53,6 +61,7 @@ const ResetPassword = () => {
             } else {
                 setError(data.message)
             }
+        setApiStatus(apiProgress.success)
         } catch (err) {
             setError("Try again")
         }
@@ -79,7 +88,12 @@ const ResetPassword = () => {
                         <button className="toggle-password-btn" type="button" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                     </div>
                 </div>
-                <button className="submit-btn" type="submit">Reset</button>
+                <button className="submit-btn" type="submit">
+                    {
+                        apiStatus === apiProgress.success ? "Reset Password" :
+                            <TailSpin width={20} height={20} color="#fff"/>
+                    }
+                </button>
                 {error && <p className="error-message">{error}</p>}
             </form>
         </div>

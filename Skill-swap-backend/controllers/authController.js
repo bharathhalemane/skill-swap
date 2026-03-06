@@ -119,7 +119,7 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
     try {
         const {token} = req.params 
-        const {password, confirmPassword} = req.body 
+        const { password, confirmPassword } = req.body         
 
         if (!password || !confirmPassword) {
             return res.status(400).json({message: "password required"})
@@ -138,6 +138,7 @@ exports.resetPassword = async (req, res) => {
             resetPasswordToken: hashedToken,
             resetPasswordExpire: {$gt: Date.now()}
         })
+        
 
         if (!user) {
             return res.status(400).json({message: "Invalid or expired token"})

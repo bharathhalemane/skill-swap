@@ -6,8 +6,14 @@ import { useNavigate} from "react-router-dom"
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import Cookies from "js-cookie"
 import "./Login.css";
+import {TailSpin} from "react-loader-spinner"
 
 const ApiURL = import.meta.env.VITE_AUTH_API_URL;
+
+const apiProgress = {
+    success: "SUCCESS",
+    loading: "LOADING"
+}
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,6 +22,7 @@ const Login = () => {
     const [error, setError]= useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [passwordShow, setPasswordShow] = useState(false);    
+    const [apiStatus, setApiStatus] = useState(apiProgress.success)
 
     const onChangeEmail = e => {
         setEmail(e.target.value);
@@ -36,6 +43,8 @@ const Login = () => {
 
     const onSubmitForm = async e => {
         e.preventDefault()
+        setApiStatus(apiProgress.loading)
+        setError(false)
         try {
             const userDetails = {email:email, password:password,}
             const url = `${ApiURL}/login`
@@ -52,12 +61,13 @@ const Login = () => {
                 setError(false)
                 setErrorMessage('')
                 setEmail('')
-                setPassword('')
+                setPassword('')                
                 onSubmitSuccess(data)
             } else {
                 setErrorMessage(data.message)
                 setError(true)
             }
+        setApiStatus(apiProgress.success)
         } catch (err) {
             setErrorMessage("Sorry, we are fixing try after sometime")
             setError(true)   
@@ -65,8 +75,7 @@ const Login = () => {
         
     }
 
-    const googleCallback = () => {
-        
+    const googleCallback = () => {        
         window.location.href = `${ApiURL}/google`;
     }
 
@@ -74,7 +83,8 @@ const Login = () => {
         window.location.href = `${ApiURL}/github`;
     }
 
-    const onForgetPassword = async() => {
+    const onForgetPassword = async () => {
+        setApiStatus(apiProgress.loading)
         try {
             const url = `${ApiURL}/forgot-password`;
             const options = {
@@ -88,6 +98,7 @@ const Login = () => {
             const data = await response.json()
             if (response.ok) {
                 alert(data.message);
+                setApiStatus(apiProgress.success)
             } else {
                 setErrorMessage(data.message)
                 setError(true)  
@@ -98,7 +109,7 @@ const Login = () => {
     }
     return (
         <div className="login-page">
-            <div className="input-container">
+            <div className="input-container-login">
                 <div className="logo">
                     <div className='swap-icon-con'>
                         <IoMdSwap className="swap-icon" />
@@ -129,7 +140,12 @@ const Login = () => {
                         </div>
                         
                     </div>
-                    <button type="submit" className="login-button">Login</button>
+                    <button type="submit" className="login-button">
+                        {
+                            apiStatus === apiProgress.success ? "Login" :
+                                <TailSpin width={20} height={20} color="#fff"/>
+                        }
+                    </button>
                     {error && <p className="error-message">*{errorMessage}</p>}
                     <p className="or">OR CONTINUE WITH</p>
                     <div className="social-login-container">

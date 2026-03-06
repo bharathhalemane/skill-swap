@@ -6,6 +6,8 @@ const cors = require("cors")
 const passport = require("passport")
 const userRoutes = require("./routes/user")
 const skillsRoutes = require("./routes/skillsRoutes")
+const classScheduleRoutes = require("./routes/classScheduleRoutes")
+const availabilityRoute = require("./routes/availabilityRoutes")
 const authRoutes = require("./routes/authRoutes")
 
 
@@ -22,6 +24,8 @@ app.use(passport.initialize())
 app.use("/api/auth", authRoutes)
 app.use("/api/skills", skillsRoutes)
 app.use("/api/profile", userRoutes)
+app.use("/api/classes", classScheduleRoutes)
+app.use("/api/availability", availabilityRoute)
 
 
 const PORT = process.env.PORT || 5000

@@ -4,11 +4,17 @@ import { FiLock, FiMail } from "react-icons/fi";
 import { GoPerson } from "react-icons/go";
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import "./Signup.css";
+import {TailSpin} from "react-loader-spinner"
 
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
 
 const ApiURL = import.meta.env.VITE_AUTH_API_URL;
+
+const apiProgress = {
+    success: "SUCCESS",
+    loading: "LOADING"
+}
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -20,6 +26,7 @@ const Signup = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [passwordShow, setPasswordShow] = useState(false);
     const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+    const [apiStatus, setApiStatus] = useState(apiProgress.success)
 
     const onChangeFullname = e => {
         setFullname(e.target.value);
@@ -53,6 +60,8 @@ const Signup = () => {
 
     const onSubmitForm = async e => {
         e.preventDefault();
+        setApiStatus(apiProgress.loading)
+        setError(false)
         try {
             const userDetails = {name:fullname, email:email, password:password, confirmPassword:confirmPassword}
             const url = `${ApiURL}/signup`
@@ -77,6 +86,7 @@ const Signup = () => {
                 setErrorMessage(data.message)
                 setError(true)
             }
+        setApiStatus(apiProgress.success)
         } catch (err) {
             setErrorMessage("Sorry, we are fixing try after sometime")
             setError(true)   
@@ -100,7 +110,7 @@ const Signup = () => {
                 <h1>Start Your Learning Journey</h1>
                 <p>Create your account and join a community of passionate learners sharing skills worldwide.</p>
             </div>
-            <div className="input-container">
+            <div className="input-container-signup">
                 <div className="logo">
                     <div className='swap-icon-con'>
                         <IoMdSwap className="swap-icon" />
@@ -143,7 +153,12 @@ const Signup = () => {
                             <button className="toggle-password-btn" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
-                    <button type="submit" className="signup-button">Create Free Account</button>
+                    <button type="submit" className="signup-button">
+                        {
+                            apiStatus === apiProgress.success ? "Create Free Account" :
+                                <TailSpin width={20} height={20} color="#fff"/>
+                        }
+                    </button>
                     {error && <p className="error-message">*{errorMessage}</p>}
                     <p className="or">OR CONTINUE WITH</p>
                     <div className="social-login-container">
