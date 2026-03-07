@@ -18,7 +18,6 @@ const SkillDetails = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log(response.data.skills)
             setTeachingSkillData(response.data.skills)
             setChanges(false)
         } catch (err) {
@@ -30,7 +29,6 @@ const SkillDetails = () => {
     const deleteSkill = async (skillId) => {
         try {
             const url = `${import.meta.env.VITE_SKILL_API}/delete/${skillId}`
-            console.log(url)
             await axios.delete(url, {
                 headers: {
                     Authorization: `Bearer ${token}`

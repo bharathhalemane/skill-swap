@@ -1,0 +1,95 @@
+.class-schedule-section {
+    width: 90%;
+    padding: 20px 5%;
+
+}
+
+.section-header-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.class-schedule-heading h1 {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.class-schedule-heading p {
+    color: #777;
+    font-size: 15px;
+}
+
+.class-add-button {
+    padding: 2px 20px !important;
+    border: 2px solid #ff7a00;
+    border-radius: 10px;
+    color: #ff7a00;
+}
+
+.classes-schedule-table {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.day-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.day-schedule h4 {
+    font-weight: bold;
+    text-align: center;
+    width: 250px;
+    padding: 10px;
+    background-color: #eeeae5;
+    border-radius: 20px;
+}
+
+.class-details {
+    margin: 0;
+    background-color: #F9ECE6;
+    padding: 10px;
+    border: 1px solid #ff7a00;
+    border-radius: 5px;
+    width: 250px;
+    position: relative;
+}
+
+.class-details .edit-btn {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 18px;
+    height: 15px !important;
+    width: 15px;
+    transform: translate(-20%, -30%);
+}
+
+.class-details:hover .edit-btn {
+    display: block;
+}
+
+.class-details p {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.no-class-schedule {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 60px;
+    border-radius: 5px;
+    border: 2px dashed #aba9a9;
+    background-color: #eeeae5;
+}

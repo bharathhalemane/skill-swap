@@ -144,7 +144,7 @@
 
 /* GRADIENT COVER */
 .profile-cover {
-  height: 220px;
+  height: 200px;
   background: linear-gradient(90deg, #ff7a00, #ff9900);
 }
 
@@ -152,7 +152,6 @@
 .profile-details-container {
   position: relative;
   margin-top: -80px;   /* makes profile overlap cover */
-  background: #f4f1ee;
   padding: 40px 80px;
   display: flex;
   align-items: flex-start;
@@ -188,6 +187,7 @@
   font-size: 32px;
   margin-bottom: 5px;
   color: #1d2b3a;
+  font-weight: bold;
 }
 
 .username {
@@ -340,6 +340,12 @@ textarea:focus,
 select:focus {
   border-color: #f08a24;
   box-shadow: 0 0 0 3px rgba(240, 138, 36, 0.15);
+}
+
+.form-group select option:focus{
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 10px;
 }
 
 textarea {
