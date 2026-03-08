@@ -199,7 +199,7 @@ const Dashboard = () => {
                             Designed for students, by students. Everything you need to learn and teach on campus.
                         </p>
                     </div>
-                    <div className="features-list">
+                    <div className="features-list-dashboard">
                         {features.map(({ icon: Icon, title, description }) => (
                             <div key={title} className="feature-card">
                                 <div className="feature-icon">

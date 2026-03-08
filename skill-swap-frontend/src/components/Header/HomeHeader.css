@@ -84,34 +84,50 @@ ul {
     align-items: center;
 }
 
-.auth-links a {
+.auth-links {
     text-decoration: none;
     font-weight: bold;
 }
-.auth-links a .profile-icon {
+.auth-links .profile-icon {
     font-size: 2.5rem;
-    margin-top: 10px;
     color: #E8724B;
     background: linear-gradient(90deg, #E8724B, #F5A623);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     cursor: pointer;
 }
-.auth-links a .profile-icon:hover {
-    scale: 1.2;
-}
-
-.auth-links a .profile-image-icon{
+.auth-links .profile-container{
+    overflow: hidden;
+    position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    margin-top: 5px;
+}
+.auth-links .profile-container .profile-image-icon{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;    
+    object-fit: cover;
 }
 
-.auth-links a .profile-image-icon:hover{
-    scale: 1.2;
+.auth-links .profile-container::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6),
+    transparent)
+}
+.auth-links .profile-container:hover::before{
+    animation: shine 0.8s ease;
 }
 
+@keyframes shine{
+    100%{
+        left: 150%;
+    }
+}
 .logout-btn{
     color: #fff;
     background-image: linear-gradient(to right, #E8724B, #F5A623);

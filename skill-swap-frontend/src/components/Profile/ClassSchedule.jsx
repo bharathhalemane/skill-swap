@@ -196,26 +196,10 @@ const ClassSchedule = () => {
     )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const groupedByDay = DAYS.reduce((acc, day) => {
         acc[day] = classSchedule.filter((c) => c.day === day.slice(0, 3))
         return acc
     }, {})
-
 
 
     return <>

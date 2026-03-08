@@ -48,8 +48,7 @@ const SkillCard = ({skillsData}) => {
             {name}
           </span>
         </div>    
-        </div>
-        
+        </div>        
     </Link>
     );
 }

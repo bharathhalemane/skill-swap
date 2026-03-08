@@ -1,11 +1,15 @@
-.browse-skill-page{
-    padding-top: 90px;    
+.browse-skill-page{    
     color: #000;
+    
 }
 
 .dashboard-section{
-    background-color: #FBF6EF;
-    padding: 30px;
+    background-color: #FBF6EF;    
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
 }
 
 .dashboard-section h1{
@@ -127,7 +131,7 @@
 }
 
 .skills-section{    
-    padding: 20px 10px;
+    padding: 20px 40px;
     background-color: #FCFAF7;    
 }
 
@@ -140,4 +144,33 @@
 .skills-length{
   color: #333;
   padding: 20px;
+}
+
+.pagination-button-container{
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.prev-button{
+  border: 2px solid #ff7a59;
+  color: #ff7a59;
+  border-radius: 10px;
+  outline: none;
+  padding: 10px 20px;  
+}
+
+.next-button{
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #ff7a59;
+  border: none;
+  outline: none;
+}
+
+.button-disable{
+  opacity: 50%;
+  
 }

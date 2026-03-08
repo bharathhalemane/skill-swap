@@ -18,10 +18,11 @@ const HomeHeader = () => {
 
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
-    const [profileData, setProfileData] = useState()
+    const [profileImage, setProfileImage] = useState(null)
 
 
     const getProfileData = async () => {
+        if (!userId || !token) return
         try {
             const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
             const response = await axios.get(url, {
@@ -30,16 +31,7 @@ const HomeHeader = () => {
                 }
             })
             const data = response.data.user
-            setProfileData({
-                email: data.email,
-                name: data.name,
-                profile: {
-                    username: data.profile.username,
-                    bio: data.profile.bio,
-                    location: data.profile.location,
-                    profileImage : data.profile.profile_image
-                }
-            })
+            setProfileImage(response.data.user?.profile?.profile_image)
         } catch (err) {
             console.log(err)
         }
@@ -47,7 +39,7 @@ const HomeHeader = () => {
 
     useEffect(() => {
         getProfileData()
-    }, [])
+    })
 
     const isActive = (path) => {
         return location.pathname === path ? "active-link" : "";
@@ -71,11 +63,11 @@ const HomeHeader = () => {
                 }
             </ul>
             <ul className="auth-links">
-                <li><a href="/profile"><button>
+                <li><Link to="/profile"><div className='profile-container'>
                     {
-                        profileData?.profile?.profileImage ? <img src={profileData.profile.profileImage} className='profile-image-icon' /> : <IoPersonCircle className="profile-icon" />
+                        profileImage ? <img src={profileImage} className='profile-image-icon' /> : <IoPersonCircle className="profile-icon" />
                     }
-                </button></a></li>
+                </div></Link></li>
                 <li><button className='logout-btn' onClick={onClickLogout}>LogOut</button></li>
             </ul>
         </nav>

@@ -23,7 +23,6 @@ exports.getClasses = async (req, res) => {
 }
 
 exports.deleteClasses = async (req, res) => {
-    console.log(req.params.id)
     await ClassSchedule.findByIdAndDelete(req.params.id)
 
     res.json({message : "Class Removed"})

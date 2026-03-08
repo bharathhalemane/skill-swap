@@ -299,6 +299,13 @@ button {
     margin-bottom: 1rem;
 }
 
+.features-list-dashboard{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    gap: 30px;
+    padding: 30px 50px 50px 50px;
+}
+
 .features-list{
     display: grid;
     grid-template-columns: repeat(4, minmax(200px, 1fr));

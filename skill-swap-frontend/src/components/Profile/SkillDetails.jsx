@@ -8,17 +8,22 @@ import Cookies from "js-cookie"
 const SkillDetails = () => {
     const [teachingSkillData, setTeachingSkillData] = useState([])
     const [changes, setChanges] = useState(false)
+    const [totalSkills, setTotalSkills] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1)
     const userId = Cookies.get("userId")
     const token = Cookies.get("jwtToken")
+    const lastPage = Math.ceil(totalSkills / 4)
+
     const getUserSkillData = async () => {
         try {
-            const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}`
+            const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}?page=${currentPage}&limit=4`
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
             setTeachingSkillData(response.data.skills)
+            setTotalSkills(response.data.totalSkills)
             setChanges(false)
         } catch (err) {
             console.log(err)
@@ -42,7 +47,7 @@ const SkillDetails = () => {
 
     useEffect(() => {
         getUserSkillData()
-    }, [changes])
+    }, [changes, currentPage])
 
     return <div className="skills-details-list">
         <h1 className="skill-details-list-header"><SlBadge color="#f08a24" size={30}/>Skills I'm Teaching</h1>
@@ -68,7 +73,13 @@ const SkillDetails = () => {
             }
         </ul>
         {
-            teachingSkillData.length > 0 ?
+            totalSkills > 0 ? <div className="pagination-button-container">
+            <button className={`prev-button ${currentPage===1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
+            <button className={`next-button ${currentPage===lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
+        </div> : null
+        }
+        {
+            teachingSkillData.length > 4 ?
                 <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} /> : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges}/>
         }
     </div>

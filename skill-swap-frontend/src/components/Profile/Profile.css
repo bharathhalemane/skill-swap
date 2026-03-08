@@ -1,5 +1,4 @@
 .profile-page {    
-    padding-top: 90px;
     background-color: #F4F1EE;
 }
 
@@ -144,7 +143,7 @@
 
 /* GRADIENT COVER */
 .profile-cover {
-  height: 200px;
+  height: 30vh;
   background: linear-gradient(90deg, #ff7a00, #ff9900);
 }
 

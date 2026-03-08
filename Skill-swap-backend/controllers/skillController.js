@@ -3,7 +3,7 @@ const cloudinary = require("../config/cloudinary")
 
 exports.getAllSkills = async (req, res) => {
     try {
-        const { category, level, title } = req.query
+        const { category, level, title, page=1, limit=8 } = req.query
 
         let filter = {}
         if (category) {
@@ -22,10 +22,16 @@ exports.getAllSkills = async (req, res) => {
             }))
         }
 
+        const skip = (page - 1) * limit
+        const skills = await Skill.find(filter)
+            .populate("user", "name profile.profile_image")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(Number(limit))
+        
+        const totalSkills = await Skill.countDocuments(filter)
 
-        const skills = await Skill.find(filter).populate("user","name profile.profile_image").sort({createdAt: -1})
-
-        res.status(200).json(skills)
+        res.status(200).json({ skills, totalSkills })
     } catch (error) {
         res.status(500).json({ message: "Server Error", error })
     }
@@ -48,13 +54,17 @@ exports.getSkillById = async (req, res) => {
 
 exports.getSkillsByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
+      const { userId } = req.params;
+      const {page = 1, limit = 4} = req.query
+      
+      const skip = (page - 1) * limit
 
     const skills = await Skill.find({ user: userId })      
-      .sort({ createdAt: -1 })
-      .lean();
-
-    // Optional: format clean response
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit))
+        .lean();
+      
     const formattedSkills = skills.map(skill => ({
       id: skill._id,
       title: skill.title,
@@ -64,10 +74,13 @@ exports.getSkillsByUserId = async (req, res) => {
       level: skill.level      
     }));
 
+    const totalSkills =await Skill.countDocuments({user : userId})
+
     res.status(200).json({
       success: true,
       count: formattedSkills.length,
-      skills: formattedSkills
+      skills: formattedSkills,
+      totalSkills
     });
 
   } catch (error) {
