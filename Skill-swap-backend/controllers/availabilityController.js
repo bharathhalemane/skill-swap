@@ -1,25 +1,27 @@
 const Availability = require("../models/Availability")
 
 exports.addAvailability = async (req, res) => {
-    const { day, startTime } = req.body 
+    const { day, startTime } = req.body
 
     let availability = await Availability.findOne({
-        user : req.user.userId,
+        user: req.user.userId,
         day
     })
+
+
 
     if (!availability) {
         availability = await Availability.create({
             user: req.user.userId,
             day,
-            slots : [{startTime}]
+            slots: [{ startTime }]
         })
     } else {
         availability.slots.push({ startTime })
         await availability.save()
     }
-
-    res.json(availability)
+    const userTotalSlot = await Availability.find({ user: req.user.userId })
+    res.json(userTotalSlot)
 }
 
 exports.getAvailabilities = async (req, res) => {
@@ -31,17 +33,46 @@ exports.getAvailabilities = async (req, res) => {
 }
 
 exports.deleteAvailabilitySlot = async (req, res) => {
-    const { day, time } = req.params 
-    const availability = await Availability.findOne({
-        user: req.user.userId,
-        day
-    })
+    try {
+        const { slotId } = req.params
+        const availability = await Availability.findOne({
+            user: req.user.userId,
+            "slots._id": slotId
+        }
+        )
 
-    availability.slots = availability.slots.filter(
-        slot => slot.startTime !== time
-    )
+        if (!availability) {
+            return res.status(404).json({ message: "Slot not found" })
+        }
 
-    await availability.save()
+        availability.slots = availability.slots.filter(
+            slot => slot._id.toString() !== slotId
+        )
+        await availability.save()
+        const userTotalSlots = await Availability.find({
+            user: req.user.userId
+        })
+        res.json(userTotalSlots)
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
 
-    res.json(availability)
+exports.deleteAllDaySlots = async (req, res) => {
+    try {
+        const { dayId } = req.params
+        let availability = await Availability.findOneAndDelete({
+            _id: dayId,
+            user: req.user.userId
+        })
+        if (!availability) {
+            return res.status(404).json({ message: "No availability found for this day" })
+        }
+        const userTotalSlots = await Availability.find({
+            user: req.user.userId
+        })
+        res.json(userTotalSlots)
+    } catch (err) {
+        res.status(500).json({error: err.message})
+    }
 }

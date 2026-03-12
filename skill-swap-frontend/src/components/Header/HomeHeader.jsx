@@ -13,7 +13,6 @@ const HomeHeader = () => {
         { href: "/home", label: "Home" },
         { href: "/find-skills", label: "Find Skills" },
         { href: "/study-groups", label: "Study Groups" },
-        { href: "/stats", label: "Stats" },
     ];
 
     const token = Cookies.get("jwtToken")

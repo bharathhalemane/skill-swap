@@ -8,6 +8,7 @@ import axios from "axios"
 import { BsPersonCircle } from "react-icons/bs";
 import SkillDetails from './SkillDetails'
 import ClassSchedule from './ClassSchedule'
+import Availability from './Availability'
 
 const Profile = () => {
     const token = Cookies.get("jwtToken")
@@ -101,7 +102,11 @@ const Profile = () => {
         <div className='profile-page'>
             {ProfileDetails()}
             <SkillDetails />
+            <hr/>
             <ClassSchedule />
+            <hr/>
+            <Availability />
+            <hr />
         </div>
         <Footer />
     </>

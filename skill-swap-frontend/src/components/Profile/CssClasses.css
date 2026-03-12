@@ -93,3 +93,102 @@
     border: 2px dashed #aba9a9;
     background-color: #eeeae5;
 }
+
+.availability-editor-section {
+    margin: 0px 5%;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.availability-editor-section .header-section {
+    display: flex;
+    justify-content: space-between;
+    margin-inline: 20px;
+}
+
+.header-section h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-section button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    border: 2px solid #ff7a00;
+    color: #ff7a00;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+}
+
+.availability-slots{
+    display: flex;
+    align-items: flex-start;
+    margin-block: 20px;
+}
+.availability-slots-day-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;    
+    margin-right: 80px;
+}
+
+.day-slots-list {
+    display: flex;
+    gap: 20px;
+}
+
+.day-slots {
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #3A7878;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.availability-each-day-slots-list{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.no-slot-container-modal{
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #aba9a9;
+}
+
+.slots-list-modal{
+    display: flex;
+    flex-direction: column;
+}
+
+.slot-day{
+    display: flex;
+    justify-content: space-between;
+}
+
+.slot-day button{
+    color: #777;
+}
+
+
+.no-slots-container{
+    color: #aba9a9;
+    text-align: center;
+    width: 100%;
+}

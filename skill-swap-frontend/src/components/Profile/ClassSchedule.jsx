@@ -175,22 +175,22 @@ const ClassSchedule = () => {
                     <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Library" />
                 </div>
                 <div className="modal-buttons">
-                            <button
-                              type="button"
-                              className="cancel-btn"
-                              onClick={() => setIsOpen(false)}
-                            >
-                              Cancel
-                            </button>
-                
-                            <button type="submit" className="save-btn">
-                              {apiStatus === apiProgress.loading ? (
-                                <TailSpin width={20} height={20} color="#fff" />
-                              ) : (
-                                "Create"
-                              )}
-                            </button>
-                          </div>
+                    <button
+                        type="button"
+                        className="cancel-btn"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Cancel
+                    </button>
+        
+                    <button type="submit" className="save-btn">
+                        {apiStatus === apiProgress.loading ? (
+                        <TailSpin width={20} height={20} color="#fff" />
+                        ) : (
+                        "Create"
+                        )}
+                    </button>
+                </div>
             </form>
         </CommonModal>
     )

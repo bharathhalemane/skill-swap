@@ -72,16 +72,18 @@ const SkillDetails = () => {
                 ))
             }
         </ul>
-        {
-            totalSkills > 0 ? <div className="pagination-button-container">
-            <button className={`prev-button ${currentPage===1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
-            <button className={`next-button ${currentPage===lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-        </div> : null
-        }
-        {
-            teachingSkillData.length > 4 ?
-                <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} /> : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges}/>
-        }
+        <div className="create-controller-container">
+            {
+                teachingSkillData.length > 4 ?
+                    <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} /> : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges} />
+            }
+            {
+                totalSkills > 0 ? <div className="pagination-button-container">
+                <button className={`prev-button ${currentPage===1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
+                <button className={`next-button ${currentPage===lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
+            </div> : null
+            }
+        </div>
     </div>
 }
 
