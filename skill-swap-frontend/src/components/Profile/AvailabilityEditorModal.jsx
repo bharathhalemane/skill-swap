@@ -5,6 +5,7 @@ import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../Utils/CommonModal";
 import { LuX, LuClock } from "react-icons/lu";
+import { toast } from "react-toastify";
 
 const apiProgress = {
     loading: "LOADING",
@@ -38,11 +39,11 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                     Authorization: `bearer ${token}`
                 }
             })
-            console.log(response.data)
+            toast.success("Availability Slot Created Successfully!")
             const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
             setData(sorted)
         } catch (err) {
-            console.log(err)
+            toast.error("Something went wrong Retry!")
         }
     }
 
@@ -54,10 +55,11 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                     Authorization: `Bearer ${token}`
                 }
             })            
+            toast.warning("Slot Deleted!")
             const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
             setData(sorted)
         }catch(err){
-            console.log(err)
+            toast.error("Something went wrong Retry!")
         }
     }
 
@@ -69,10 +71,11 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                     Authorization:  `Bearer ${token}`
                 }
             })
+            toast.warning("All slot of that day cleared!!")
             const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
             setData(sorted)
         }catch(err){
-            console.log(err)
+            toast.error("Something went wrong Retry!")
         }
     }
 
@@ -139,14 +142,14 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                                     <li key={each.id}>
                                         <div className="slot-day">
                                             <h1>{each.day}</h1>
-                                            <button onClick={()=>clearAll(each._id)}>clear all</button>
+                                            <button onClick={()=>clearAll(each._id)} className="clear-all-btn">clear all</button>
                                         </div>
-                                        <ul>
+                                        <ul className="each-day-slots-container">
                                             {
                                                 each.slots.map(slot => (
                                                     <li className="day-slots" key={slot._id}>
                                                         <LuClock size={13} />  {slot.startTime}
-                                                        <LuX onClick={() => onDelete(slot._id)} />
+                                                        <LuX onClick={() => onDelete(slot._id)} className="delete-x"/>
                                                     </li>
                                                 ))
                                             }

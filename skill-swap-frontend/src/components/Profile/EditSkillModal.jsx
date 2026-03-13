@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../Utils/CommonModal";
+import { toast } from "react-toastify";
 
 const apiProgress = {
     loading: "LOADING",
@@ -61,12 +62,12 @@ const EditSkillModal = ({ setChanges, skillId, skillData }) => {
                 Authorization: `Bearer ${token}`
             }
         })
-
+        toast.success("Skill edited!")
         setApiStatus(apiProgress.success)
         setChanges(true)
         setIsOpen(false)
     } catch (err) {
-        console.log(err)
+        toast.error("Unable to edit the skill. try Again!!")
         setIsOpen(false)
     }
 }

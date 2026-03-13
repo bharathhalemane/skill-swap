@@ -7,10 +7,14 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
 import Home from './components/Home/Home'
 import Profile from './components/Profile/Profile'
+import {ToastContainer, toast} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 import './App.css'
 
 function App() {
-  return (
+  return (  
+    <>
+    <ToastContainer position="bottom-right" autoClose={2500} theme='dark'/>
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
@@ -27,7 +31,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
-    </Router>
+      </Router>
+    </>
   )
 }
 

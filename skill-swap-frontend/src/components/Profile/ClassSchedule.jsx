@@ -6,6 +6,7 @@ import Cookies from "js-cookie"
 import CommonModal from "../Utils/CommonModal";
 import {TailSpin} from "react-loader-spinner"
 import { TfiLayoutLineSolid } from "react-icons/tfi";
+import { toast } from "react-toastify";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TIMES = [
@@ -47,9 +48,9 @@ const ClassSchedule = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            setClassSchedule(response.data)
+            setClassSchedule(response.data)            
         } catch (err) {
-            console.log(err)
+            toast.error("Unable to get Scheduled Data!")
         }
     }
 
@@ -82,9 +83,10 @@ const ClassSchedule = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            toast.warning("Removed your class schedule!")
             getClassScheduleData()
         } catch (err) {
-            console.log(err)
+            toast.error("Unable to remove your class schedule.")
         }
     }
 
@@ -106,10 +108,11 @@ const ClassSchedule = () => {
                 endTime: "",
                 location: ""
             })
+            toast.success("Scheduled Successfully!")
             setIsOpen(false)
             getClassScheduleData()
         } catch (err) {
-            console.log(err)
+            toast.error("Unable to scheduled your class!")
             setIsOpen(false)
         }
     }
@@ -238,7 +241,7 @@ const ClassSchedule = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="no-class-schedule">
+                            <div className="no-class-schedule" onClick={()=>setIsOpen(true)}>
                                 <span className="">No classes</span>
                             </div>
                         )}

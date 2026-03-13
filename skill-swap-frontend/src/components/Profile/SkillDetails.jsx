@@ -5,6 +5,7 @@ import { SlBadge } from "react-icons/sl";
 import { BsTrash } from "react-icons/bs";
 import axios from "axios"
 import Cookies from "js-cookie"
+import { toast } from "react-toastify";
 const SkillDetails = () => {
     const [teachingSkillData, setTeachingSkillData] = useState([])
     const [changes, setChanges] = useState(false)
@@ -39,9 +40,10 @@ const SkillDetails = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            toast.warning("Skill Deleted Successfully!")
             getUserSkillData()
         } catch (err) {
-            console.log(err)
+            toast.error("Unable to delete Skill Retry!")
         }
     }
 

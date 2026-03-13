@@ -71,6 +71,7 @@ const Login = () => {
         } catch (err) {
             setErrorMessage("Sorry, we are fixing try after sometime")
             setError(true)   
+            setApiStatus(apiProgress.success)
         }
         
     }
@@ -136,7 +137,7 @@ const Login = () => {
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************"  value={password} onChange={onChangePassword} />
-                            <button className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button type="button" className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                         
                     </div>

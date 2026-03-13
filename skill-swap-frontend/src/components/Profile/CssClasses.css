@@ -92,10 +92,11 @@
     border-radius: 5px;
     border: 2px dashed #aba9a9;
     background-color: #eeeae5;
+    cursor: pointer;
 }
 
 .availability-editor-section {
-    margin: 0px 5%;
+    margin: 20px 5%;
     background-color: #fff;
     padding: 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -112,6 +113,23 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.delete-x:hover{
+    background-color: #f14848;
+    color: #fff;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+.each-day-slots-container{
+    overflow: hidden;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.clear-all-btn:hover{
+    color: #f14848;
 }
 
 .header-section button {
@@ -192,3 +210,4 @@
     text-align: center;
     width: 100%;
 }
+

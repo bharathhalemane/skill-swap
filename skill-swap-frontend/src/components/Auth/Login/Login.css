@@ -191,7 +191,9 @@ input{
 .error-message{
     color: red;
     font-size: 0.8rem;
-    margin-top: -5px;
+    margin-top: -2px;
+    text-align: left !important;
+    margin-left: 10px;
 }
 
 @media (min-width: 580px) {    

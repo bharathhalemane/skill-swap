@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../Utils/CommonModal";
+import { toast } from "react-toastify";
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
@@ -69,13 +70,15 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
           Authorization: `Bearer ${token}`
         }
       });
-
+      toast.success("Hurry! your profile updated successfully.")
       setApiStatus(apiProgress.success);
       onProfileUpdated();
       setIsOpen(false);
 
     } catch (err) {
-      console.log("FULL ERROR:", err.response?.data);
+      setApiStatus(apiProgress.success)
+      setIsOpen(false)
+      toast.error("Oops! Something unexpect thing happened. Try Again!")
     }
   };
 
@@ -87,6 +90,7 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="Edit Profile"
+        width="550px"
       >
         <form className="profile-update-form" onSubmit={onSubmitProfileDetails}>
 

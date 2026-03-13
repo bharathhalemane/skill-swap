@@ -105,8 +105,7 @@ const Profile = () => {
             <hr/>
             <ClassSchedule />
             <hr/>
-            <Availability />
-            <hr />
+            <Availability />            
         </div>
         <Footer />
     </>
