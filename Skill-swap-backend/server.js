@@ -9,6 +9,7 @@ const skillsRoutes = require("./routes/skillsRoutes")
 const classScheduleRoutes = require("./routes/classScheduleRoutes")
 const availabilityRoute = require("./routes/availabilityRoutes")
 const authRoutes = require("./routes/authRoutes")
+const requestRoutes = require("./routes/requestRoutes")
 
 
 require("./config/passport")
@@ -26,6 +27,7 @@ app.use("/api/skills", skillsRoutes)
 app.use("/api/profile", userRoutes)
 app.use("/api/classes", classScheduleRoutes)
 app.use("/api/availability", availabilityRoute)
+app.use("/api/requests", requestRoutes)
 
 
 const PORT = process.env.PORT || 5000

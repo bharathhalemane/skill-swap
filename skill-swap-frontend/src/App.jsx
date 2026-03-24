@@ -7,7 +7,8 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
 import Home from './components/Home/Home'
 import Profile from './components/Profile/Profile'
-import {ToastContainer, toast} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
+import SkillPage from './components/Skill/Skillpage'
 import "react-toastify/dist/ReactToastify.css"
 import './App.css'
 
@@ -20,6 +21,9 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/find-skills" element={<ProtectedRoute>
           <BrowseSkills />
+          </ProtectedRoute>} />    
+          <Route path="/skill/:id" element={<ProtectedRoute>
+          <SkillPage />
         </ProtectedRoute>} />    
         <Route path="/home" element={<ProtectedRoute>
           <Home />

@@ -106,7 +106,7 @@ const BrowseSkills = () => {
                             <li><button className={`category-filter-btn ${category === "" ? "active" : ""}`} onClick={onChangeCategory} value="">All</button></li>
                             {
                                 categories.map(each => (
-                                    <li><button className={`category-filter-btn ${category === each.name ? "active" : ""}`} value={each.name} onClick={onChangeCategory}>{each.icon} {each.name}</button></li>
+                                    <li key={ each.name}><button className={`category-filter-btn ${category === each.name ? "active" : ""}`} value={each.name} onClick={onChangeCategory}>{each.icon} {each.name}</button></li>
                                 ))
                             }
                         </ul>
@@ -116,7 +116,7 @@ const BrowseSkills = () => {
                         <ul>
                             {
                                 levels.map(each => (
-                                    <li><button className={`level-filter-btn ${each.name === level ? "active" : ""}`} value={each.name} onClick={onChangeLevel}>{each.name}</button></li>
+                                    <li key={each.name}><button className={`level-filter-btn ${each.name === level ? "active" : ""}`} value={each.name} onClick={onChangeLevel}>{each.name}</button></li>
                                 ))
                             }
                             <li><button className={`level-filter-btn ${level ? "" : "d-none"}`} onClick={onClearLevel}>Clear Filter</button></li>
