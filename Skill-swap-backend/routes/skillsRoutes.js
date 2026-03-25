@@ -1,5 +1,5 @@
 const express = require("express")
-const { getAllSkills,  getSkillById, addSkill, getSkillsByUserId, deleteSkill, updateSkill} = require("../controllers/skillController")
+const { getAllSkills,  getSkillById, addSkill, getSkillsByUserId, deleteSkill, updateSkill, getSkillsOfOwner} = require("../controllers/skillController")
 const upload = require('../middleware/upload')
 const auth = require('../middleware/auth')
 
@@ -8,6 +8,9 @@ const router = express.Router()
 
 // GET ALL SKILLS
 router.get("/", getAllSkills)
+
+//GET SKILLS OF OWNER
+router.get("/owner/:userId", getSkillsOfOwner)
 
 // GET SINGLE SKILL BY ID
 router.get("/:skillId", getSkillById)

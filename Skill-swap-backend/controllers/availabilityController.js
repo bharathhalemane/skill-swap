@@ -24,6 +24,14 @@ exports.addAvailability = async (req, res) => {
     res.json(userTotalSlot)
 }
 
+exports.getAvailabilitiesByUser = async (req, res) => {
+    const { userId } = req.params
+    const data = await Availability.find({
+        user: userId
+    })
+    res.status(200).json(data)
+}
+
 exports.getAvailabilities = async (req, res) => {
     const data = await Availability.find({
         user: req.user.userId

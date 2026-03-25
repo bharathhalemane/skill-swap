@@ -24,7 +24,7 @@ exports.getAllSkills = async (req, res) => {
 
         const skip = (page - 1) * limit
         const skills = await Skill.find(filter)
-            .populate("user", "name profile.profile_image")
+            .populate("user", "name profile.profile_image _id")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(Number(limit))
@@ -40,6 +40,7 @@ exports.getAllSkills = async (req, res) => {
 exports.getSkillById = async (req, res) => {
     try {
         const skill = await Skill.findById(req.params.skillId)
+            .populate("user", "name profile.profile_image _id")
 
         if (!skill) {
             return res.status(404).json({ message: "skill not found" })
@@ -51,6 +52,25 @@ exports.getSkillById = async (req, res) => {
     }
 }
 
+exports.getSkillsOfOwner = async (req, res) => {
+    try {
+        const { userId } = req.params
+        const skills = await Skill.find({ user: userId })
+            .populate("user", "name profile.profile_image _id")
+            .sort({ createdAt: -1 })
+        
+        if(!skills || skills.length === 0){
+            return res.status(404).json({msg: "No Skills found"})
+        }
+
+        res.status(200).json({
+            count: skills.length,
+            skills
+        })
+    } catch (err) {
+        res.status(500).json({msg: err.message})
+    }
+}
 
 exports.getSkillsByUserId = async (req, res) => {
   try {

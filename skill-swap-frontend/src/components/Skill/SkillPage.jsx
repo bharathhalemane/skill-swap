@@ -1,48 +1,73 @@
 import { useParams } from "react-router-dom";
 import HomeHeader from "../Header/HomeHeader";
 import './SkillPage.css';
-import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { sentRequest, getSkillData, allSkillsOfOwner, availabilityOfOwner } from "./SkillApi"
+import SkillInformationCard from "./SkillInformationCard"
+import Skills from "./Skills"
+import Footer from "../Footer/Footer";
+import OwnerAvailability from "./OwnerAvailability";
 
 const SkillPage = () => {
-    const { id } = useParams();
-    const token = Cookies.get("jwtToken");    
+    const { skillId, userId } = useParams();
+    const token = Cookies.get("jwtToken");
+    const [skillData, setSkillData] = useState({})
+    const [availabilityData, setAvailabilityData] = useState([])
+    const [allSkillsData, setAllSkillsData] = useState([])
 
-    const sendRequest = async () => {        
-
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_API}/requests/send`;
-
-            const data = { 
-                skillId: id,
-                message: "I want to learn this skill"
-            };
-
-            const response = await axios.post(url, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });                
-            console.log(response)
-            toast.success("Request sent successfully")
-
-        } catch (err) {            
-            toast.error("already sent!");
-            console.log(err)
+    useEffect(() => {
+        const fetchSkillData = async () =>{
+            const response = await getSkillData(skillId)
+            setSkillData(response.data)
+            
         }
-    };
+
+        const fetchAvailabilityData = async () => {
+            const response = await availabilityOfOwner(userId)
+            setAvailabilityData(response.data)
+        }
+
+        const fetchAllSkillsData = async () => {
+            const response = await allSkillsOfOwner(userId)
+            const formattedSkills = response.data.skills.map(skill => ({
+                    id: skill._id,
+                    title: skill.title,
+                    description: skill.description,
+                    duration: skill.duration,
+                    imageUrl: skill.imageUrl,
+                    category: skill.category,
+                    level: skill.level,
+                    user: {
+                        name: skill.user.name,
+                        profileImage: skill.user.profile?.profile_image,
+                        userId: skill.user._id
+                    }
+                }))
+            setAllSkillsData(formattedSkills)
+            
+        }
+
+
+        fetchSkillData()
+        fetchAvailabilityData()
+        fetchAllSkillsData()
+    }, [skillId])
+
+    const request = () => {
+        const response = sentRequest(skillId)
+    }
+
 
     return (
         <>
             <HomeHeader />
             <div className="skill-page">
-                <h1>Skill ID: {id}</h1>
-
-                <button onClick={sendRequest}>Request</button>
-                
+                <SkillInformationCard data={skillData} />
+                <OwnerAvailability availabilityData={availabilityData} />
+                <Skills skillsData={allSkillsData} skillId={skillId} />                
             </div>
+            <Footer/>
         </>
     );
 };

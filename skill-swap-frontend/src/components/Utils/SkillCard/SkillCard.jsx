@@ -11,10 +11,14 @@ const SkillCard = ({skillsData}) => {
       description,        
         user
   } = skillsData;
-  const {name, profileImage} = user
+  const { name, profileImage, userId, profile } = user
+  let profile_image 
+  if (profile) {
+    profile_image = profile.profile_image
+  }
     return (
     <Link
-      to={`/skill/${id}`}
+      to={`/skill/${id}/${userId}`}
       className="skills-card"
     >
       <div className="container">
@@ -40,7 +44,7 @@ const SkillCard = ({skillsData}) => {
           </p>       
         <div className="instructor-info">
           <img
-            src={profileImage}
+            src={profileImage || profile_image}
             alt={name}
             className="instructor-avatar"
           />

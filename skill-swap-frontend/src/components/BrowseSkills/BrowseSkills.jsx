@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import SkillCard from '../Utils/SkillCard/SkillCard';
-import Cookies from 'js-cookie'
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -72,7 +71,8 @@ const BrowseSkills = () => {
                     level: skill.level,
                     user: {
                         name: skill.user.name,
-                        profileImage: skill.user.profile?.profile_image
+                        profileImage: skill.user.profile?.profile_image,
+                        userId: skill.user._id
                     }
                 }))
                 setSkillData(formattedSkills)

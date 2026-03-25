@@ -22,7 +22,7 @@ function App() {
         <Route path="/find-skills" element={<ProtectedRoute>
           <BrowseSkills />
           </ProtectedRoute>} />    
-          <Route path="/skill/:id" element={<ProtectedRoute>
+          <Route path="/skill/:skillId/:userId" element={<ProtectedRoute>
           <SkillPage />
         </ProtectedRoute>} />    
         <Route path="/home" element={<ProtectedRoute>
