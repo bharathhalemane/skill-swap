@@ -51,7 +51,7 @@ const Availability = () => {
                 availabilityData.length > 0 ? <ul className="availability-each-day-slots-list">
                 {
                     availabilityData.map(each => (
-                        <ul className="day-slots-list">
+                        <ul className="day-slots-list" key={each.id}>
                             {
                                 each.slots.map(slot => (
                                     <div className="day-slots" key={slot.id || slot._id}>

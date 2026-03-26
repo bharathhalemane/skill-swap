@@ -9,6 +9,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import SkillDetails from './SkillDetails'
 import ClassSchedule from './ClassSchedule'
 import Availability from './Availability'
+import ReceivedRequest from './ReceivedRequest'
 
 const Profile = () => {
     const token = Cookies.get("jwtToken")
@@ -100,12 +101,14 @@ const Profile = () => {
     return <>
         <HomeHeader />
         <div className='profile-page'>
-            {ProfileDetails()}
+            {ProfileDetails()}            
+            <ReceivedRequest/>
+            <hr />
             <SkillDetails />
             <hr/>
             <ClassSchedule />
             <hr/>
-            <Availability />            
+            <Availability />       
         </div>
         <Footer />
     </>

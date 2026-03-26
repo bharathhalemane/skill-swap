@@ -1,6 +1,5 @@
 import CommonModal from "../Utils/CommonModal"
 import { sentRequest } from "./SkillApi"
-import { toast } from "react-toastify";
 import { TailSpin } from "react-loader-spinner";
 import { useState, useEffect } from "react";
 const apiProgress = {

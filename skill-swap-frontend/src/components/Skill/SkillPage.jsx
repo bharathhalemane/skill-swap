@@ -3,7 +3,7 @@ import HomeHeader from "../Header/HomeHeader";
 import './SkillPage.css';
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { sentRequest, getSkillData, allSkillsOfOwner, availabilityOfOwner } from "./SkillApi"
+import { getSkillData, allSkillsOfOwner, availabilityOfOwner } from "./SkillApi"
 import SkillInformationCard from "./SkillInformationCard"
 import Skills from "./Skills"
 import Footer from "../Footer/Footer";
@@ -11,7 +11,6 @@ import OwnerAvailability from "./OwnerAvailability";
 
 const SkillPage = () => {
     const { skillId, userId } = useParams();
-    const token = Cookies.get("jwtToken");
     const [skillData, setSkillData] = useState({})
     const [availabilityData, setAvailabilityData] = useState([])
     const [allSkillsData, setAllSkillsData] = useState([])
@@ -53,10 +52,6 @@ const SkillPage = () => {
         fetchAvailabilityData()
         fetchAllSkillsData()
     }, [skillId])
-
-    const request = () => {
-        const response = sentRequest(skillId)
-    }
 
 
     return (

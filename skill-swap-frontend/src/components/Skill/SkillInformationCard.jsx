@@ -1,7 +1,5 @@
-import { sentRequest } from "./SkillApi"
 import RequestModel from "./RequestModel"
 const SkillInformationCard = ({ data }) => {
-    console.log(data)
     const {_id, category, level, title, imageUrl, description, user } = data
     const { name, profile, userId } = user || {}
     const { profile_image } = profile || {}
@@ -16,7 +14,7 @@ const SkillInformationCard = ({ data }) => {
             <h1 className="title">{title}</h1>
             <p className="description">{description}</p>
 
-            <div className="user">
+            <div className="skill-user-info">
                 <img src={profile_image} alt="user" />
                 <h4>{name}</h4>                                    
             </div>

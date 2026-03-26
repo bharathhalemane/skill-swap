@@ -67,6 +67,7 @@ exports.getSkillsOfOwner = async (req, res) => {
             count: skills.length,
             skills
         })
+        
     } catch (err) {
         res.status(500).json({msg: err.message})
     }
@@ -258,3 +259,4 @@ exports.updateSkill = async (req, res) => {
         })
     }
 }
+

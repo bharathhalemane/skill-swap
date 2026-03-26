@@ -55,18 +55,23 @@
 }
 
 /* USER */
-.user {
+.skill-user-info {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 15px;
 }
 
-.user img {
+.skill-user-info img {
     width: 45px;
     height: 45px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.skill-user-info h4{
+    display: flex;
+    align-items: center;
 }
 
 /* STATS */

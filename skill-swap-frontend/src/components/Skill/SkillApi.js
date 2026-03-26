@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 
 const token = Cookies.get("jwtToken")
 
-export const sentRequest = async ({skillId, message}) => {
-
+export const sentRequest = async ({ skillId, message }) => {
+    const token = Cookies.get("jwtToken")
+    console.log(token, skillId, message)
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/send`;
 
@@ -23,8 +24,9 @@ export const sentRequest = async ({skillId, message}) => {
         return response
 
     } catch (err) {
-        toast.error("already sent!");
-        console.log(err)
+        const msg = err.response?.data?.msg || "Something went wrong"
+        toast.error(msg)
+        return null 
     }
 }
 
