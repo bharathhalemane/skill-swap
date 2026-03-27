@@ -1,5 +1,5 @@
-import CreateSkillModal from "./CreateSkillModal"
-import EditSkillModal from "./EditSkillModal";
+import CreateSkillModal from "../Modals/CreateSkillModal"
+import EditSkillModal from "../Modals/EditSkillModal";
 import { useState, useEffect } from "react"
 import { SlBadge } from "react-icons/sl";
 import { BsTrash } from "react-icons/bs";
@@ -52,7 +52,7 @@ const SkillDetails = () => {
     }, [changes, currentPage])
 
     return <div className="skills-details-list">
-        <h1 className="skill-details-list-header"><SlBadge color="#f08a24" size={30}/>Skills I'm Teaching</h1>
+        <h1 className="skill-details-list-header"><SlBadge color="#f08a24" size={30} />Skills I'm Teaching</h1>
         <ul>
             {
                 teachingSkillData.map(each => (
@@ -67,7 +67,7 @@ const SkillDetails = () => {
                             </div>
                             <div className="skill-operation-container">
                                 <EditSkillModal setChanges={setChanges} skillId={each.id} skillData={each} />
-                                <BsTrash size={25} color="#ff0000" onClick={()=>deleteSkill(each.id)}/>
+                                <BsTrash size={25} color="#ff0000" onClick={() => deleteSkill(each.id)} />
                             </div>
                         </div>
                     </li>
@@ -81,9 +81,9 @@ const SkillDetails = () => {
             }
             {
                 totalSkills > 0 ? <div className="pagination-button-container">
-                <button className={`prev-button ${currentPage===1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
-                <button className={`next-button ${currentPage===lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-            </div> : null
+                    <button className={`prev-button ${currentPage === 1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
+                    <button className={`next-button ${currentPage === lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
+                </div> : null
             }
         </div>
     </div>

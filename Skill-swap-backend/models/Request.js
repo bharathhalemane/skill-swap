@@ -20,6 +20,10 @@ const requestSchema = new mongoose.Schema({
     status: {
         type: String, enum: ["PENDING", "ACCEPTED", "REJECTED", "CANCELLED"],
         default: "PENDING"
+    },
+    isLearning: {
+        type: Boolean,
+        default: false
     }
 },{timestamps: true});
 

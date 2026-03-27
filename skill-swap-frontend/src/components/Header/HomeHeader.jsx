@@ -21,6 +21,9 @@ const HomeHeader = () => {
 
 
     const getProfileData = async () => {
+        
+        const token = Cookies.get("jwtToken")
+        const userId = Cookies.get("userId")
         if (!userId || !token) return
         try {
             const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
@@ -46,6 +49,7 @@ const HomeHeader = () => {
 
     const onClickLogout = () => {
         Cookies.remove("jwtToken")
+        Cookies.remove("userId")
         navigate("/")
     }
 

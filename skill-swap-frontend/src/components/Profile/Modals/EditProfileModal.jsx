@@ -4,7 +4,7 @@ import { FaCamera } from "react-icons/fa";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
-import CommonModal from "../Utils/CommonModal";
+import CommonModal from "../../Utils/CommonModal";
 import { toast } from "react-toastify";
 const apiProgress = {
   loading: "LOADING",

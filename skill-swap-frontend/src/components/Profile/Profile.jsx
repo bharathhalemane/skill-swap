@@ -2,19 +2,21 @@ import './Profile.css'
 import HomeHeader from '../Header/HomeHeader'
 import Footer from '../Footer/Footer'
 import { useState, useEffect } from "react"
-import EditProfileModal from "./EditProfileModal"
+import EditProfileModal from "./Modals/EditProfileModal"
 import Cookies from 'js-cookie'
 import axios from "axios"
 import { BsPersonCircle } from "react-icons/bs";
-import SkillDetails from './SkillDetails'
-import ClassSchedule from './ClassSchedule'
-import Availability from './Availability'
-import ReceivedRequest from './ReceivedRequest'
+import SkillDetails from './Skill/SkillDetails'
+import ClassSchedule from './Schedule/ClassSchedule'
+import Availability from './Availability/Availability'
+import ReceivedRequest from './requests/ReceivedRequests/ReceivedRequest'
+import SentRequests from './requests/SentRequests/SentRequests'
 
 const Profile = () => {
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
     const [profileData, setProfileData] = useState()
+    
 
 
     const getProfileData = async () => {
@@ -33,7 +35,7 @@ const Profile = () => {
                     username: data.profile.username,
                     bio: data.profile.bio,
                     location: data.profile.location,
-                    profileImage : data.profile.profile_image
+                    profileImage: data.profile.profile_image
                 }
             })
         } catch (err) {
@@ -101,14 +103,15 @@ const Profile = () => {
     return <>
         <HomeHeader />
         <div className='profile-page'>
-            {ProfileDetails()}            
-            <ReceivedRequest/>
+            {ProfileDetails()}
+            <ReceivedRequest />
+            <SentRequests />
             <hr />
             <SkillDetails />
-            <hr/>
+            <hr />
             <ClassSchedule />
-            <hr/>
-            <Availability />       
+            <hr />
+            <Availability />
         </div>
         <Footer />
     </>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 import { LuGraduationCap, LuX, LuClock } from "react-icons/lu";
-import './CssClasses.css'
+import '../CssClasses.css'
 import axios from "axios"
 import Cookies from "js-cookie"
-import CommonModal from "../Utils/CommonModal";
+import CommonModal from "../../Utils/CommonModal";
 import {TailSpin} from "react-loader-spinner"
 import { TfiLayoutLineSolid } from "react-icons/tfi";
 import { toast } from "react-toastify";

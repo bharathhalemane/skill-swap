@@ -3,7 +3,6 @@ const Skill = require("../models/Skill.js")
 
 exports.sendRequest = async (req, res) => {
     try {
-        console.log("calling..")
         const { skillId, message } = req.body
 
         const skill = await Skill.findById(skillId)
@@ -40,8 +39,53 @@ exports.sendRequest = async (req, res) => {
             data: request
         })
     } catch (err) {
+        res.status(500).json({ msg: err.message })
+    }
+}
+
+exports.resendRequest = async (req, res) => {
+    try {
+        const { requestId } = req.params
+        const userId = req.user.userId
+
+        const request = await Request.findById(requestId)
+
+        if (!request) {
+            return res.status(404).json({ msg: "Request not found" })
+        }
+
+        if (request.sender.toString() !== userId) {
+            return res.status(403).json({ msg: "Unauthorized" })
+        }
+
+        if (!["REJECTED", "CANCELED"].includes(request.status)) {
+            return res.status(400).json({ msg: "Cannot resend this request" })
+        }
+
+        const exists = await Request.findOne({
+            skill: request.skill,
+            sender: userId,
+            status: "PENDING"
+        })
+
+        if (exists) {
+            return res.status(400).json({ msg: "Already have a pending request" })
+        }
+
+        request.status = "PENDING"
+        request.updatedAt = new Date()
+
+        await request.save()
+
+        res.json({
+            success: true,
+            msg: "Request resent successfully",
+            data: request
+        })
+    } catch (err) {
         console.log(err)
         res.status(500).json({ msg: err.message })
+        
     }
 }
 
@@ -79,7 +123,6 @@ exports.getReceivedRequests = async (req, res) => {
         })
     } catch (err) {
         res.status(500).json({ msg: err.message })
-        console.log(err.message)
     }
 }
 
@@ -88,8 +131,8 @@ exports.getSentRequests = async (req, res) => {
         const requests = await Request.find({
             sender: req.user.userId
         })
-            .populate("receiver", "name email profile.profile_image")
-            .populate("skill", "title")
+            .populate("receiver", "name email profile")
+            .populate("skill", "title category")
 
         res.json(requests)
     } catch (err) {
@@ -110,6 +153,8 @@ exports.acceptRequest = async (req, res) => {
         }
 
         request.status = "ACCEPTED"
+        request.isLearning = true
+        request.updatedAt = new Date()
         await request.save()
 
         res.json({ msg: "Request accepted", request })
@@ -160,6 +205,29 @@ exports.cancelRequest = async (req, res) => {
 
         res.json({ msg: "Request cancelled successfully" })
     } catch (err) {
+        res.status(500).json({ msg: err.message })
+    }
+}
+
+exports.getCurrentLearning = async (req, res) => {
+    try {
+        const userId = req.user.userId
+        const learning = await Request.find({
+            sender: userId,
+            status: "ACCEPTED",
+            isLearning: true
+        })
+            .populate("sender", "name profile")
+            .populate("receiver", "name profile")
+            .populate("skill", "title category")
+
+        res.json({
+            success: true,
+            count: learning.length,
+            data: learning
+        })
+    } catch (err) {
+        console.log(err)
         res.status(500).json({ msg: err.message })
     }
 }
