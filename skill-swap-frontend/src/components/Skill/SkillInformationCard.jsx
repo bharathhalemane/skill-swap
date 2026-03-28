@@ -1,4 +1,5 @@
 import RequestModel from "./RequestModel"
+import RequestWithSwap from "./RequestWithSwap"
 const SkillInformationCard = ({ data }) => {
     const {_id, category, level, title, imageUrl, description, user } = data
     const { name, profile, userId } = user || {}
@@ -20,7 +21,9 @@ const SkillInformationCard = ({ data }) => {
             </div>
 
             <div className="actions">
-                <RequestModel skillId={_id}/>
+                <RequestModel skillId={_id} />
+                <RequestWithSwap skillId={_id} />
+                
             </div>
 
         </div>

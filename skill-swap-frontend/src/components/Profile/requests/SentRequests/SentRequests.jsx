@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './SentRequests.css'
-import { getSentRequest, resendRequest } from '../../requestAPi'
+import { getSentRequest, resendRequest, cancelRequest } from '../../requestAPi'
 import { ArrowRight, RefreshCcw, RotateCcw, Send, X } from 'lucide-react'
 import RequestModel from '../../../Skill/RequestModel'
 
@@ -12,7 +12,6 @@ const SentRequests = () => {
         try {
             const res = await getSentRequest()
             setData(res.data)
-            console.log(res.data)
         } catch (err) {
             console.log(err)
         }
@@ -23,6 +22,12 @@ const SentRequests = () => {
 
     const handleResentRequest = async (id) => {
         await resendRequest(id)
+        setCallData(!callData)
+    }
+
+    const handleCancelRequest = async (id) => {
+        console.log(id)
+        await cancelRequest(id)
         setCallData(!callData)
     }
 
@@ -65,7 +70,7 @@ const SentRequests = () => {
                                                 </div>
                                                 <div className="right">
                                                     <div className="status waiting">Awaiting Response</div>
-                                                    <button className="cancel "><X size={15} /> Cancel</button>
+                                                    <button className="cancel " onClick={()=> handleCancelRequest(req._id)}><X size={15} /> Cancel</button>
                                                 </div>
                                             </div>
                                         ))

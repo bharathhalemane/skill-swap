@@ -4,17 +4,17 @@ import { toast } from "react-toastify";
 
 const token = Cookies.get("jwtToken")
 
-export const sentRequest = async ({ skillId, message }) => {
+export const sentRequest = async ({ skillId, message, isSwap,  swapSkillId}) => {
     const token = Cookies.get("jwtToken")
-    console.log(token, skillId, message)
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/send`;
 
         const data = {
             skillId: skillId,
-            message: message
+            message: message,
+            isSwap,
+            swapSkillId
         };
-
         const response = await axios.post(url, data, {
             headers: {
                 Authorization: `Bearer ${token}`

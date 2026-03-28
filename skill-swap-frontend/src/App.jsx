@@ -1,3 +1,4 @@
+import {io} from "socket.io-client"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Dashboard from "./components/Dashboard/Dashboard"
 import BrowseSkills from './components/BrowseSkills/BrowseSkills'
@@ -11,8 +12,31 @@ import { ToastContainer, toast } from 'react-toastify'
 import SkillPage from './components/Skill/Skillpage'
 import "react-toastify/dist/ReactToastify.css"
 import './App.css'
+import { useEffect } from "react"
+import Cookies from "js-cookie"
+import {socket} from "./Socket"
+
 
 function App() {
+  
+  useEffect(() => {
+    const userId = Cookies.get("userId")
+    
+    if (!userId) return 
+    
+    if (socket.connected) {
+      socket.emit("join", userId)
+    } else {
+      socket.on("connect", () => {
+        socket.emit("join", userId)
+      })
+    }
+
+    return () => {
+      socket.off("connect")
+    }
+  }, [])
+
   return (  
     <>
     <ToastContainer position="bottom-right" autoClose={2500} theme='dark'/>

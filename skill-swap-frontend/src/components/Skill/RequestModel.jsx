@@ -17,12 +17,12 @@ const RequestModel = ({ skillId }) => {
     }
     const request = (e) => {
         e.preventDefault()
-        sentRequest({ skillId, message })
+        sentRequest({ skillId, message, isSwap: false, swapSkillId: null })
         setIsOpen(false)
         setMessage("")
     }
     return <>
-        <button className="request-btn" onClick={()=>setIsOpen(true)}>Request Swap</button>
+        <button className="request-btn" onClick={()=>setIsOpen(true)}>Send Request</button>
         <CommonModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Send Request" width="550px">
             <form action="" className="modern-form" onSubmit={request}>
                 <div className="form-group">
@@ -42,7 +42,7 @@ const RequestModel = ({ skillId }) => {
                     {apiStatus === apiProgress.loading ? (
                         <TailSpin width={20} height={20} color="#fff" />
                     ) : (
-                        "Request Swap"
+                        "Sent"
                     )}
                     </button>
                 </div>

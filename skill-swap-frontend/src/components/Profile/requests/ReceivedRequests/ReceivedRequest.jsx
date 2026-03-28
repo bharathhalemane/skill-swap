@@ -3,19 +3,40 @@ import { useEffect, useState } from "react"
 import "./ReceivedRequest.css"
 import { Check, X } from "lucide-react"
 import Cookies from "js-cookie"
+import { socket } from "../../../../Socket"
+import { toast } from "react-toastify"
+
 const ReceivedRequest = () => {
     const [requestsData, setRequestsData] = useState([])
     const [callData, setCallData] = useState(false)
+
     const fetchReceivedRequests = async () => {
-        const response = await getReceivedRequests();
-        setRequestsData(response.data.data)
-    }
+        try {
+            const response = await getReceivedRequests();
+            setRequestsData(response.data.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }    
+
     useEffect(() => {
         const token = Cookies.get("jwtToken")
         if (token) {
             fetchReceivedRequests()
         }
     }, [callData])
+
+    useEffect(() => {
+        const userId = Cookies.get("userId")
+
+        socket.on("new_request", (newReq) => {
+            setRequestsData(prev => [newReq, ...prev])
+            toast.info("New Request received!")
+        })
+        return () => {
+            socket.off("new_request")
+        }
+    },[])
 
     const handleAcceptRequest = async (id, name) => {
         acceptRequest(id, name)

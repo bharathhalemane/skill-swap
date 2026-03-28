@@ -1,11 +1,12 @@
 const Request = require("../models/Request.js")
 const Skill = require("../models/Skill.js")
+const { getIO, onlineUsers} = require("../socket.js")
 
 exports.sendRequest = async (req, res) => {
     try {
-        const { skillId, message } = req.body
+        const { skillId, message, swapSkillId, isSwap } = req.body
 
-        const skill = await Skill.findById(skillId)
+        const skill = await Skill.findById(skillId).populate("user")
 
 
         if (!skill) {
@@ -26,13 +27,35 @@ exports.sendRequest = async (req, res) => {
             return res.status(400).json({ msg: "Already requested" })
         }
 
+        let swapSkill = null 
+        if (isSwap) {
+            swapSkill = await Skill.findById(swapSkillId)
+            
+            if (!swapSkill) {
+                return res.status(404).json({msg: "Swap skill not found"})
+            }
+
+            if (swapSkill.user.toString() !== req.user.userId) {
+                return res.status(403).json({msg: "Invalid swap skill"})
+            }
+        }
+
         const request = await Request.create({
             skill: skillId,
             sender: req.user.userId,
             receiver: skill.user,
+            swapSkill: isSwap ? swapSkillId: null,
             message,
+            isSwap,
             status: "PENDING"
         })
+
+        const io = getIO() 
+        const receiverSocketId = onlineUsers[skill.user.toString()]
+
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("new_request", request)
+        }
 
         res.status(201).json({
             success: true,
@@ -219,7 +242,7 @@ exports.getCurrentLearning = async (req, res) => {
         })
             .populate("sender", "name profile")
             .populate("receiver", "name profile")
-            .populate("skill", "title category")
+            .populate("skill", "title category imageUrl")
 
         res.json({
             success: true,
@@ -227,7 +250,39 @@ exports.getCurrentLearning = async (req, res) => {
             data: learning
         })
     } catch (err) {
-        console.log(err)
         res.status(500).json({ msg: err.message })
+    }
+}
+
+exports.endLearning = async (req, res) => {
+    try{
+        const { requestId } = req.params 
+        const userId = req.user.userId 
+
+        const request = await Request.findById(requestId)
+
+        if (!request) {
+            return res.status(404).json({msg: "Request not found"})
+        }
+
+        if (
+            request.sender.toString() !== userId && request.receiver.toString() !== userId
+        ) {
+            return res.status(403).json({msg: "Unauthorized"})
+        }
+
+        request.status = "COMPLETED"
+        request.isLearning = false
+        request.updatedAt = new Date()
+
+        await request.save() 
+
+        res.json({
+            success: true,
+            msg: "Learning completed",
+            data: request
+        })
+    } catch (err) {
+        res.status(500).json({msg: err.message})
     }
 }

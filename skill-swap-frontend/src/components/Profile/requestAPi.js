@@ -80,3 +80,49 @@ export const resendRequest = async (id) => {
         toast.error(err.response?.data?.msg)
     }
 }
+
+export const cancelRequest = async (id) => {
+    const token = Cookies.get("jwtToken")
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_API}/requests/cancel/${id}`
+        const response = await axios.delete(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    } catch (err) {
+        toast.error(err.response?.data?.msg)
+    }
+}
+
+export const learningSkills = async () => {
+    const token = Cookies.get("jwtToken")
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_API}/requests/learning`
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const endLearning = async (id) => {
+    const token = Cookies.get("jwtToken")
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_API}/requests/end/${id}`
+        const res = await axios.patch(url, {},{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        toast.success("Learning ended")
+        return res
+    } catch (err) {
+        toast.error(err.response?.data?.msg)
+    }
+}

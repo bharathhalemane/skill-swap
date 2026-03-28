@@ -11,6 +11,7 @@ import ClassSchedule from './Schedule/ClassSchedule'
 import Availability from './Availability/Availability'
 import ReceivedRequest from './requests/ReceivedRequests/ReceivedRequest'
 import SentRequests from './requests/SentRequests/SentRequests'
+import LearningSkills from './LearningSkills/LearningSkills'
 
 const Profile = () => {
     const token = Cookies.get("jwtToken")
@@ -111,7 +112,8 @@ const Profile = () => {
             <hr />
             <ClassSchedule />
             <hr />
-            <Availability />
+            <Availability />            
+            <LearningSkills/>
         </div>
         <Footer />
     </>

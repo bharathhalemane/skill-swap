@@ -6,6 +6,14 @@ const requestSchema = new mongoose.Schema({
         ref: "Skill",
         required: true 
     },
+    swapSkill: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Skill",
+        required: true 
+    },
+    isSwap: {
+        type: Boolean
+    },
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -18,7 +26,7 @@ const requestSchema = new mongoose.Schema({
     },
     message: String,
     status: {
-        type: String, enum: ["PENDING", "ACCEPTED", "REJECTED", "CANCELLED"],
+        type: String, enum: ["PENDING", "ACCEPTED", "REJECTED", "CANCELLED","COMPLETED"],
         default: "PENDING"
     },
     isLearning: {
