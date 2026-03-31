@@ -9,15 +9,20 @@ const initSocket = (server) => {
     })
 
     io.on("connection", (socket) => {
+        console.log("Socket connected:", socket.id);
 
-        socket.on("join", (userId) => {
-            onlineUsers[userId] = socket.id 
+        socket.on("register", (userId) => {
+            onlineUsers[userId] = socket.id  
+            console.log("👤 User registered:", userId);
+        console.log("🧠 Socket ID:", socket.id);
+        console.log("📡 Online Users:", onlineUsers);
         })
 
         socket.on("disconnect", () => {
             for (let user in onlineUsers) {
                 if (onlineUsers[user] === socket.id) {
                     delete onlineUsers[user]
+                    console.log("User offline:", user);
                 }
             }
         })

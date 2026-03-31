@@ -1,6 +1,6 @@
 const Request = require("../models/Request.js")
 const Skill = require("../models/Skill.js")
-const { getIO, onlineUsers} = require("../socket.js")
+const { getIO, onlineUsers } = require("../socket.js")
 
 exports.sendRequest = async (req, res) => {
     try {
@@ -27,16 +27,16 @@ exports.sendRequest = async (req, res) => {
             return res.status(400).json({ msg: "Already requested" })
         }
 
-        let swapSkill = null 
+        let swapSkill = null
         if (isSwap) {
             swapSkill = await Skill.findById(swapSkillId)
-            
+
             if (!swapSkill) {
-                return res.status(404).json({msg: "Swap skill not found"})
+                return res.status(404).json({ msg: "Swap skill not found" })
             }
 
             if (swapSkill.user.toString() !== req.user.userId) {
-                return res.status(403).json({msg: "Invalid swap skill"})
+                return res.status(403).json({ msg: "Invalid swap skill" })
             }
         }
 
@@ -44,17 +44,17 @@ exports.sendRequest = async (req, res) => {
             skill: skillId,
             sender: req.user.userId,
             receiver: skill.user,
-            swapSkill: isSwap ? swapSkillId: null,
+            swapSkill: isSwap ? swapSkillId : null,
             message,
             isSwap,
             status: "PENDING"
         })
 
-        const io = getIO() 
-        const receiverSocketId = onlineUsers[skill.user.toString()]
+        const io = getIO()
+        const receiverSocketId = onlineUsers[skill.user]
 
         if (receiverSocketId) {
-            io.to(receiverSocketId).emit("new_request", request)
+            io.to(receiverSocketId).emit("new_requests", request)
         }
 
         res.status(201).json({
@@ -108,7 +108,7 @@ exports.resendRequest = async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).json({ msg: err.message })
-        
+
     }
 }
 
@@ -134,6 +134,7 @@ exports.getReceivedRequests = async (req, res) => {
         })
             .populate("sender", "name profile")
             .populate("skill", "title category")
+            .populate("swapSkill", "title category")
             .sort({
                 status: 1,
                 createdAt: -1
@@ -156,6 +157,8 @@ exports.getSentRequests = async (req, res) => {
         })
             .populate("receiver", "name email profile")
             .populate("skill", "title category")
+            .populate("swapSkill", "title category")
+            .sort({ createdAt: -1 })
 
         res.json(requests)
     } catch (err) {
@@ -236,18 +239,60 @@ exports.getCurrentLearning = async (req, res) => {
     try {
         const userId = req.user.userId
         const learning = await Request.find({
-            sender: userId,
+            $or: [
+                { sender: userId },
+                { receiver: userId }
+            ],
             status: "ACCEPTED",
             isLearning: true
         })
             .populate("sender", "name profile")
             .populate("receiver", "name profile")
             .populate("skill", "title category imageUrl")
+            .populate("swapSkill", "title category imageUrl")
+        
+        const formatted = learning.map(reqItem => {
+            const isSender = reqItem.sender._id.toString() === userId
+            const isReceiver = reqItem.receiver._id.toString() === userId
+
+            if (!reqItem.isSwap) {
+                if (isSender) {
+                    return {
+                        id:reqItem._id,
+                        skill: reqItem.skill,
+                        partner: reqItem.receiver,
+                        startedAt: reqItem.updatedAt
+                    }
+                }
+                return null
+            }
+
+            if (reqItem.isSwap) {
+                if (isSender) {
+                    return {
+                        id:reqItem._id,
+                        skill: reqItem.skill,
+                        partner: reqItem.receiver,
+                        startedAt: reqItem.updatedAt
+                    }
+                }
+
+                if (isReceiver) {
+                    return {
+                        id:reqItem._id,
+                        skill: reqItem.swapSkill,
+                        partner: reqItem.sender,
+                        startedAt: reqItem.updatedAt
+                    }
+                }
+            }
+            return null
+        }).filter(Boolean)
 
         res.json({
             success: true,
-            count: learning.length,
-            data: learning
+            count: formatted.length,
+            data: formatted
         })
     } catch (err) {
         res.status(500).json({ msg: err.message })
@@ -255,27 +300,27 @@ exports.getCurrentLearning = async (req, res) => {
 }
 
 exports.endLearning = async (req, res) => {
-    try{
-        const { requestId } = req.params 
-        const userId = req.user.userId 
+    try {
+        const { requestId } = req.params
+        const userId = req.user.userId
 
         const request = await Request.findById(requestId)
 
         if (!request) {
-            return res.status(404).json({msg: "Request not found"})
+            return res.status(404).json({ msg: "Request not found" })
         }
 
         if (
             request.sender.toString() !== userId && request.receiver.toString() !== userId
         ) {
-            return res.status(403).json({msg: "Unauthorized"})
+            return res.status(403).json({ msg: "Unauthorized" })
         }
 
         request.status = "COMPLETED"
         request.isLearning = false
         request.updatedAt = new Date()
 
-        await request.save() 
+        await request.save()
 
         res.json({
             success: true,
@@ -283,6 +328,52 @@ exports.endLearning = async (req, res) => {
             data: request
         })
     } catch (err) {
-        res.status(500).json({msg: err.message})
+        res.status(500).json({ msg: err.message })
+    }
+}
+
+exports.getCompletedSkills = async (req, res) => {
+    try {
+        const userId = req.user.userId
+
+        const completedRequests = await Request.find({
+            status: "COMPLETED",
+            $or: [
+                { sender: userId },
+                { receiver: userId }
+            ]
+        })
+            .populate("skill", "title category imageUrl")
+            .populate("swapSkill", "title category imageUrl")
+            .populate("sender", "name")
+            .populate("receiver", "name")
+            .sort({ updatedAr: -1 })
+
+        const learned = [];
+        const taught = []
+        const swaps = []
+
+        completedRequests.forEach(reqItem => {
+            const isSender = reqItem.sender._id.toString() == userId;
+
+            if (reqItem.isSwap) {
+                swaps.push(reqItem)
+            } else if (isSender) {
+                learned.push(reqItem)
+            } else {
+                taught.push(reqItem)
+            }
+        })
+
+        res.status(200).json({
+            success: true,
+            data: {
+                learned,
+                taught,
+                swaps
+            }
+        })
+    } catch (err) {
+        res.status(500).json({ msg: err.message })
     }
 }

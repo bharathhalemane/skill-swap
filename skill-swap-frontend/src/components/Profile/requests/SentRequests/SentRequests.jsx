@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './SentRequests.css'
 import { getSentRequest, resendRequest, cancelRequest } from '../../requestAPi'
-import { ArrowRight, RefreshCcw, RotateCcw, Send, X } from 'lucide-react'
+import { ArrowRight, ArrowRightLeft, RefreshCcw, RotateCcw, Send, X } from 'lucide-react'
 import RequestModel from '../../../Skill/RequestModel'
 
 const SentRequests = () => {
@@ -24,12 +24,35 @@ const SentRequests = () => {
         await resendRequest(id)
         setCallData(!callData)
     }
-
     const handleCancelRequest = async (id) => {
         console.log(id)
         await cancelRequest(id)
         setCallData(!callData)
     }
+    const getTimeAgo = (date) => {
+        const now = new Date();
+        const seconds = Math.floor((now - new Date(date)) / 1000);
+
+        if (seconds < 60) return `${seconds} sec ago`;
+
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} min ago`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} hr ago`;
+
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `${days} days ago`;
+
+        const weeks = Math.floor(days / 7);
+        if (weeks < 4) return `${weeks} weeks ago`;
+
+        const months = Math.floor(days / 30);
+        if (months < 12) return `${months} months ago`;
+
+        const years = Math.floor(days / 365);
+        return `${years} years ago`;
+    };
 
     const awaiting = data.filter(r => r.status === "PENDING")
     const resolved = data.filter(r => r.status !== "PENDING")
@@ -59,13 +82,18 @@ const SentRequests = () => {
                                                         <h3>{req.receiver?.name}
                                                             <span className="username">{" "}@{req.receiver?.profile?.username}</span>
                                                         </h3>
-
-                                                        <div className="skills">
-                                                            <span className="tag light">{req.skill?.category}</span>
-                                                            <span className="tag dark">{req.skill?.title}</span>
-                                                        </div>
+                                                        {
+                                                            req.isSwap ?
+                                                                <div className="skills">
+                                                                    <span className="tag light">Your Offer:<b> {req.swapSkill?.title}</b></span><ArrowRightLeft /><span className="tag dark">You Want: <b>{req.skill?.title}</b></span>
+                                                                </div> :
+                                                                <div className="skills">
+                                                                    <span className="tag light">{req.skill?.category}</span><ArrowRight />
+                                                                    <span className="tag dark">{req.skill?.title}</span>
+                                                                </div>
+                                                        }
                                                         <div className="message">"{req.message}"</div>
-                                                        <div className="time">Sent {new Date(req.createdAt).toLocaleString()}</div>
+                                                        <div className="time">Sent {getTimeAgo(req.createdAt)}</div>
                                                     </div>
                                                 </div>
                                                 <div className="right">
@@ -87,10 +115,16 @@ const SentRequests = () => {
                                             <img src={req.receiver?.profile?.profile_image} alt="profile" className="profile" />
                                             <div className="info">
                                                 <h3>{req.receiver?.name}</h3>
-                                                <div className="skills">
-                                                    {req.skill?.category} <span> <ArrowRight size={15}/> </span>
-                                                    {req.skill?.title}
-                                                </div>
+                                                {
+                                                    req.isSwap ?
+                                                        <div className="skills">
+                                                            <span>{req.swapSkill?.title} </span><ArrowRightLeft /><span> {req.skill?.title}</span>
+                                                        </div> :
+                                                        <div className="skills">
+                                                            <span>{req.skill?.category} </span><ArrowRight />
+                                                            <span> {req.skill?.title}</span>
+                                                        </div>
+                                                }                                               
 
                                                 {req.status === "REJECTED" && (
                                                     <div className="resend" onClick={() => handleResentRequest(req._id)}><RotateCcw /> Resend Request</div>                                                    

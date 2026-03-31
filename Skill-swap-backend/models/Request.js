@@ -8,11 +8,11 @@ const requestSchema = new mongoose.Schema({
     },
     swapSkill: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Skill",
-        required: true 
+        ref: "Skill",        
     },
     isSwap: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     sender: {
         type: mongoose.Schema.Types.ObjectId,

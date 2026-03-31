@@ -1,11 +1,11 @@
 import { useSearchParams } from 'react-router-dom'
-import HomeHeader from '../Header/HomeHeader'
-import Footer from '../Footer/Footer'
+import HomeHeader from '../../components/Header/HomeHeader'
+import Footer from '../../components/Footer/Footer'
 import './BrowseSkills.css'
 import { useState, useEffect } from "react"
 import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import SkillCard from '../Utils/SkillCard/SkillCard';
+import SkillCard from '../../components/Utils/SkillCard/SkillCard';
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -54,7 +54,6 @@ const BrowseSkills = () => {
     const getSkillData = async () => {
         try {
             const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=8`
-            console.log(url)
             const option = {
                 method: "GET"
             }
@@ -106,7 +105,7 @@ const BrowseSkills = () => {
                             <li><button className={`category-filter-btn ${category === "" ? "active" : ""}`} onClick={onChangeCategory} value="">All</button></li>
                             {
                                 categories.map(each => (
-                                    <li key={ each.name}><button className={`category-filter-btn ${category === each.name ? "active" : ""}`} value={each.name} onClick={onChangeCategory}>{each.icon} {each.name}</button></li>
+                                    <li key={each.name}><button className={`category-filter-btn ${category === each.name ? "active" : ""}`} value={each.name} onClick={onChangeCategory}>{each.icon} {each.name}</button></li>
                                 ))
                             }
                         </ul>
@@ -136,9 +135,9 @@ const BrowseSkills = () => {
                     </ul>
                     {
                         totalSkills > 8 ? <div className="pagination-button-container">
-                        <button className={`prev-button ${currentPage===1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
-                        <button className={`next-button ${currentPage===lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-                    </div> : null
+                            <button className={`prev-button ${currentPage === 1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
+                            <button className={`next-button ${currentPage === lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
+                        </div> : null
                     }
                 </div>
                 <Footer />

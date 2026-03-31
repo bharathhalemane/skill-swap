@@ -3,15 +3,30 @@
   margin: auto;
   font-family: "Segoe UI", sans-serif;
 }
-
-.learning-container h2 {
+.learning-container-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.learning-container .learning-container-header h2 {
   margin-bottom: 20px;
+}
+
+.completed-page-link{
+  background: linear-gradient(90deg, #ff7a00, #ff9900);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s ease;
 }
 
 /* Grid */
 .learning-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 2fr));
+  grid-template-columns: repeat(3, minmax(320px, 2fr));
   gap: 20px;
 }
 
@@ -23,6 +38,7 @@
   background: #f5f6f8;
   padding: 16px;
   border-radius: 16px;
+  max-width: 400px;
 }
 
 /* Image */

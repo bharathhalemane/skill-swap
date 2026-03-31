@@ -29,7 +29,6 @@ const RequestWithSwap = ({ skillId }) => {
             const skills = response.data.skills
             const titles = skills.map(skill => ({ title: skill.title, id: skill.id }))
             setTitles(titles)
-            console.log(titles)
         } catch (err) {
             console.log(err)
         }

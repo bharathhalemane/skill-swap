@@ -17,7 +17,7 @@ const RequestModel = ({ skillId }) => {
     }
     const request = (e) => {
         e.preventDefault()
-        sentRequest({ skillId, message, isSwap: false, swapSkillId: null })
+        sentRequest({ skillId, message, isSwap: false, swapSkillId: {} })
         setIsOpen(false)
         setMessage("")
     }

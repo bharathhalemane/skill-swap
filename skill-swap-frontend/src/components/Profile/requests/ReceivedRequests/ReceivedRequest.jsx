@@ -1,7 +1,7 @@
 import { getReceivedRequests, acceptRequest, rejectRequest } from "../../requestAPi"
 import { useEffect, useState } from "react"
 import "./ReceivedRequest.css"
-import { Check, X } from "lucide-react"
+import { ArrowRight, ArrowRightLeft, Calendar, Check, X } from "lucide-react"
 import Cookies from "js-cookie"
 import { socket } from "../../../../Socket"
 import { toast } from "react-toastify"
@@ -17,8 +17,7 @@ const ReceivedRequest = () => {
         } catch (err) {
             console.log(err)
         }
-    }    
-
+    }
     useEffect(() => {
         const token = Cookies.get("jwtToken")
         if (token) {
@@ -29,14 +28,14 @@ const ReceivedRequest = () => {
     useEffect(() => {
         const userId = Cookies.get("userId")
 
-        socket.on("new_request", (newReq) => {
+        socket.on("new_requests", (newReq) => {
             setRequestsData(prev => [newReq, ...prev])
             toast.info("New Request received!")
         })
         return () => {
             socket.off("new_request")
         }
-    },[])
+    }, [])
 
     const handleAcceptRequest = async (id, name) => {
         acceptRequest(id, name)
@@ -49,6 +48,31 @@ const ReceivedRequest = () => {
         setCallData(!callData)
         fetchReceivedRequests()
     }
+
+    const getTimeAgo = (date) => {
+        const now = new Date();
+        const seconds = Math.floor((now - new Date(date)) / 1000);
+
+        if (seconds < 60) return `${seconds} sec ago`;
+
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} min ago`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} hr ago`;
+
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `${days} days ago`;
+
+        const weeks = Math.floor(days / 7);
+        if (weeks < 4) return `${weeks} weeks ago`;
+
+        const months = Math.floor(days / 30);
+        if (months < 12) return `${months} months ago`;
+
+        const years = Math.floor(days / 365);
+        return `${years} years ago`;
+    };
 
 
     const pendingRequests = requestsData.filter(r => r.status === "PENDING")
@@ -72,18 +96,23 @@ const ReceivedRequest = () => {
                                             {req.sender?.name}
                                             <span className="username"> @{req.sender?.profile?.username}</span>
                                         </h3>
-
-                                        <div className="skills">
-                                            <span className="tag">{req.skill?.category}</span>
-                                            <span className="tag">{req.skill?.title}</span>
-                                        </div>
+                                        {
+                                            req.isSwap ?
+                                                <div className="skills">
+                                                    <span className="tag">{req.skill?.title}</span><ArrowRightLeft /><span className="tag">{req.swapSkill?.title}</span>
+                                                </div> :
+                                                <div className="skills">
+                                                    <span className="tag">{req.skill?.category}</span><ArrowRight />
+                                                    <span className="tag">{req.skill?.title}</span>
+                                                </div>
+                                        }
 
                                         <div className="message">
                                             "{req.message}"
                                         </div>
 
                                         <div className="time">
-                                            {new Date(req.createdAt).toLocaleString()}
+                                            <Calendar size={15}/>{getTimeAgo(req.createdAt)}
                                         </div>
                                     </div>
                                 </div>
@@ -120,12 +149,16 @@ const ReceivedRequest = () => {
                                     <img src={req.sender?.profile?.profile_image} alt="profile" className="profile" />
                                     <div className="info">
                                         <h3>{req.sender?.name}</h3>
-
-                                        <div className="skills">
-                                            <span className="tag">{req.skill?.category}</span>
-                                            <span className="tag">{req.skill?.title}</span>
-
-                                        </div>
+                                        {
+                                            req.isSwap ?
+                                                <div className="skills">
+                                                    <span className="tag">{req.skill?.title}</span><ArrowRightLeft /><span className="tag">{req.swapSkill?.title}</span>
+                                                </div> :
+                                                <div className="skills">
+                                                    <span className="tag">{req.skill?.category}</span><ArrowRight />
+                                                    <span className="tag">{req.skill?.title}</span>
+                                                </div>
+                                        }
                                     </div>
                                 </div>
 

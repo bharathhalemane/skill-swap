@@ -1,9 +1,10 @@
 const Skill = require("../models/Skill")
 const cloudinary = require("../config/cloudinary")
+const mongoose = require("mongoose")
 
 exports.getAllSkills = async (req, res) => {
     try {
-        const { category, level, title, page=1, limit=8 } = req.query
+        const { category, level, title, page = 1, limit = 8 } = req.query
 
         let filter = {}
         if (category) {
@@ -28,7 +29,7 @@ exports.getAllSkills = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(Number(limit))
-        
+
         const totalSkills = await Skill.countDocuments(filter)
 
         res.status(200).json({ skills, totalSkills })
@@ -58,66 +59,66 @@ exports.getSkillsOfOwner = async (req, res) => {
         const skills = await Skill.find({ user: userId })
             .populate("user", "name profile.profile_image _id")
             .sort({ createdAt: -1 })
-        
-        if(!skills || skills.length === 0){
-            return res.status(404).json({msg: "No Skills found"})
+
+        if (!skills || skills.length === 0) {
+            return res.status(404).json({ msg: "No Skills found" })
         }
 
         res.status(200).json({
             count: skills.length,
             skills
         })
-        
+
     } catch (err) {
-        res.status(500).json({msg: err.message})
+        res.status(500).json({ msg: err.message })
     }
 }
 
 exports.getSkillsByUserId = async (req, res) => {
-  try {
-      const { userId } = req.params;
-      const {page = 1, limit = 4} = req.query
-      
-      const skip = (page - 1) * limit
+    try {
+        const { userId } = req.params;
+        const { page = 1, limit = 4 } = req.query
 
-    const skills = await Skill.find({ user: userId })      
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(Number(limit))
-        .lean();
-      
-    const formattedSkills = skills.map(skill => ({
-      id: skill._id,
-      title: skill.title,
-      description: skill.description,
-      imageUrl: skill.imageUrl,
-      category: skill.category,
-      level: skill.level      
-    }));
+        const skip = (page - 1) * limit
 
-    const totalSkills =await Skill.countDocuments({user : userId})
+        const skills = await Skill.find({ user: userId })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(Number(limit))
+            .lean();
 
-    res.status(200).json({
-      success: true,
-      count: formattedSkills.length,
-      skills: formattedSkills,
-      totalSkills
-    });
+        const formattedSkills = skills.map(skill => ({
+            id: skill._id,
+            title: skill.title,
+            description: skill.description,
+            imageUrl: skill.imageUrl,
+            category: skill.category,
+            level: skill.level
+        }));
 
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
+        const totalSkills = await Skill.countDocuments({ user: userId })
+
+        res.status(200).json({
+            success: true,
+            count: formattedSkills.length,
+            skills: formattedSkills,
+            totalSkills
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
 };
 
 exports.addSkill = async (req, res) => {
     try {
         const { title, category, description, duration, level } = req.body
-        
+
         if (!title || !category || !description || !level) {
-            return res.status(400).json({error: "fill all requirements fields"})
+            return res.status(400).json({ error: "fill all requirements fields" })
         }
 
         let imageUrl = "";
@@ -132,7 +133,7 @@ exports.addSkill = async (req, res) => {
                                 {
                                     width: 500, height: 500, crop: "fill"
                                 },
-                                {quality: "auto"}
+                                { quality: "auto" }
                             ]
                         },
                         (error, result) => {
@@ -144,7 +145,7 @@ exports.addSkill = async (req, res) => {
                     stream.end(req.file.buffer)
                 })
             }
-            const result = await uploadToCloudinary() 
+            const result = await uploadToCloudinary()
             imageUrl = result.secure_url
         }
 
@@ -158,8 +159,8 @@ exports.addSkill = async (req, res) => {
             imageUrl
         })
 
-        res.status(201).json(newSkill)        
-    }catch (error) {
+        res.status(201).json(newSkill)
+    } catch (error) {
         console.error("FULL ERROR OBJECT:", error);
         res.status(500).json({
             message: error.message,
@@ -170,8 +171,8 @@ exports.addSkill = async (req, res) => {
 
 exports.deleteSkill = async (req, res) => {
     try {
-        const { skillId } = req.params 
-        
+        const { skillId } = req.params
+
         const skill = await Skill.findById(skillId)
 
         if (!skill) {
@@ -182,7 +183,7 @@ exports.deleteSkill = async (req, res) => {
         }
 
         if (skill.user.toString() !== req.user.userId) {
-            
+
             return res.status(403).json({
                 success: false,
                 message: "Not authorized to delete this skill"
@@ -199,17 +200,17 @@ exports.deleteSkill = async (req, res) => {
         res.status(500).json({
             message: err.message,
             success: false
-        })   
+        })
     }
 }
 
 
 exports.updateSkill = async (req, res) => {
     try {
-        const {skillId} = req.params
+        const { skillId } = req.params
 
         const skill = await Skill.findById(skillId)
-        
+
         const skillUser = skill.user.toString()
         const tokenUser = req.user.userId.toString()
 
@@ -221,7 +222,7 @@ exports.updateSkill = async (req, res) => {
             })
         }
 
-        if(!skill){
+        if (!skill) {
             res.status(404).json({
                 success: false,
                 message: "Skill not found"
@@ -236,14 +237,14 @@ exports.updateSkill = async (req, res) => {
         }
 
         const { title, description, category, level, imageUrl } = req.body || {}
-        
+
         skill.title = title ?? skill.title;
-        skill.description = description ?? skill.description 
-        skill.category = category ?? skill.category 
-        skill.level = level ?? skill.level 
+        skill.description = description ?? skill.description
+        skill.category = category ?? skill.category
+        skill.level = level ?? skill.level
         skill.imageUrl = imageUrl ?? skill.imageUrl
 
-        await skill.save() 
+        await skill.save()
 
         res.status(200).json({
             success: true,
@@ -256,6 +257,113 @@ exports.updateSkill = async (req, res) => {
         res.status(500).json({
             success: false,
             message: error.message
+        })
+    }
+}
+
+exports.getFourSkills = async (req, res) => {
+    try {
+        const userId = req.user.userId
+
+        const skills = await Skill.aggregate([
+            {
+                $match: {
+                    user: { $ne: new mongoose.Types.ObjectId(userId) }
+                }
+            },
+            {
+                $sample: { size: 4 }
+            },
+            {
+                $lookup: {
+                    from: "users", // collection name in MongoDB
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $project: {
+                    id: "$_id",
+                    title: 1,
+                    imageUrl: 1,
+                    category: 1,
+                    level: 1,
+                    description: 1,
+
+                    user: {
+                        userId: "$user._id",
+                        name: "$user.name",
+                        profileImage: "$user.profile.profile_image",
+                        profile: "$user.profile"
+                    }
+                }
+            }
+        ])
+
+        res.status(200).json({
+            success: true,
+            data: skills
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+exports.getCategoryWiseSkillCount = async (req, res) => {
+    try {
+        const categories = [
+            "Academics",
+            "Technology",
+            "Wellness",
+            "Music",
+            "Design",
+            "Languages",
+            "Career",
+        ]
+
+        const result = await Skill.aggregate([
+            {
+                $group: {
+                    _id: {
+                        $cond: [
+                            { $in: ["$category", categories] },
+                            "$category",
+                            "Other"
+                        ]
+                    },
+                    count: { $sum: 1 }
+                }
+            }
+        ])
+
+        const countMap = {}
+        result.forEach(item => {
+            countMap[item._id] = item.count
+        })
+
+        const finalCategories = [...categories, "Others"]
+
+        const finalData = finalCategories.map(cat => ({
+            category: cat,
+            count: countMap[cat] || 0
+        }))
+        res.status(200).json({
+            success: true,
+            data: finalData
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: err.message
         })
     }
 }

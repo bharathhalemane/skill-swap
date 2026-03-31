@@ -128,6 +128,7 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
               <option value="Technology">Technology</option>
               <option value="Career">Career</option>
               <option value="Wellness">Wellness</option>
+              <option value="Others">Others</option>
             </select>
           </div>
 

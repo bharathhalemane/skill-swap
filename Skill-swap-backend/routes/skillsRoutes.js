@@ -1,5 +1,5 @@
 const express = require("express")
-const { getAllSkills,  getSkillById, addSkill, getSkillsByUserId, deleteSkill, updateSkill, getSkillsOfOwner} = require("../controllers/skillController")
+const { getAllSkills,  getSkillById, addSkill, getSkillsByUserId, deleteSkill, updateSkill, getSkillsOfOwner, getFourSkills, getCategoryWiseSkillCount} = require("../controllers/skillController")
 const upload = require('../middleware/upload')
 const auth = require('../middleware/auth')
 
@@ -11,6 +11,9 @@ router.get("/", getAllSkills)
 
 //GET SKILLS OF OWNER
 router.get("/owner/:userId", getSkillsOfOwner)
+
+// ANY 4 skills
+router.get("/four-skills",auth, getFourSkills)
 
 // GET SINGLE SKILL BY ID
 router.get("/:skillId", getSkillById)
@@ -26,4 +29,8 @@ router.delete("/delete/:skillId", auth, deleteSkill)
 
 //UPDATE SKILL
 router.put("/update/:skillId", auth,upload.single("image"), updateSkill)
+
+// GET CATEGORY WISE SKILL COUNT
+router.get("/categories/count", getCategoryWiseSkillCount)
+
 module.exports = router
