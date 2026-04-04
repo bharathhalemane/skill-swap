@@ -9,7 +9,6 @@ const LearningSkills = () => {
     const fetchData = async () => {
         const response = await learningSkills()
         setSkillsData(response.data.data)
-        console.log(response.data.data)
     }
     useEffect(() => {        
         fetchData()

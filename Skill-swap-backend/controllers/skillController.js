@@ -1,4 +1,5 @@
 const Skill = require("../models/Skill")
+const Request = require("../models/Request")
 const cloudinary = require("../config/cloudinary")
 const mongoose = require("mongoose")
 
@@ -189,6 +190,11 @@ exports.deleteSkill = async (req, res) => {
                 message: "Not authorized to delete this skill"
             })
         }
+
+        await Request.updateMany(
+            { $or: [{ skill: skillId }, { swapSkill: skillId }] },
+            { status: "CANCELLED" }
+        );
 
         await skill.deleteOne();
 

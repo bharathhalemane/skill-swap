@@ -90,6 +90,7 @@ export const cancelRequest = async (id) => {
                 Authorization: `Bearer ${token}`
             }
         })
+        toast.success("Request cancelled!")
     } catch (err) {
         toast.error(err.response?.data?.msg)
     }

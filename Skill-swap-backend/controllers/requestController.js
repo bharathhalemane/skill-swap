@@ -19,8 +19,17 @@ exports.sendRequest = async (req, res) => {
 
         const exists = await Request.findOne({
             skill: skillId,
-            sender: req.user.userId,
-            status: "PENDING"
+            status: "PENDING",
+            $or: [
+                {
+                    sender: req.user.userId,
+                    receiver: skill.user
+                },
+                {
+                    sender: skill.user,
+                    receiver: req.user.userId
+                }
+            ]
         })
 
         if (exists) {
@@ -50,11 +59,16 @@ exports.sendRequest = async (req, res) => {
             status: "PENDING"
         })
 
+        const populatedRequest = await Request.findById(request._id)
+            .populate("sender", "name profile")
+            .populate("skill", "title category")
+            .populate("swapSkill", "title category")
+        const msg = `New Skill swap request from ${populatedRequest.sender.name}`
         const io = getIO()
-        const receiverSocketId = onlineUsers[skill.user]
-
+        const receiverId = skill.user._id.toString()
+        const receiverSocketId = onlineUsers[receiverId]
         if (receiverSocketId) {
-            io.to(receiverSocketId).emit("new_requests", request)
+            io.to(receiverSocketId).emit("new_request", populatedRequest, msg)
         }
 
         res.status(201).json({
@@ -81,7 +95,7 @@ exports.resendRequest = async (req, res) => {
             return res.status(403).json({ msg: "Unauthorized" })
         }
 
-        if (!["REJECTED", "CANCELED"].includes(request.status)) {
+        if (!["REJECTED", "CANCELLED"].includes(request.status)) {
             return res.status(400).json({ msg: "Cannot resend this request" })
         }
 
@@ -99,6 +113,18 @@ exports.resendRequest = async (req, res) => {
         request.updatedAt = new Date()
 
         await request.save()
+
+        const populatedRequest = await Request.findById(requestId)
+            .populate("sender", "name profile")
+            .populate("skill", "title category")
+            .populate("swapSkill", "title category")
+        const msg = `Request resent from ${populatedRequest.sender.name}`
+        const io = getIO()
+        const receiverId = request.receiver.toString()
+        const receiverSocketId = onlineUsers[receiverId]
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("new_request", populatedRequest, msg)
+        }
 
         res.json({
             success: true,
@@ -152,14 +178,27 @@ exports.getReceivedRequests = async (req, res) => {
 
 exports.getSentRequests = async (req, res) => {
     try {
+
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+
         const requests = await Request.find({
-            sender: req.user.userId
+            sender: req.user.userId,
+            $or: [
+                { status: "PENDING" },
+                {
+                    status: { $ne: "PENDING" },
+                    updatedAt: { $gte: startOfDay, $lte: endOfDay }
+                }
+            ]
         })
             .populate("receiver", "name email profile")
             .populate("skill", "title category")
             .populate("swapSkill", "title category")
             .sort({ createdAt: -1 })
-
         res.json(requests)
     } catch (err) {
         res.status(500).json({ msg: err.message })
@@ -169,12 +208,15 @@ exports.getSentRequests = async (req, res) => {
 exports.acceptRequest = async (req, res) => {
     try {
         const request = await Request.findById(req.params.id)
+            .populate("skill", "title")
+            .populate("receiver", "name")
+            .populate("sender", "name")
 
         if (!request) {
             return res.status(404).json({ msg: "Request not found" })
         }
 
-        if (request.receiver.toString() !== req.user.userId) {
+        if (request.receiver._id.toString() !== req.user.userId) {
             return res.status(403).json({ msg: "Unauthorized" })
         }
 
@@ -182,6 +224,13 @@ exports.acceptRequest = async (req, res) => {
         request.isLearning = true
         request.updatedAt = new Date()
         await request.save()
+
+        const io = getIO()
+        const senderSocketId = onlineUsers[request.sender._id.toString()]
+        const msg = `Your request for ${request.skill.title} was accepted by ${request.receiver.name}`
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("request_accepted", msg)
+        }
 
         res.json({ msg: "Request accepted", request })
     } catch (err) {
@@ -191,18 +240,28 @@ exports.acceptRequest = async (req, res) => {
 
 exports.rejectRequest = async (req, res) => {
     try {
-        const request = await Request.findById(req.params.id);
+        const request = await Request.findById(req.params.id)
+            .populate("receiver", "name")
+            .populate("sender", "name")
+            .populate("skill", "title")
 
         if (!request) {
             return res.status(404).json({ msg: "Request not found" })
         }
 
-        if (request.receiver.toString() !== req.user.userId) {
+        if (request.receiver._id.toString() !== req.user.userId) {
             return res.status(403).json({ msg: "Unauthorized" })
         }
 
         request.status = "REJECTED"
         await request.save()
+
+        const io = getIO()
+        const senderSocketId = onlineUsers[request.sender._id.toString()]
+        const msg = `Your request for ${request.skill.title} was rejected by ${request.receiver.name}`
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("request_rejected", msg)
+        }
 
         res.json({ msg: "request rejected", request })
     } catch (err) {
@@ -213,12 +272,14 @@ exports.rejectRequest = async (req, res) => {
 exports.cancelRequest = async (req, res) => {
     try {
         const request = await Request.findById(req.params.id)
+            .populate("sender", "name")
+            .populate("skill", "title")
 
         if (!request) {
             return res.status(404).json({ msg: "Request not found" })
         }
 
-        if (request.sender.toString() !== req.user.userId) {
+        if (request.sender._id.toString() !== req.user.userId) {
             return res.status(403).json({ msg: "only sender can cancel this request" })
         }
 
@@ -228,6 +289,14 @@ exports.cancelRequest = async (req, res) => {
 
         request.status = "CANCELLED";
         await request.save();
+
+        const msg = `${request.skill.title} Request cancelled by ${request.sender.name}`;
+        const io = getIO()
+        const receiverSocketId = onlineUsers[request.receiver.toString()];
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("request_cancelled", request, msg);
+        }
+
 
         res.json({ msg: "Request cancelled successfully" })
     } catch (err) {
@@ -250,7 +319,7 @@ exports.getCurrentLearning = async (req, res) => {
             .populate("receiver", "name profile")
             .populate("skill", "title category imageUrl")
             .populate("swapSkill", "title category imageUrl")
-        
+
         const formatted = learning.map(reqItem => {
             const isSender = reqItem.sender._id.toString() === userId
             const isReceiver = reqItem.receiver._id.toString() === userId
@@ -258,7 +327,7 @@ exports.getCurrentLearning = async (req, res) => {
             if (!reqItem.isSwap) {
                 if (isSender) {
                     return {
-                        id:reqItem._id,
+                        id: reqItem._id,
                         skill: reqItem.skill,
                         partner: reqItem.receiver,
                         startedAt: reqItem.updatedAt
@@ -270,7 +339,7 @@ exports.getCurrentLearning = async (req, res) => {
             if (reqItem.isSwap) {
                 if (isSender) {
                     return {
-                        id:reqItem._id,
+                        id: reqItem._id,
                         skill: reqItem.skill,
                         partner: reqItem.receiver,
                         startedAt: reqItem.updatedAt
@@ -279,7 +348,7 @@ exports.getCurrentLearning = async (req, res) => {
 
                 if (isReceiver) {
                     return {
-                        id:reqItem._id,
+                        id: reqItem._id,
                         skill: reqItem.swapSkill,
                         partner: reqItem.sender,
                         startedAt: reqItem.updatedAt

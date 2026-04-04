@@ -13,9 +13,7 @@ const initSocket = (server) => {
 
         socket.on("register", (userId) => {
             onlineUsers[userId] = socket.id  
-            console.log("👤 User registered:", userId);
-        console.log("🧠 Socket ID:", socket.id);
-        console.log("📡 Online Users:", onlineUsers);
+            console.log("📡 Online Users:", onlineUsers);
         })
 
         socket.on("disconnect", () => {

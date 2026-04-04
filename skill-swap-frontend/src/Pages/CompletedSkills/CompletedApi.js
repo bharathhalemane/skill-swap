@@ -25,7 +25,6 @@ export const getAnySkills = async () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        console.log(response.data.data)
         return response
     }catch(err){
         console.log(err)

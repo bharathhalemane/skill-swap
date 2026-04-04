@@ -39,7 +39,7 @@ const CompletedSkills = () => {
                                         <img src={item.skill.imageUrl} alt="skill" className="completed-img" />
                                         <div className="completed-info">
                                             <h3>{item.skill.title}</h3>
-                                            <p>with {item.receiver.name}</p>
+                                            <p>by {item.receiver.name}</p>
                                         </div>
                                     </div>
                                 )
@@ -56,7 +56,7 @@ const CompletedSkills = () => {
                                     <img src={item.skill.imageUrl} alt="skill" className="completed-img" /> 
                                     <div className="completed-info">
                                         <h3>{item.skill.title}</h3>
-                                        <p>to {item.receiver.name}</p>
+                                        <p>to {item.sender.name}</p>
                                     </div>
                                 </div>
                             )

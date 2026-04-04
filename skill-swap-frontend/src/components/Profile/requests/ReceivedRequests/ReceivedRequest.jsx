@@ -25,18 +25,32 @@ const ReceivedRequest = () => {
         }
     }, [callData])
 
-    useEffect(() => {
-        const userId = Cookies.get("userId")
-
-        socket.on("new_requests", (newReq) => {
-            setRequestsData(prev => [newReq, ...prev])
-            toast.info("New Request received!")
+    const showToast = msg => {
+        toast.info(msg, {
+            position: "bottom-right",
+            autoClose: 2500,
+            theme: "dark",
         })
+    }
+    useEffect(() => {
+        const handleNewRequest = (data, msg) => {
+            setRequestsData(prev => [data, ...prev])
+            showToast(msg)
+        }
+
+        const handleCancelRequest = (data, msg) => {
+            setRequestsData(prev => prev.filter(req => req._id !== data._id))
+            showToast(msg)
+        }
+
+        socket.on("new_request", handleNewRequest)
+        socket.on("request_cancelled", handleCancelRequest)
+
         return () => {
             socket.off("new_request")
+            socket.off("request_cancelled")
         }
     }, [])
-
     const handleAcceptRequest = async (id, name) => {
         acceptRequest(id, name)
         setCallData(!callData)
@@ -112,7 +126,7 @@ const ReceivedRequest = () => {
                                         </div>
 
                                         <div className="time">
-                                            <Calendar size={15}/>{getTimeAgo(req.createdAt)}
+                                            <Calendar size={15} />{getTimeAgo(req.createdAt)}
                                         </div>
                                     </div>
                                 </div>

@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css"
 import './App.css'
 import { useEffect } from "react"
 import Cookies from "js-cookie"
-import { socket } from "./Socket"
+import socket from './Socket'
 import CompletedSkills from './Pages/CompletedSkills/CompletedSkills'
 
 
@@ -25,8 +25,8 @@ function App() {
 
     if (!userId) return
 
-    const handleConnect = () => {
-      console.log("Socket connected, registering user...");
+    const handleConnect = () => {      
+      console.log("Socket ID:", socket.id);
       socket.emit("register", userId);
     };
 
@@ -35,7 +35,6 @@ function App() {
     } else {
       socket.on("connect", handleConnect)
     }
-    console.log("Socket ID:", socket.id);
     return () => {
       socket.off("connect", handleConnect)
     }

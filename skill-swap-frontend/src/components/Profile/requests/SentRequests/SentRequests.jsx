@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import './SentRequests.css'
 import { getSentRequest, resendRequest, cancelRequest } from '../../requestAPi'
-import { ArrowRight, ArrowRightLeft, RefreshCcw, RotateCcw, Send, X } from 'lucide-react'
-import RequestModel from '../../../Skill/RequestModel'
+import { ArrowRight, ArrowRightLeft, RotateCcw, Send, X } from 'lucide-react'
+import {socket} from '../../../../Socket'
+import {toast} from 'react-toastify'
 
 const SentRequests = () => {
     const [data, setData] = useState([])
@@ -20,12 +21,42 @@ const SentRequests = () => {
         fetchData()
     }, [callData])
 
+    const showToast = msg => {
+        toast.info(msg, {
+            position: "bottom-right",
+            autoClose: 2500,
+            theme: "dark",
+        })
+    }
+
+    useEffect(() => {
+        const handleRequestAccepted = msg => {
+            
+            fetchData()
+            showToast(msg)
+        }
+
+        const handleRequestRejected = msg => {
+            console.log("calling rejected function")
+            showToast(msg)
+            fetchData()
+        }
+        
+        socket.on("request_accepted", handleRequestAccepted)
+        socket.on("request_rejected", handleRequestRejected)
+
+        return () => {
+            socket.off("request_accepted")
+            socket.off("request_rejected")
+        }
+    })
+
+
     const handleResentRequest = async (id) => {
         await resendRequest(id)
         setCallData(!callData)
     }
     const handleCancelRequest = async (id) => {
-        console.log(id)
         await cancelRequest(id)
         setCallData(!callData)
     }
@@ -93,12 +124,12 @@ const SentRequests = () => {
                                                                 </div>
                                                         }
                                                         <div className="message">"{req.message}"</div>
-                                                        <div className="time">Sent {getTimeAgo(req.createdAt)}</div>
+                                                        <div className="time">Sent {getTimeAgo(req.updatedAt)}</div>
                                                     </div>
                                                 </div>
                                                 <div className="right">
                                                     <div className="status waiting">Awaiting Response</div>
-                                                    <button className="cancel " onClick={()=> handleCancelRequest(req._id)}><X size={15} /> Cancel</button>
+                                                    <button className="cancel " onClick={() => handleCancelRequest(req._id)}><X size={15} /> Cancel</button>
                                                 </div>
                                             </div>
                                         ))
@@ -124,10 +155,10 @@ const SentRequests = () => {
                                                             <span>{req.skill?.category} </span><ArrowRight />
                                                             <span> {req.skill?.title}</span>
                                                         </div>
-                                                }                                               
+                                                }
 
-                                                {req.status === "REJECTED" && (
-                                                    <div className="resend" onClick={() => handleResentRequest(req._id)}><RotateCcw /> Resend Request</div>                                                    
+                                                {(req.status === "REJECTED" || req.status === "CANCELLED") && (
+                                                    <div className="resend" onClick={() => handleResentRequest(req._id)}><RotateCcw /> Resend Request</div>
                                                 )}
                                             </div>
                                         </div>
