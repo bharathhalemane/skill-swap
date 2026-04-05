@@ -8,7 +8,7 @@ import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
 import Home from './Pages/Home/Home'
 import Profile from './components/Profile/Profile'
 import { ToastContainer } from 'react-toastify'
-import SkillPage from './components/Skill/Skillpage'
+import SkillPage from './components/Skill/SkillPage'
 import StudyGroups from './Pages/StudyGroups/StudyGroups'
 import "react-toastify/dist/ReactToastify.css"
 import './App.css'

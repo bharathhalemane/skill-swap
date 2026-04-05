@@ -9,8 +9,6 @@ const initSocket = (server) => {
     })
 
     io.on("connection", (socket) => {
-        console.log("Socket connected:", socket.id);
-
         socket.on("register", (userId) => {
             onlineUsers[userId] = socket.id  
             console.log("📡 Online Users:", onlineUsers);
