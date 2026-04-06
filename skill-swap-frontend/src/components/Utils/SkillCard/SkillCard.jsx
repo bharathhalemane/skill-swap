@@ -21,7 +21,7 @@ const SkillCard = ({skillsData}) => {
       to={`/skill/${id}/${userId}`}
       className="skills-card"
     >
-      <div className="container">
+      <div className="skill-card-container">
         <img
           src={imageUrl}
           alt={title}

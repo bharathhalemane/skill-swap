@@ -95,8 +95,13 @@ const Dashboard = () => {
                 <h1>Learn from <span>Classmates</span>, Teach What You Know</h1>
                 <p>Swap skills with fellow students. Get help with calculus, learn guitar, practice coding - all by exchanging what you're good at</p>
                 <div className="banner-buttons">
-                    <a href="/signup" ><button className='swapping-button'>Join with email <FaArrowRight className="arrow-icon" /></button></a>
-                    <a href="/browse-skills" ><button className='browse-skills-button'>Browse Skills</button></a>
+                    <a href="/signup" >
+                        <button className='swapping-button'>Join with email <FaArrowRight className="arrow-icon" />
+                        </button>
+                    </a>
+                    <a href="/browse-skills" >
+                        <button className='browse-skills-button'>Browse Skills</button>
+                    </a>
                 </div>
             </section>
 

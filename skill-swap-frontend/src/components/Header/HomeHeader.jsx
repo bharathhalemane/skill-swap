@@ -1,52 +1,50 @@
-import './HomeHeader.css'
+import styles from './HomeHeader.module.css'
 import { IoMdSwap } from "react-icons/io";
 import { IoPersonCircle } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { useState, useEffect } from 'react';
 import axios from "axios"
+import { Menu } from 'lucide-react';
 
 const HomeHeader = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const navLinks = [
-        { href: "/home", label: "Home" },
-        { href: "/find-skills", label: "Find Skills" },
-        { href: "/study-groups", label: "Study Groups" },
-        { href: "/completed-skills", label: "Completed Skills" },
-    ];
 
-    const token = Cookies.get("jwtToken")
-    const userId = Cookies.get("userId")
+    const [menuOpen, setMenuOpen] = useState(false)
     const [profileImage, setProfileImage] = useState(null)
 
-
-    const getProfileData = async () => {
-        
-        const token = Cookies.get("jwtToken")
-        const userId = Cookies.get("userId")
-        if (!userId || !token) return
-        try {
-            const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const data = response.data.user
-            setProfileImage(response.data.user?.profile?.profile_image)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    const navLinks = [
+        { href: "/home",              label: "Home" },
+        { href: "/find-skills",       label: "Find Skills" },
+        { href: "/study-groups",      label: "Study Groups" },
+        { href: "/completed-skills",  label: "Completed Skills" },
+    ];
 
     useEffect(() => {
-        getProfileData()
-    })
+        const getProfileData = async () => {
+            const token  = Cookies.get("jwtToken")
+            const userId = Cookies.get("userId")
+            if (!userId || !token) return
 
-    const isActive = (path) => {
-        return location.pathname === path ? "active-link" : "";
-    }
+            try {
+                const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
+                const res = await axios.get(url, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                setProfileImage(res.data.user?.profile?.profile_image)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        getProfileData()
+    }, [])
+
+    const isActive = (path) =>
+        location.pathname === path ? styles.active : ""
+
+    const closeMenu = () => setMenuOpen(false)
 
     const onClickLogout = () => {
         Cookies.remove("jwtToken")
@@ -55,24 +53,96 @@ const HomeHeader = () => {
     }
 
     return (
-        <nav className="header">
-            <div className="logo"><div className='swap-icon-con'><IoMdSwap className="swap-icon" /></div><h1>Skill<span>Swap</span></h1></div>
-            <ul>
-                {
-                    navLinks.map((link, index) => (
-                        <li key={index}>
-                            <Link to={link.href} className={`nav-link ${isActive(link.href)}`}>{link.label}</Link>
-                        </li>
-                    ))
-                }
+        <nav className={styles.header}>
+
+            {/* LOGO */}
+            <div className={styles.logo}>
+                <div className={styles.iconBox}>
+                    <IoMdSwap className={styles.icon} />
+                </div>
+                <h1>Skill<span>Swap</span></h1>
+            </div>
+
+            {/* ── DESKTOP: Nav links ── */}
+            <ul className={styles.navLinks}>
+                {navLinks.map(link => (
+                    <li key={link.href}>
+                        <Link
+                            to={link.href}
+                            className={`${styles.link} ${isActive(link.href)}`}
+                        >
+                            {link.label}
+                        </Link>
+                    </li>
+                ))}
             </ul>
-            <ul className="auth-links">
-                <li><Link to="/profile"><div className='profile-container'>
-                    {
-                        profileImage ? <img src={profileImage} className='profile-image-icon' /> : <IoPersonCircle className="profile-icon" />
-                    }
-                </div></Link></li>
-                <li><button className='logout-btn' onClick={onClickLogout}>LogOut</button></li>
+
+            {/* ── DESKTOP: Auth (profile + logout) ── */}
+            <ul className={styles.authLinks}>
+                <li>
+                    <Link to="/profile">
+                        <div className={styles.profileBox}>
+                            {profileImage
+                                ? <img src={profileImage} alt="Profile" className={styles.profileImg} />
+                                : <IoPersonCircle className={styles.profileIcon} />
+                            }
+                        </div>
+                    </Link>
+                </li>
+                <li>
+                    <button className={styles.logoutBtn} onClick={onClickLogout}>
+                        Logout
+                    </button>
+                </li>
+            </ul>
+
+            {/* ── MOBILE: Hamburger ── */}
+            <div
+                className={styles.hamburger}
+                onClick={() => setMenuOpen(prev => !prev)}
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+            >
+                <Menu />
+            </div>
+
+            {/* ── MOBILE: Single unified menu ── */}
+            <ul className={`${styles.mobileMenu} ${menuOpen ? styles.show : ''}`}>
+
+                {/* Nav links */}
+                {navLinks.map(link => (
+                    <li key={link.href}>
+                        <Link
+                            to={link.href}
+                            className={`${styles.link} ${isActive(link.href)}`}
+                            onClick={closeMenu}
+                        >
+                            {link.label}
+                        </Link>
+                    </li>
+                ))}
+
+                {/* Profile row */}
+                <li className={styles.profileLogout}>
+                    <Link
+                        to="/profile"
+                        className={styles.mobileProfileRow}
+                        onClick={closeMenu}
+                    >
+                        <div className={styles.profileBox}>
+                            {profileImage
+                                ? <img src={profileImage} alt="Profile" className={styles.profileImg} />
+                                : <IoPersonCircle className={styles.profileIcon} />
+                            }
+                        </div>
+                        <span className={styles.mobileProfileLabel}>My Profile</span>
+                    </Link>
+                    <button className={styles.logoutBtn} onClick={onClickLogout}>
+                        Logout
+                    </button>
+                </li>
+
+
             </ul>
         </nav>
     )
