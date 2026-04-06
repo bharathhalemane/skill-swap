@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import HomeHeader from '../../components/Header/HomeHeader'
 import Footer from '../../components/Footer/Footer'
-import './BrowseSkills.css'
+import styles from './BrowseSkills.module.css'
 import { useState, useEffect } from "react"
 import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
@@ -23,6 +23,14 @@ const levels = [
 
 const skillApi = import.meta.env.VITE_SKILL_API
 
+// Returns limit based on current window width:
+// mobile (≤768px) → 4  |  tablet (≤1024px) → 6  |  desktop → 8
+const getLimit = () => {
+    if (window.innerWidth <= 768) return 4
+    if (window.innerWidth <= 1024) return 6
+    return 8
+}
+
 const BrowseSkills = () => {
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
@@ -33,31 +41,47 @@ const BrowseSkills = () => {
     const [skillData, setSkillData] = useState([])
     const [totalSkills, setTotalSkills] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
+    const [limit, setLimit] = useState(getLimit)
 
-    const lastPage = Math.ceil(totalSkills / 8)
+    const lastPage = Math.ceil(totalSkills / limit)
+
+    // Update limit on window resize and reset to page 1
+    useEffect(() => {
+        const handleResize = () => {
+            const newLimit = getLimit()
+            setLimit(prev => {
+                if (prev !== newLimit) {
+                    setCurrentPage(1)
+                    return newLimit
+                }
+                return prev
+            })
+        }
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     const onChangeInputValue = e => {
         setInputValue(e.target.value)
+        setCurrentPage(1)
     }
-
     const onChangeCategory = e => {
         setCategory(e.target.value)
+        setCurrentPage(1)
     }
-
     const onChangeLevel = e => {
         setLevel(e.target.value)
+        setCurrentPage(1)
     }
-
     const onClearLevel = () => {
         setLevel("")
+        setCurrentPage(1)
     }
+
     const getSkillData = async () => {
         try {
-            const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=8`
-            const option = {
-                method: "GET"
-            }
-            const response = await fetch(url, option)
+            const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=${limit}`
+            const response = await fetch(url, { method: "GET" })
             if (response.ok) {
                 const data = await response.json()
                 const formattedSkills = data.skills.map(skill => ({
@@ -77,69 +101,120 @@ const BrowseSkills = () => {
                 setSkillData(formattedSkills)
                 setTotalSkills(data.totalSkills)
             }
-        } catch {
+        } catch (err) {
             console.log(err)
         }
     }
 
     useEffect(() => {
         getSkillData()
-    }, [inputValue, category, level, currentPage])
+    }, [inputValue, category, level, currentPage, limit])
 
     return (
         <>
             <HomeHeader />
-            <div className="browse-skill-page">
-                <div className="dashboard-section">
+            <div className={styles.browseSkillPage}>
+                {/* ── Hero ── */}
+                <div className={styles.dashboardSection}>
                     <h1>Browse Skills</h1>
                     <p>Discover skills from our community of passionate teachers. Filter by category, level, or search for specific skills.</p>
                 </div>
 
-                <div className="filter-section">
-                    <div className="input-filter-container">
-                        <div className="skill-input-container">
+                {/* ── Filters ── */}
+                <div className={styles.filterSection}>
+                    <div className={styles.inputFilterContainer}>
+                        <div className={styles.skillInputContainer}>
                             <MdSearch size={20} />
-                            <input type="search" placeholder='Search Skills...' value={inputValue} onChange={onChangeInputValue} />
+                            <input
+                                type="search"
+                                placeholder='Search Skills...'
+                                value={inputValue}
+                                onChange={onChangeInputValue}
+                            />
                         </div>
-                        <ul className='categories-filter-list'>
-                            <li><button className={`category-filter-btn ${category === "" ? "active" : ""}`} onClick={onChangeCategory} value="">All</button></li>
-                            {
-                                categories.map(each => (
-                                    <li key={each.name}><button className={`category-filter-btn ${category === each.name ? "active" : ""}`} value={each.name} onClick={onChangeCategory}>{each.icon} {each.name}</button></li>
-                                ))
-                            }
+                        <ul className={styles.categoriesFilterList}>
+                            <li>
+                                <button
+                                    className={`${styles.categoryFilterBtn} ${category === "" ? styles.active : ""}`}
+                                    onClick={onChangeCategory}
+                                    value=""
+                                >
+                                    All
+                                </button>
+                            </li>
+                            {categories.map(each => (
+                                <li key={each.name}>
+                                    <button
+                                        className={`${styles.categoryFilterBtn} ${category === each.name ? styles.active : ""}`}
+                                        value={each.name}
+                                        onClick={onChangeCategory}
+                                    >
+                                        {each.icon} {each.name}
+                                    </button>
+                                </li>
+                            ))}
                         </ul>
                     </div>
-                    <div className="level-filter-container">
+
+                    <div className={styles.levelFilterContainer}>
                         <HiAdjustmentsHorizontal size={30} color="#a3a2a2" />
                         <ul>
-                            {
-                                levels.map(each => (
-                                    <li key={each.name}><button className={`level-filter-btn ${each.name === level ? "active" : ""}`} value={each.name} onClick={onChangeLevel}>{each.name}</button></li>
-                                ))
-                            }
-                            <li><button className={`level-filter-btn ${level ? "" : "d-none"}`} onClick={onClearLevel}>Clear Filter</button></li>
+                            {levels.map(each => (
+                                <li key={each.name}>
+                                    <button
+                                        className={`${styles.levelFilterBtn} ${each.name === level ? styles.active : ""}`}
+                                        value={each.name}
+                                        onClick={onChangeLevel}
+                                    >
+                                        {each.name}
+                                    </button>
+                                </li>
+                            ))}
+                            <li>
+                                <button
+                                    className={`${styles.levelFilterBtn} ${level ? "" : styles.dNone}`}
+                                    onClick={onClearLevel}
+                                >
+                                    Clear Filter
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <div className="skills-section">
-                    <h1 className='skills-length'>{
-                        totalSkills > 0 ? `Available ${totalSkills} Skills` : 'No Skill Found'
-                    }</h1>
-                    <ul className="skills-list">
-                        {
-                            skillData.map(each => (
-                                <li key={each.id}><SkillCard skillsData={each} /></li>
-                            ))
-                        }
+
+                {/* ── Skills Grid ── */}
+                <div className={styles.skillsSection}>
+                    <h1 className={styles.skillsLength}>
+                        {totalSkills > 0 ? `Available ${totalSkills} Skills` : 'No Skill Found'}
+                    </h1>
+                    <ul className={styles.skillsList}>
+                        {skillData.map(each => (
+                            <li key={each.id}>
+                                <SkillCard skillsData={each} />
+                            </li>
+                        ))}
                     </ul>
-                    {
-                        totalSkills > 8 ? <div className="pagination-button-container">
-                            <button className={`prev-button ${currentPage === 1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
-                            <button className={`next-button ${currentPage === lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-                        </div> : null
-                    }
+
+                    {totalSkills > limit && (
+                        <div className={styles.paginationButtonContainer}>
+                            <button
+                                className={`${styles.prevButton} ${currentPage === 1 ? styles.buttonDisable : ""}`}
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage(prev => prev - 1)}
+                            >
+                                Prev
+                            </button>
+                            <button
+                                className={`${styles.nextButton} ${currentPage === lastPage ? styles.buttonDisable : ""}`}
+                                disabled={currentPage === lastPage}
+                                onClick={() => setCurrentPage(prev => prev + 1)}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
                 </div>
+
                 <Footer />
             </div>
         </>

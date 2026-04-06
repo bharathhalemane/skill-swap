@@ -118,6 +118,10 @@
 
 
 /*skills cards  */
+.details{
+    margin-top: 10px;
+    display: block;
+}
 .skills-slider-container {
     padding: 20px;
     color: #000;
@@ -147,4 +151,39 @@
     color: #ff7a18 !important;
     font-size: 24px;
     color: #000;
+}
+
+@media (max-width: 768px) {
+    .skill-page {
+        padding: 20px;
+        padding-top: 10%;
+    }
+
+    .skills-information {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .skill-right img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .skill-page {
+        padding: 15px;
+        padding-top: 15%;
+    }
+
+    .skills-information {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+    .details{
+        display: none;
+    }
 }

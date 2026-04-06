@@ -1,0 +1,83 @@
+/* ── Skills Slider Section ────────────────────────────── */
+.skillsSliderContainer {
+    padding: 20px;
+    color: #000;
+}
+
+.skillsSliderContainer h1 {
+    font-size: 20px;
+    font-weight: bold;
+    padding-block: 10px;
+}
+
+/* ── No Skills ────────────────────────────────────────── */
+.noSkills {
+    text-align: center;
+    color: #777;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* ── Static grid (when ≤ 4 skills) ───────────────────── */
+.staticGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+/* ── Slick overrides ──────────────────────────────────── */
+:global(.slick-slide) {
+    padding: 10px;
+}
+
+:global(.slick-prev:before),
+:global(.slick-next:before) {
+    color: #ff7a18 !important;
+    font-size: 24px;
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Tablet  (≤ 1024px)
+════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .staticGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Mobile  (≤ 768px)
+   Show 2 cards max
+════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .skillsSliderContainer {
+        padding: 14px 12px;
+    }
+
+    .skillsSliderContainer h1 {
+        font-size: 17px;
+        padding-block: 8px;
+    }
+
+    .staticGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    :global(.slick-slide) {
+        padding: 6px;
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Small Mobile  (≤ 480px)
+════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .skillsSliderContainer {
+        padding: 12px 8px;
+    }
+
+    .staticGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+    }
+}

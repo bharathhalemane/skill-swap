@@ -1,0 +1,325 @@
+.browseSkillPage {
+    color: #000;
+}
+
+/* ── Dashboard / Hero ─────────────────────────────────── */
+.dashboardSection {
+    background-color: #FBF6EF;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+}
+
+.dashboardSection h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dashboardSection p {
+    font-size: 15px;
+    color: #a99f98;
+    width: 500px;
+}
+
+/* ── Filter Section ───────────────────────────────────── */
+.filterSection {
+    background-color: #ffffff81;
+    padding: 20px 30px;
+    font-family: "Segoe UI", sans-serif;
+    border-bottom: 1px solid #a99f98;
+
+    position: sticky;
+    top: 90px;
+    z-index: 1000;
+}
+
+/* Top Container */
+.inputFilterContainer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Search Input */
+.skillInputContainer {
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    outline: none;
+    background-color: #ffffff;
+    transition: 0.2s ease;
+    width: 300px;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.skillInputContainer input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Category List */
+.categoriesFilterList {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Category Button */
+.categoryFilterBtn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 2px solid #ff7a59;
+    background-color: #fff;
+    color: #ff7a59;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.categoryFilterBtn.active,
+.categoryFilterBtn:hover {
+    background-color: #ff7a59;
+    color: #fff;
+}
+
+/* Level Section */
+.levelFilterContainer {
+    margin-top: 18px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.levelFilterContainer ul {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Level Button */
+.levelFilterBtn {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid #d6d6d6;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.levelFilterBtn:hover,
+.levelFilterBtn.active {
+    border-color: #ff7a59;
+    color: #ff7a59;
+    background-color: #fff5f2;
+}
+
+.dNone {
+    display: none;
+}
+
+/* ── Skills Section ───────────────────────────────────── */
+.skillsSection {
+    padding: 20px 40px;
+    background-color: #FCFAF7;
+}
+
+.skillsList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.skillsLength {
+    color: #333;
+    padding: 20px;
+}
+
+/* ── Pagination ───────────────────────────────────────── */
+.paginationButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.prevButton {
+    border: 2px solid #ff7a59;
+    color: #ff7a59;
+    border-radius: 10px;
+    outline: none;
+    padding: 10px 20px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.nextButton {
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #ff7a59;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.buttonDisable {
+    opacity: 50%;
+    cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Tablet  (≤ 1024px)
+════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .skillsList {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .dashboardSection p {
+        width: 100%;
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Mobile  (≤ 768px)
+════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* Hero */
+    .dashboardSection {
+        height: auto;
+        padding: 80px 20px 30px;
+    }
+
+    .dashboardSection h1 {
+        font-size: 26px;
+    }
+
+    .dashboardSection p {
+        font-size: 13px;
+        width: 100%;
+    }
+
+    /* Filter section becomes scrollable, no longer sticky */
+    .filterSection {
+        position: static;
+        padding: 14px 16px;
+        backdrop-filter: none;
+    }
+
+    /* Stack search + categories vertically */
+    .inputFilterContainer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .skillInputContainer {
+        width: 100%;
+    }
+
+    /* Horizontally scrollable category pills */
+    .categoriesFilterList {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 10px;
+        padding-bottom: 4px;
+    }
+
+    .categoriesFilterList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .categoryFilterBtn {
+        padding: 7px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    /* Level row wraps nicely */
+    .levelFilterContainer {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .levelFilterContainer ul {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Skills grid → 1 column */
+    .skillsSection {
+        padding: 16px 16px;
+    }
+
+    .skillsList {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .skillsLength {
+        padding: 10px 4px;
+        font-size: 16px;
+    }
+
+    /* Pagination full-width */
+    .paginationButtonContainer {
+        justify-content: center;
+        gap: 14px;
+        margin-top: 24px;
+        padding-bottom: 20px;
+    }
+
+    .prevButton,
+    .nextButton {
+        flex: 1;
+        max-width: 140px;
+        text-align: center;
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — Small Mobile  (≤ 480px)
+════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    .filterSection{
+        padding: 14px 2px;
+    }
+    .dashboardSection h1 {
+        font-size: 22px;
+    }
+
+    .skillsList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .categoryFilterBtn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .levelFilterBtn {
+        font-size: 12px;
+        padding: 5px 12px;
+    }
+}

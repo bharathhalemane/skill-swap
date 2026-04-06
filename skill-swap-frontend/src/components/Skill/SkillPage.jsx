@@ -4,10 +4,10 @@ import './SkillPage.css';
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { getSkillData, allSkillsOfOwner, availabilityOfOwner } from "./SkillApi"
-import SkillInformationCard from "./SkillInformationCard"
-import Skills from "./Skills"
+import SkillInformationCard from "./SkillInformationCard/SkillInformationCard";
+import Skills from "./Skills/Skills"
 import Footer from "../Footer/Footer";
-import OwnerAvailability from "./OwnerAvailability";
+import OwnerAvailability from "./OwnerAvailability/OwnerAvailability";
 
 const SkillPage = () => {
     const { skillId, userId } = useParams();
@@ -59,8 +59,10 @@ const SkillPage = () => {
             <HomeHeader />
             <div className="skill-page">
                 <SkillInformationCard data={skillData} />
-                <OwnerAvailability availabilityData={availabilityData} />
-                <Skills skillsData={allSkillsData} skillId={skillId} />                
+                <Skills skillsData={allSkillsData} skillId={skillId}/>                
+                <div className="details">
+                    <OwnerAvailability availabilityData={availabilityData}/>
+                </div>
             </div>
             <Footer/>
         </>
