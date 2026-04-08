@@ -196,7 +196,7 @@ input{
     margin-left: 10px;
 }
 
-@media (min-width: 580px) {    
+@media (min-width: 780px) {    
     .input-container-login{
         width: 50%;
         padding: 20px;

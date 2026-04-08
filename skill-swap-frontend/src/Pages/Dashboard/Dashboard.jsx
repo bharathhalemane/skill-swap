@@ -3,11 +3,11 @@ import Footer from "../../components/Footer/Footer";
 import './Dashboard.css'
 import { FaArrowRight } from "react-icons/fa";
 import { LuCoins, LuBookOpen, LuGraduationCap, LuUsers, LuCalendar } from "react-icons/lu";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useScrollReveal from "../../components/Utils/useScrollReveal";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import Cookies from "js-cookie"
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
     { name: "Technology", icon: "💻", count: 234 },
@@ -64,6 +64,7 @@ const howItWorksSteps = [
     },
 ]
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [apiData, setApiData] = useState([])
     const howitworksRef = useScrollReveal();
     const categoriesRef = useScrollReveal();
@@ -71,13 +72,18 @@ const Dashboard = () => {
     const spaceRef = useScrollReveal();
 
     useEffect(() => {
+        const jwtToken = Cookies.get("jwtToken");
+        if (jwtToken) {
+            navigate("/home")
+        }
+
         const getCategoriesCount = async () => {
             const url = `${import.meta.env.VITE_SKILL_API}/categories/count`
             const response = await axios.get(url)
             setApiData(response.data.data)
         }
         getCategoriesCount()
-    }, [])
+    }, [navigate])
 
     const mergedData = categories.map(cat => {
         const found = apiData.find(item => item.category === cat.name)
@@ -99,7 +105,7 @@ const Dashboard = () => {
                         <button className='swapping-button'>Join with email <FaArrowRight className="arrow-icon" />
                         </button>
                     </a>
-                    <a href="/browse-skills" >
+                    <a href="/find-skills" >
                         <button className='browse-skills-button'>Browse Skills</button>
                     </a>
                 </div>
