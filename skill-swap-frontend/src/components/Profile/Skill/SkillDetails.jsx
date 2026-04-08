@@ -6,6 +6,8 @@ import { BsTrash } from "react-icons/bs";
 import axios from "axios"
 import Cookies from "js-cookie"
 import { toast } from "react-toastify";
+import styles from './SkillDetails.module.css'
+
 const SkillDetails = () => {
     const [teachingSkillData, setTeachingSkillData] = useState([])
     const [changes, setChanges] = useState(false)
@@ -51,42 +53,61 @@ const SkillDetails = () => {
         getUserSkillData()
     }, [changes, currentPage])
 
-    return <div className="skills-details-list">
-        <h1 className="skill-details-list-header"><SlBadge color="#f08a24" size={30} />Skills I'm Teaching</h1>
-        <ul>
-            {
-                teachingSkillData.map(each => (
+    return (
+        <div className={styles.skillsDetailsList}>
+            <h1 className={styles.skillDetailsListHeader}>
+                <SlBadge color="#f08a24" size={30} />
+                Skills I'm Teaching
+            </h1>
+
+            <ul>
+                {teachingSkillData.map(each => (
                     <li key={each.id}>
-                        <div className="user-skill-card">
-                            <div className="skill-details">
+                        <div className={styles.userSkillCard}>
+                            <div className={styles.skillDetails}>
                                 <h1>{each.title}</h1>
-                                <div className="skill-category-details">
-                                    <div className="category-badge">{each.category}</div>
-                                    <div className={`level-badge level-${each.level.toLowerCase()}`}>{each.level}</div>
+                                <div className={styles.skillCategoryDetails}>
+                                    <div className={styles.categoryBadge}>{each.category}</div>
+                                    <div className={`${styles.levelBadge} ${styles[`level${each.level.charAt(0).toUpperCase() + each.level.slice(1).toLowerCase()}`]}`}>
+                                        {each.level}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="skill-operation-container">
+                            <div className={styles.skillOperationContainer}>
                                 <EditSkillModal setChanges={setChanges} skillId={each.id} skillData={each} />
                                 <BsTrash size={25} color="#ff0000" onClick={() => deleteSkill(each.id)} />
                             </div>
                         </div>
                     </li>
-                ))
-            }
-        </ul>
-        <div className="create-controller-container">
-            {
-                teachingSkillData.length > 4 ?
-                    <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} /> : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges} />
-            }
-            {
-                totalSkills > 0 ? <div className="pagination-button-container">
-                    <button className={`prev-button ${currentPage === 1 ? "button-disable" : ""}`} disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>Prev</button>
-                    <button className={`next-button ${currentPage === lastPage ? "button-disable" : ""}`} disabled={currentPage === lastPage} onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
-                </div> : null
-            }
+                ))}
+            </ul>
+
+            <div className={styles.createControllerContainer}>
+                {teachingSkillData.length > 4
+                    ? <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} />
+                    : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges} />
+                }
+                {totalSkills > 0 && (
+                    <div className={styles.paginationButtonContainer}>
+                        <button
+                            className={`${styles.prevButton} ${currentPage === 1 ? styles.buttonDisable : ''}`}
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(prev => prev - 1)}
+                        >
+                            Prev
+                        </button>
+                        <button
+                            className={`${styles.nextButton} ${currentPage === lastPage ? styles.buttonDisable : ''}`}
+                            disabled={currentPage === lastPage}
+                            onClick={() => setCurrentPage(prev => prev + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
+    )
 }
 
 export default SkillDetails

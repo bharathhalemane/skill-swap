@@ -1,7 +1,8 @@
-import CommonModal from "../Utils/CommonModal"
-import { sentRequest } from "./SkillApi"
+import CommonModal from "../../Utils/CommonModal"
+import { sentRequest } from "../SkillApi"
 import { TailSpin } from "react-loader-spinner";
 import { useState, useEffect } from "react";
+import styles from './Modal.module.css'
 import Cookies from "js-cookie"
 import axios from "axios";
 const apiProgress = {
@@ -54,12 +55,12 @@ const RequestWithSwap = ({ skillId }) => {
     return <>
         <button className="request-btn" onClick={() => setIsOpen(true)}>Swap With Skill</button>
         <CommonModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Send Request" width="550px">
-            <form action="" className="modern-form" onSubmit={request}>
-                <div className="form-group">
+            <form action="" className={styles.modernForm} onSubmit={request}>
+                <div className={styles.formGroup}>
                     <label htmlFor="">Message</label>
                     <textarea name="message" id="" placeholder="Send any message" onChange={handleChangeMessage}></textarea>
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="">Skills</label>
                     <select name="swapSkillId" id="" value={swapSkillId} onChange={handleChangeSkillId} required>
                         <option value="" disabled>Select Skill</option>
@@ -70,16 +71,16 @@ const RequestWithSwap = ({ skillId }) => {
                         }
                     </select>
                 </div>
-                <div className="modal-buttons">
+                <div className={styles.modalButtons}>
                     <button
                         type="button"
-                        className="cancel-btn"
+                        className={styles.cancelBtn}
                         onClick={() => setIsOpen(false)}
                     >
                         Cancel
                     </button>
 
-                    <button type="submit" className="request-btn">
+                    <button type="submit" className={styles.saveBtn}>
                         {apiStatus === apiProgress.loading ? (
                             <TailSpin width={20} height={20} color="#fff" />
                         ) : (

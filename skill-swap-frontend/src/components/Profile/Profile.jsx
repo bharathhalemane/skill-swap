@@ -1,4 +1,4 @@
-import './Profile.css'
+import styles from './Profile.module.css'
 import HomeHeader from '../Header/HomeHeader'
 import Footer from '../Footer/Footer'
 import { useState, useEffect } from "react"
@@ -17,8 +17,6 @@ const Profile = () => {
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
     const [profileData, setProfileData] = useState()
-    
-
 
     const getProfileData = async () => {
         try {
@@ -48,78 +46,78 @@ const Profile = () => {
         getProfileData()
     }, [])
 
+    const handleProfileEditor = () => {
+        return <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
+    }
+
     const ProfileDetails = () => {
-        const { profile, name } = profileData || {};
+        const { profile, name } = profileData || {}
 
         return (
-            <div className='profile-header'>
-                <div className="profile-cover"></div>
-                <div className="profile-details-container">
+            <div className={styles.profileHeader}>
+                <div className={styles.profileCover}></div>
+                <div className={styles.profileDetailsContainer}>
                     {profile ? (
                         <>
-                            <div className="profile-image-container">
+                            <div className={styles.profileImageContainer}>
                                 {profile.profileImage ? (
                                     <img
                                         src={profile.profileImage}
                                         alt="profile"
-                                        className="profile-image"
+                                        className={styles.profileImage}
                                     />
                                 ) : (
-                                    <BsPersonCircle className="no-profile-image" />
+                                    <BsPersonCircle className={styles.noProfileImage} />
                                 )}
                             </div>
 
-                            <div className="profile-details">
-                                <h1 className="name">
+                            <div className={styles.profileDetails}>
+                                <h1 className={styles.name}>
                                     {name ? name : "Please edit your profile"}
                                 </h1>
-
-                                <h3 className="username">
+                                <h3 className={styles.username}>
                                     @{profile.username ? profile.username : "username"}
                                 </h3>
-
-                                <p className="bio">
+                                <p className={styles.bio}>
                                     {profile.bio ? profile.bio : "no bio saved"}
                                 </p>
                             </div>
 
-                            <div className="edit-profile-button-container">
+                            <div className={styles.editProfileButtonContainer}>
                                 <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
                             </div>
                         </>
                     ) : (
-                        <div className="no-profile-wrapper">
-                            <BsPersonCircle size={80} color='#e76f51' className="no-profile-image" />
+                        <div className={styles.noProfileWrapper}>
+                            <BsPersonCircle size={80} color='#e76f51' className={styles.noProfileImage} />
                             <p>No profile data found</p>
-                            <div className="edit-profile-button-container">
+                            <div className={styles.editProfileButtonContainer}>
                                 <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
                             </div>
                         </div>
                     )}
                 </div>
             </div>
-        );
+        )
     }
 
-    return <>
-        <HomeHeader />
-        <div className='profile-page'>
-            {ProfileDetails()}
-            <ReceivedRequest />
-            <SentRequests />
-            <hr />
-            <SkillDetails />
-            <hr />
-            <ClassSchedule />
-            <hr />
-            <Availability />            
-            <LearningSkills/>
-        </div>
-        <Footer />
-    </>
+    return (
+        <>
+            <HomeHeader />
+            <div className={styles.profilePage}>
+                {ProfileDetails()}
+                <ReceivedRequest />
+                <SentRequests />
+                <hr />
+                <SkillDetails />
+                <hr />
+                <ClassSchedule />
+                <Availability />
+                <LearningSkills />
+            </div>
+            <Footer />
+        </>
+    )
 }
 
 export default Profile
-
-
-

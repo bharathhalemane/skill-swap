@@ -1,0 +1,183 @@
+.skillsDetailsList {
+    padding-inline: 5%;
+    width: 40vw;
+}
+
+.skillDetailsListHeader {
+    display: flex;
+    gap: 10px;
+    font-size: 30px;
+    align-items: center;
+}
+
+.skillsDetailsList ul {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    list-style: none;
+    margin: 0;
+    gap: 12px;
+}
+
+/* ── Skill Card ── */
+.userSkillCard {
+    display: flex;
+    width: 35vw;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 10px 20px;
+    cursor: default;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.skillDetails h1 {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0 0 6px 0;
+}
+
+.skillCategoryDetails {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ── Badges ── */
+.categoryBadge {
+    background-color: #fff4e6;
+    color: #f08a24;
+    border: 1px solid #f08a24;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.levelBadge {
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.levelBeginner {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+
+.levelIntermediate {
+    background-color: #fff8e1;
+    color: #f9a825;
+    border: 1px solid #f9a825;
+}
+
+.levelAdvanced {
+    background-color: #fce4ec;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+/* ── Operations ── */
+.skillOperationContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* ── Bottom Controls ── */
+.createControllerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ── Pagination ── */
+.paginationButtonContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.prevButton,
+.nextButton {
+    padding: 8px 18px;
+    border-radius: 10px;
+    border: 1px solid #f08a24;
+    background: transparent;
+    color: #f08a24;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.prevButton:hover,
+.nextButton:hover {
+    background: #f08a24;
+    color: #fff;
+}
+
+.buttonDisable {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ── Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+    .skillsDetailsList {
+        width: 60vw;
+    }
+
+    .userSkillCard {
+        width: 100%;
+    }
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+    .skillsDetailsList {
+        width: 100%;
+        padding-inline: 4%;
+    }
+
+    .skillDetailsListHeader {
+        font-size: 22px;
+    }
+
+    .userSkillCard {
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .skillOperationContainer {
+        margin-right: 0;
+        align-self: flex-end;
+    }
+
+    .createControllerContainer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ── Small Mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+    .skillDetailsListHeader {
+        font-size: 18px;
+    }
+
+    .prevButton,
+    .nextButton {
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+}

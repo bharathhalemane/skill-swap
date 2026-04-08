@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react"
 import { LuGraduationCap, LuX, LuClock } from "react-icons/lu";
-import '../CssClasses.css'
 import axios from "axios"
 import Cookies from "js-cookie"
 import CommonModal from "../../Utils/CommonModal";
-import {TailSpin} from "react-loader-spinner"
-import { TfiLayoutLineSolid } from "react-icons/tfi";
+import { TailSpin } from "react-loader-spinner"
 import { toast } from "react-toastify";
+import styles from './ClassSchedule.module.css'
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TIMES = [
@@ -36,19 +35,17 @@ const ClassSchedule = () => {
         location: ""
     })
 
-    const handleChange= e => {
-        setFormData(prev => ({...prev, [e.target.name]: e.target.value}))
+    const handleChange = e => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
     const getClassScheduleData = async () => {
         try {
             const url = `${import.meta.env.VITE_BACKEND_API}/classes`
             const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             })
-            setClassSchedule(response.data)            
+            setClassSchedule(response.data)
         } catch (err) {
             toast.error("Unable to get Scheduled Data!")
         }
@@ -58,14 +55,11 @@ const ClassSchedule = () => {
         try {
             const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}`
             const response = await axios.get(url, {
-                headers: {
-                    Authorization : `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             })
             const skills = response.data.skills
-            const titles = skills.map(skill => skill.title)
-            setTitles(titles)
-        }catch(err){
+            setTitles(skills.map(skill => skill.title))
+        } catch (err) {
             console.log(err)
         }
     }
@@ -79,9 +73,7 @@ const ClassSchedule = () => {
         try {
             const url = `${import.meta.env.VITE_BACKEND_API}/classes/delete/${id}`
             await axios.delete(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             })
             toast.warning("Removed your class schedule!")
             getClassScheduleData()
@@ -96,18 +88,10 @@ const ClassSchedule = () => {
             setApiStatus(apiProgress.loading)
             const url = `${import.meta.env.VITE_BACKEND_API}/classes/create`
             await axios.post(url, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })            
-            setApiStatus(apiProgress.success)
-            setFormData({
-                day: "",
-                title: "",
-                startTime: "",
-                endTime: "",
-                location: ""
+                headers: { Authorization: `Bearer ${token}` }
             })
+            setApiStatus(apiProgress.success)
+            setFormData({ day: "", title: "", startTime: "", endTime: "", location: "" })
             toast.success("Scheduled Successfully!")
             setIsOpen(false)
             getClassScheduleData()
@@ -124,133 +108,123 @@ const ClassSchedule = () => {
             title="Add a Class"
             width="550px"
         >
-            <form action="" className="modern-form" onSubmit={onSubmit}>
-                <div className="form-group">
-                    <label htmlFor="">Class Name</label>                   
-                    <select name="title" id="" value={formData.title} onChange={handleChange} required>
+            <form className={styles.modernForm} onSubmit={onSubmit}>
+                <div className={styles.formGroup}>
+                    <label>Class Name</label>
+                    <select name="title" value={formData.title} onChange={handleChange} required>
                         <option value="" disabled>Select Title</option>
-                        {
-                            titles.map(title => (
-                                <option value={title}>{title}</option>
-                            ))
-                        }
+                        {titles.map(title => (
+                            <option key={title} value={title}>{title}</option>
+                        ))}
                     </select>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="">Day</label>
-                    <select name="day" id="" value={formData.day} onChange={handleChange} required>
+                <div className={styles.formGroup}>
+                    <label>Day</label>
+                    <select name="day" value={formData.day} onChange={handleChange} required>
                         <option value="" disabled>Select day</option>
-                        {
-                            DAYS.map(day => (
-                                <option value={day.slice(0, 3)}>{day}</option>
-                            ))
-                        }
+                        {DAYS.map(day => (
+                            <option key={day} value={day.slice(0, 3)}>{day}</option>
+                        ))}
                     </select>
                 </div>
 
-                <div className="row">
-                    <div className="form-group">
-                        <label htmlFor="">Start Time</label>
-                        <select name="startTime" id="" value={formData.startTime} onChange={handleChange} required>
+                <div className={styles.row}>
+                    <div className={styles.formGroup}>
+                        <label>Start Time</label>
+                        <select name="startTime" value={formData.startTime} onChange={handleChange} required>
                             <option value="" disabled>Start</option>
-                            {
-                                TIMES.map(time => (
-                                    <option value={time}>{time}</option>
-                                ))
-                            }
+                            {TIMES.map(time => (
+                                <option key={time} value={time}>{time}</option>
+                            ))}
                         </select>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="">End Time</label>
-                        <select name="endTime" id="" value={formData.endTime} onChange={handleChange} required>
+                    <div className={styles.formGroup}>
+                        <label>End Time</label>
+                        <select name="endTime" value={formData.endTime} onChange={handleChange} required>
                             <option value="" disabled>End</option>
-                            {
-                                TIMES.map(time => (
-                                    <option value={time}>{time}</option>
-                                ))
-                            }
+                            {TIMES.map(time => (
+                                <option key={time} value={time}>{time}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="">Location (Optional)</label>
-                    <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Library" />
+
+                <div className={styles.formGroup}>
+                    <label>Location (Optional)</label>
+                    <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        placeholder="e.g. Library"
+                    />
                 </div>
-                <div className="modal-buttons">
-                    <button
-                        type="button"
-                        className="cancel-btn"
-                        onClick={() => setIsOpen(false)}
-                    >
+
+                <div className={styles.modalButtons}>
+                    <button type="button" className={styles.cancelBtn} onClick={() => setIsOpen(false)}>
                         Cancel
                     </button>
-        
-                    <button type="submit" className="save-btn">
-                        {apiStatus === apiProgress.loading ? (
-                        <TailSpin width={20} height={20} color="#fff" />
-                        ) : (
-                        "Create"
-                        )}
+                    <button type="submit" className={styles.saveBtn}>
+                        {apiStatus === apiProgress.loading
+                            ? <TailSpin width={20} height={20} color="#fff" />
+                            : "Create"
+                        }
                     </button>
                 </div>
             </form>
         </CommonModal>
     )
 
-
     const groupedByDay = DAYS.reduce((acc, day) => {
         acc[day] = classSchedule.filter((c) => c.day === day.slice(0, 3))
         return acc
     }, {})
 
-
-    return <>
-        <div className="class-schedule-section">
-            <div className="section-header-container">
-                <div className="class-schedule-heading">
-                    <h1><LuGraduationCap />My Class Schedule</h1>
+    return (
+        <div className={styles.classScheduleSection}>
+            <div className={styles.sectionHeaderContainer}>
+                <div className={styles.classScheduleHeading}>
+                    <h1><LuGraduationCap size={25} color="#e76f51" /> My Class Schedule</h1>
                     <p>Set your class times to automatically block unavailable hours</p>
                 </div>
-                <button className="class-add-button" onClick={() => setIsOpen(true)}>+ Add Class</button>
+                <button className={styles.classAddButton} onClick={() => setIsOpen(true)}>
+                    + Add Class
+                </button>
             </div>
+
             {createModal()}
-            <div className="classes-schedule-table">
+
+            <div className={styles.classesScheduleTable}>
                 {DAYS.map((day) => (
-                    <div key={day} className="day-schedule">
-                        <h4 className="">
-                            {day.slice(0, 3)}
-                        </h4>
+                    <div key={day} className={styles.daySchedule}>
+                        <h4>{day.slice(0, 3)}</h4>
                         {groupedByDay[day].length > 0 ? (
                             groupedByDay[day].slice(0, 3).map((cls) => (
-                                <div
-                                    key={cls.id}
-                                    className="class-details"
-                                >
+                                <div key={cls.id} className={styles.classDetails}>
                                     <button
-                                        onClick={() =>removeClassScheduleData(cls._id)}
-                                        className="edit-btn"
+                                        onClick={() => removeClassScheduleData(cls._id)}
+                                        className={styles.editBtn}
                                     >
                                         <LuX />
                                     </button>
-                                    <p className="">{cls.title}</p>
-                                    <p className="">
-                                        <LuClock className="h-3 w-3" />
+                                    <p>{cls.title}</p>
+                                    <p>
+                                        <LuClock />
                                         {cls.startTime} - {cls.endTime}
                                     </p>
                                 </div>
                             ))
                         ) : (
-                            <div className="no-class-schedule" onClick={()=>setIsOpen(true)}>
-                                <span className="">No classes</span>
+                            <div className={styles.noClassSchedule} onClick={() => setIsOpen(true)}>
+                                <span>No classes</span>
                             </div>
                         )}
                     </div>
                 ))}
             </div>
         </div>
-    </>
-
+    )
 }
 
 export default ClassSchedule

@@ -6,6 +6,8 @@ import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import { toast } from "react-toastify";
+import styles from './Modal.module.css'
+
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
@@ -92,30 +94,30 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
         title="Edit Profile"
         width="550px"
       >
-        <form className="profile-update-form" onSubmit={onSubmitProfileDetails}>
+        <form className={styles.profileUpdateForm} onSubmit={onSubmitProfileDetails}>
 
-          <div className="profile-image-wrapper">
-            <label className="avatar-container">
+          <div className={styles.profileImageWrapper}>
+            <label className={styles.avatarContainer}>
               {preview ? (
-                <img src={preview} className="profile-selected-image" />
+                <img src={preview} className={styles.uploadedImage} />
               ) : (
-                <BsPersonCircle className="avatar-icon" />
+                <BsPersonCircle className={styles.avatarIcon} />
               )}
 
-              <div className="camera-icon">
+              <div className={styles.cameraIcon}>
                 <FaCamera />
               </div>
 
               <input
                 type="file"
-                className="profile-image-input"
+                className={styles.profileImageInput}
                 accept="image/*"
                 onChange={handleImageChange}
               />
             </label>
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Name</label>
             <input
               type="text"
@@ -126,7 +128,7 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Username</label>
             <input
               type="text"
@@ -137,7 +139,7 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Location</label>
             <input
               type="text"
@@ -148,7 +150,7 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Bio</label>
             <textarea
               value={profileData.bio}
@@ -158,16 +160,16 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
             />
           </div>
 
-          <div className="modal-buttons">
+          <div className={styles.modalButtons}>
             <button
               type="button"
-              className="cancel-btn"
+              className={styles.cancelBtn}
               onClick={() => setIsOpen(false)}
             >
               Cancel
             </button>
 
-            <button type="submit" className="save-btn">
+            <button type="submit" className={styles.saveBtn}>
               {apiStatus === apiProgress.loading ? (
                 <TailSpin width={20} height={20} color="#fff" />
               ) : (

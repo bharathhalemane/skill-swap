@@ -6,7 +6,7 @@ import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import { LuX, LuClock } from "react-icons/lu";
 import { toast } from "react-toastify";
-
+import styles from "./Modal.module.css"
 const apiProgress = {
     loading: "LOADING",
     success: "SUCCESS"
@@ -90,10 +90,10 @@ const AvailabilityEditorModal = ({ data, setData }) => {
             <button onClick={() => setIsOpen(true)}><FaRegEdit color="#ff7a00" /> Edit</button>
 
             <CommonModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Edit Availability" width="550px">
-                <form className="modern-form" onSubmit={onSubmit}>
+                <form className={styles.moderForm} onSubmit={onSubmit}>
                     <h1>Add Time Slot</h1>
-                    <div className="row">
-                        <div className="form-group">
+                    <div className={styles.row}>
+                        <div className={styles.formGroup}>
                             <select name="day" id="" value={daySlot.day} onChange={handleChange}
                             >
                                 {
@@ -103,7 +103,7 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                                 }
                             </select>
                         </div>
-                        <div className="form-group">
+                        <div className={styles.formGroup}>
                             <select name="startTime" id="" value={daySlot.startTime} onChange={handleChange}
                             >
                                 {
@@ -114,16 +114,16 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                             </select>
                         </div>
                     </div>
-                    <div className="modal-buttons">
+                    <div className={styles.modalButtons}>
                         <button
                             type="button"
-                            className="cancel-btn"
+                            className={styles.cancelBtn}
                             onClick={() => setIsOpen(false)}
                         >
                             Cancel
                         </button>
 
-                        <button type="submit" className="save-btn">
+                        <button type="submit" className={styles.saveBtn}>
                             {apiStatus === apiProgress.loading ? (
                                 <TailSpin width={20} height={20} color="#fff" />
                             ) : (
@@ -133,23 +133,23 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                     </div>
                 </form>
 
-                <div className="availability-slots-modal">
+                <div className={styles.availabilitySlotsModal}>
                     <h1>Current Availability</h1>
                     {
-                        data.length > 0 ? <ul className="slots-list-modal">
+                        data.length > 0 ? <ul className={styles.slotsListModal}>
                             {
                                 data.map(each => (
                                     <li key={each.id}>
-                                        <div className="slot-day">
+                                        <div className={styles.slotDay}>
                                             <h1>{each.day}</h1>
-                                            <button onClick={()=>clearAll(each._id)} className="clear-all-btn">clear all</button>
+                                            <button onClick={()=>clearAll(each._id)} className={styles.clearAllBtn}>clear all</button>
                                         </div>
-                                        <ul className="each-day-slots-container">
+                                        <ul className={styles.eachDaySlotsContainer}>
                                             {
                                                 each.slots.map(slot => (
-                                                    <li className="day-slots" key={slot._id}>
+                                                    <li className={styles.daySlots} key={slot._id}>
                                                         <LuClock size={13} />  {slot.startTime}
-                                                        <LuX onClick={() => onDelete(slot._id)} className="delete-x"/>
+                                                        <LuX onClick={() => onDelete(slot._id)} className={styles.deleteX}/>
                                                     </li>
                                                 ))
                                             }
@@ -157,7 +157,7 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                                     </li>
                                 ))
                             }
-                        </ul> : <div className="no-slot-container-modal">
+                        </ul> : <div className={styles.noSlotContainerModal}>
                             <h1>Not time slots added yet</h1>
                         </div>
                     }

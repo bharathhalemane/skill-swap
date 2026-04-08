@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
-
+import styles from './Modal.module.css'
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
@@ -92,23 +92,23 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
         title="Add New Skill To Teach"
         width="550px"
       >
-        <form className="modern-form" onSubmit={onSubmit}>
+        <form className={styles.modernForm} onSubmit={onSubmit}>
 
-          <div className="image-upload-wrapper">
-            <label htmlFor="" className="image-upload-container">
+          <div className={styles.imageUploadWrapper}>
+            <label htmlFor="" className={styles.imageUploadContainer}>
               {
                 preview ? (
-                  <img src={preview} alt="preview" className="uploaded-image"/>
+                  <img src={preview} alt="preview" className={styles.uploadedImage}/>
                 ): (
-                    <div className="image-placeholder">Upload Image</div>
+                    <div className={styles.imagePlaceholder}>Upload Image</div>
                 )
               }
 
-              <input type="file" accept="image/*" name="image" className="file-input" onChange={handleImageChange} required/>
+              <input type="file" accept="image/*" name="image" className={styles.fileInput} onChange={handleImageChange} required/>
             </label>
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="">Skill Title</label>
             <input type="text" name="title" placeholder="e.g., Web Development with React"
               value={formData.title}
@@ -116,7 +116,7 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
             required/>            
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="">Category</label>
             <select name="category" id="" value={formData.category} onChange={handleChange} required>
               <option value="">Select a category</option>
@@ -132,17 +132,17 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
             </select>
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="">Description</label>
             <textarea name="description" id="" placeholder="Describe what you'll teach" value={formData.description} onChange={handleChange} required></textarea>
           </div>
 
-          <div className="row">
-            <div className="form-group">
+          <div className={styles.row}>
+            <div className={styles.formGroup}>
               <label htmlFor="">Duration (optional)</label>
               <input type="text" name="duration" placeholder="e.g., 4 hours" value={formData.duration} onChange={handleChange}/>
             </div>
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="">Level</label>
               <select name="level" id="" value={formData.level} onChange={handleChange}
               required>
@@ -152,16 +152,16 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
               </select>
             </div>
           </div>
-          <div className="modal-buttons">
+          <div className={styles.modalButtons}>
             <button
               type="button"
-              className="cancel-btn"
+              className={styles.cancelBtn}
               onClick={() => setIsOpen(false)}
             >
               Cancel
             </button>
 
-            <button type="submit" className="save-btn">
+            <button type="submit" className={styles.saveBtn}>
               {apiStatus === apiProgress.loading ? (
                 <TailSpin width={20} height={20} color="#fff" />
               ) : (

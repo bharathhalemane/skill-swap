@@ -1,0 +1,181 @@
+.availabilityEditorSection {
+    margin: 20px 5%;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* ── Header ── */
+.headerSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-inline: 20px;
+}
+
+.headerSection h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.headerSection button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    border: 2px solid #ff7a00;
+    color: #ff7a00;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+    background: transparent;
+}
+
+/* ── Slots Layout ── */
+.availabilitySlots {
+    display: flex;
+    align-items: flex-start;
+    margin-block: 20px;
+    overflow-x: auto;
+}
+
+.availabilitySlotsDayList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-right: 80px;
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+.availabilitySlotsDayList li {
+    font-weight: 600;
+    color: #1d2b3a;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* ── Per-day slot rows ── */
+.availabilityEachDaySlotslist {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.daySlotsList {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+/* ── Slot pill ── */
+.daySlots {
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #3A7878;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* ── Empty state ── */
+.noSlotsContainer {
+    color: #aba9a9;
+    text-align: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.noSlotsContainer h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+    .availabilityEditorSection {
+        margin: 16px 3%;
+        padding: 20px;
+    }
+
+    .headerSection {
+        margin-inline: 0;
+    }
+
+    .headerSection h1 {
+        font-size: 18px;
+    }
+
+    .availabilitySlotsDayList {
+        margin-right: 40px;
+        gap: 20px;
+    }
+
+    .availabilityEachDaySlotslist {
+        gap: 16px;
+    }
+}
+
+/* ── Mobile (≤ 540px) ── */
+@media (max-width: 540px) {
+    .availabilityEditorSection {
+        margin: 12px 0;
+        border-radius: 0;
+        padding: 16px;
+        display:none;
+    }
+
+    .headerSection h1 {
+        font-size: 16px;
+    }
+
+    .headerSection button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .availabilitySlots {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .availabilitySlotsDayList {
+        flex-direction: row;
+        margin-right: 0;
+        gap: 12px;
+        overflow-x: auto;
+        width: 100%;
+        padding-bottom: 4px;
+    }
+
+    .availabilityEachDaySlotslist {
+        gap: 12px;
+        width: 100%;
+    }
+
+    .daySlotsList {
+        gap: 8px;
+    }
+
+    .daySlots {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+}

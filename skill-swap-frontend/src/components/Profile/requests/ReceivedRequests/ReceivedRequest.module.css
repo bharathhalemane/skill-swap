@@ -1,0 +1,227 @@
+.container {
+    max-width: 90%;
+    margin: auto;
+}
+
+.container h2 {
+    margin-bottom: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.container h4 {
+    margin-top: 30px;
+    color: #6b7280;
+}
+
+/* ── Header ── */
+.requestsHeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ── Badge ── */
+.badge {
+    background: #ff7a45;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* ── Card ── */
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #ff7a45;
+}
+
+/* ── Left ── */
+.left {
+    display: flex;
+    gap: 15px;
+}
+
+.profile {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    font-size: 55px;
+    color: #ccc;
+}
+
+/* ── Info ── */
+.info h3 {
+    margin: 0;
+}
+
+.username {
+    color: gray;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+/* ── Skills ── */
+.skills {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: #eef2ff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 5px;
+    font-size: 13px;
+}
+
+/* ── Message & Time ── */
+.message {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.time {
+    font-size: 12px;
+    color: gray;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ── Right ── */
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* ── Status ── */
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.pending {
+    background: #e6fffa;
+    color: #0f766e;
+}
+
+.ACCEPTED {
+    background: #fff4e6;
+    color: #ff7a45;
+}
+
+.REJECTED {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.CANCELLED {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ── Actions ── */
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.accept {
+    background: #ff7a45;
+    color: white;
+}
+
+.decline {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding-inline: 16px;
+    }
+
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .right {
+        align-items: flex-start;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+/* ── Mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+    .container h2 {
+        font-size: 18px;
+    }
+
+    .left {
+        gap: 10px;
+    }
+
+    .profile {
+        width: 44px;
+        height: 44px;
+    }
+
+    .info h3 {
+        font-size: 14px;
+    }
+
+    .tag {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .actions {
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .badge {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+}

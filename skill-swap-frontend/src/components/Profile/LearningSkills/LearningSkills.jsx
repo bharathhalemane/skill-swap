@@ -1,8 +1,8 @@
-import './LearningSkills.css'
+import styles from './LearningSkills.module.css'
 import { learningSkills, endLearning } from '../requestAPi'
 import { useEffect, useState } from 'react'
-import Cookies from "js-cookie"
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
+
 const LearningSkills = () => {
     const [skillsData, setSkillsData] = useState([])
 
@@ -10,49 +10,56 @@ const LearningSkills = () => {
         const response = await learningSkills()
         setSkillsData(response.data.data)
     }
-    useEffect(() => {        
+
+    useEffect(() => {
         fetchData()
     }, [])
-    
-    const handleLearning = async (id) => {        
+
+    const handleLearning = async (id) => {
         await endLearning(id)
         fetchData()
     }
-    
-    return <>
-        {
-            skillsData.length > 0 && <>
-                <hr />
-                <div className="learning-container">
-                    <div className="learning-container-header">
-                        <h2>Currently Learning</h2>
-                        <Link to="/completed-skills" className='completed-page-link'>Completed</Link>
-                    </div>
 
-                    <div className="learning-grid">
-                        {skillsData.map((item) => {                            
-                            return (
-                                <div className="learning-card" key={item.id}>
-                                    <img src={item.skill?.imageUrl} alt="profile" className="learning-img" />
+    if (skillsData.length === 0) return null
 
-                                    <div className="learning-info">
-                                        <h3>{item.skill?.title}</h3>
-                                        <p>with {item.partner?.name}</p>
-
-                                        <div className="learning-actions">
-                                            <span className="status">In Progress</span>                            
-                                            <button className="complete-btn" onClick={() => handleLearning(item.id)}>
-                                            Completed</button>                
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
+    return (
+        <>
+            <hr />
+            <div className={styles.learningContainer}>
+                <div className={styles.learningContainerHeader}>
+                    <h2>Currently Learning</h2>
+                    <Link to="/completed-skills" className={styles.completedPageLink}>
+                        Completed
+                    </Link>
                 </div>
-            </>
-        }
-    </>
+
+                <div className={styles.learningGrid}>
+                    {skillsData.map((item) => (
+                        <div className={styles.learningCard} key={item.id}>
+                            <img
+                                src={item.skill?.imageUrl}
+                                alt="profile"
+                                className={styles.learningImg}
+                            />
+                            <div className={styles.learningInfo}>
+                                <h3>{item.skill?.title}</h3>
+                                <p>with {item.partner?.name}</p>
+                                <div className={styles.learningActions}>
+                                    <span className={styles.status}>In Progress</span>
+                                    <button
+                                        className={styles.completeBtn}
+                                        onClick={() => handleLearning(item.id)}
+                                    >
+                                        Completed
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default LearningSkills

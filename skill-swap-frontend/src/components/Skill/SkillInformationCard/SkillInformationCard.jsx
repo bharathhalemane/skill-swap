@@ -1,5 +1,5 @@
-import RequestModel from "../RequestModel"
-import RequestWithSwap from "../RequestWithSwap"
+import RequestModel from "../Modals/RequestModel"
+import RequestWithSwap from "../Modals/RequestWithSwap"
 import styles from './SkillInformationCard.module.css'
 
 const SkillInformationCard = ({ data }) => {

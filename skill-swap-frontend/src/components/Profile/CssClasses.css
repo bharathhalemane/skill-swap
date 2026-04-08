@@ -190,24 +190,3 @@
     color: #aba9a9;
 }
 
-.slots-list-modal{
-    display: flex;
-    flex-direction: column;
-}
-
-.slot-day{
-    display: flex;
-    justify-content: space-between;
-}
-
-.slot-day button{
-    color: #777;
-}
-
-
-.no-slots-container{
-    color: #aba9a9;
-    text-align: center;
-    width: 100%;
-}
-
