@@ -1,0 +1,140 @@
+.completedSkillsContainer {
+    padding-top: 15vh;
+    min-height: 65vh;
+    padding-inline: 2vw;
+    background-color: #FCFAF7;
+}
+
+.completedSection {
+    padding-bottom: 20px;
+}
+
+.completedSection h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    color: #222;
+}
+
+.completedSkillsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.completedCard {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.completedImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.completedInfo {
+    text-align: center;
+}
+
+.completedInfo h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.completedInfo p {
+    margin: 5px 0;
+    color: #777;
+}
+.etcSkillsGrid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+/* ── Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+    .completedSkillsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ── Small Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+    .completedSkillsContainer {
+        padding-top: 10vh;
+        padding-inline: 4vw;
+    }
+
+    .completedSkillsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .completedSection h2 {
+        font-size: 1.25rem;
+        padding-left: 14px;
+    }
+}
+
+/* ── Mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+    .completedSkillsContainer {
+        padding-top: 11vh;
+        padding-inline: 4vw;
+    }
+
+    .completedSkillsGrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .completedCard {
+        flex-direction: row;
+        align-items: center;
+        padding: 14px;
+        gap: 16px;
+    }
+
+    .completedImg {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .completedInfo {
+        text-align: left;
+    }
+
+    .completedInfo h3 {
+        font-size: 1rem;
+    }
+
+    .completedInfo p {
+        font-size: 0.85rem;
+    }
+
+    .completedSection h2 {
+        font-size: 1.1rem;
+        padding-left: 10px;
+    }
+    .etcSkillsGrid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    }
+}

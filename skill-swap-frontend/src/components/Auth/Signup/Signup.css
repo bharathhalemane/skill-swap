@@ -197,7 +197,7 @@ input{
     border: none;
 }
 
-@media (min-width: 580px) {    
+@media (min-width: 780px) {    
     .input-container-signup {
         width: 50%;
         margin-left: 50%;
