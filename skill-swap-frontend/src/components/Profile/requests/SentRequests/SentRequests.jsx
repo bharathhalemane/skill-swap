@@ -105,7 +105,7 @@ const SentRequests = () => {
                                             <div className={styles.info}>
                                                 <h3>
                                                     {req.receiver?.name}
-                                                    <span className={styles.username}>{" "}@{req.receiver?.profile?.username}</span>
+                                                    <span className={styles.username}>{" "}{req.receiver?.profile?.username && `@${req.receiver.profile.username}`}</span>
                                                 </h3>
                                                 {req.isSwap ? (
                                                     <div className={styles.skills}>

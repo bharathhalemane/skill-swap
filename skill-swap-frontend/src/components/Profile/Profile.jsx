@@ -76,7 +76,7 @@ const Profile = () => {
                                     {name ? name : "Please edit your profile"}
                                 </h1>
                                 <h3 className={styles.username}>
-                                    @{profile.username ? profile.username : "username"}
+                                    {profile.username ? `@${profile.username}` : "username"}
                                 </h3>
                                 <p className={styles.bio}>
                                     {profile.bio ? profile.bio : "no bio saved"}

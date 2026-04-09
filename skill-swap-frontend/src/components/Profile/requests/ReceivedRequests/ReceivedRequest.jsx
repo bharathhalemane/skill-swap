@@ -111,7 +111,7 @@ const ReceivedRequest = () => {
                                     <div className={styles.info}>
                                         <h3>
                                             {req.sender?.name}
-                                            <span className={styles.username}> @{req.sender?.profile?.username}</span>
+                                            <span className={styles.username}>{req.sender?.profile?.username && ` @${req.sender.profile.username}`}</span>
                                         </h3>
                                         {req.isSwap ? (
                                             <div className={styles.skills}>
