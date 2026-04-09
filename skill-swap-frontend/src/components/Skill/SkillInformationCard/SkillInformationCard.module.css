@@ -101,6 +101,14 @@
     border-radius: 16px;
 }
 
+.userInformation{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 15px;
+}
+
 /* ════════════════════════════════════════════════════════
    RESPONSIVE — Tablet  (≤ 1024px)
 ════════════════════════════════════════════════════════ */

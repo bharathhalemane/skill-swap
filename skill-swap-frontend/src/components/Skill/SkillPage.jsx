@@ -40,11 +40,11 @@ const SkillPage = () => {
                     user: {
                         name: skill.user.name,
                         profileImage: skill.user.profile?.profile_image,
-                        userId: skill.user._id
+                        userId: skill.user._id,
+                        email: skill.user.email
                     }
                 }))
-            setAllSkillsData(formattedSkills)
-            
+            setAllSkillsData(formattedSkills)            
         }
 
 

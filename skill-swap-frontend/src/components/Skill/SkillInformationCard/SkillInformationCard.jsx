@@ -4,7 +4,7 @@ import styles from './SkillInformationCard.module.css'
 
 const SkillInformationCard = ({ data }) => {
     const { _id, category, level, title, imageUrl, description, user } = data
-    const { name, profile, userId } = user || {}
+    const { name,email, profile, userId } = user || {}
     const { profile_image } = profile || {}
 
     return (
@@ -20,7 +20,12 @@ const SkillInformationCard = ({ data }) => {
 
                 <div className={styles.skillUserInfo}>
                     <img src={profile_image} alt="user" />
-                    <h4>{name}</h4>
+                    <div className={styles.userInformation}>
+                        <h4>{name}</h4>
+                        <a href={`mailto:${email}`} target="_blank" rel="noopener noreferrer">
+                            {email}
+                        </a>
+                    </div>
                 </div>
 
                 <div className={styles.actions}>
