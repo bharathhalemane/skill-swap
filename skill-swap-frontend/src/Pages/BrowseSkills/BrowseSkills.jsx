@@ -35,7 +35,7 @@ const BrowseSkills = () => {
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")
-    const [category, setCategory] = useState("")
+    const [category, setCategory] = useState(searchParams.get('category') || "")
     const [level, setLevel] = useState("")
     const [inputValue, setInputValue] = useState("")
     const [skillData, setSkillData] = useState([])
@@ -80,8 +80,13 @@ const BrowseSkills = () => {
 
     const getSkillData = async () => {
         try {
-            const url = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=${limit}`
-            const response = await fetch(url, { method: "GET" })
+            const url = new URL(window.location.href)
+            url.searchParams.set("category", category || "all")
+            url.searchParams.set("level", level)
+            url.searchParams.set("title", inputValue)
+            window.history.pushState({}, "", url)
+            const skillUrl = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=${limit}`
+            const response = await fetch(skillUrl, { method: "GET" })
             if (response.ok) {
                 const data = await response.json()
                 const formattedSkills = data.skills.map(skill => ({
@@ -135,7 +140,7 @@ const BrowseSkills = () => {
                         <ul className={styles.categoriesFilterList}>
                             <li>
                                 <button
-                                    className={`${styles.categoryFilterBtn} ${category === "" ? styles.active : ""}`}
+                                    className={`${styles.categoryFilterBtn} ${category === "" || category === "all" ? styles.active : ""}`}
                                     onClick={onChangeCategory}
                                     value=""
                                 >

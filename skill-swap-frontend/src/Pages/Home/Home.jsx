@@ -132,7 +132,7 @@ const Home = () => {
                         {mergedData.map((category) => (
                             <Link
                                 key={category.name}
-                                to={`/find-skills`}
+                                to={`/find-skills?category=${category.name}`}
                                 className="categories"
                             >
                                 <span className="">{category.icon}</span>
