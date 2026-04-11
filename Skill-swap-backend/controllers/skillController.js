@@ -8,7 +8,7 @@ exports.getAllSkills = async (req, res) => {
         const { category, level, title, page = 1, limit = 8 } = req.query
 
         let filter = {}
-        if (category) {
+        if (category && category !== "all") {
             filter.category = { $regex: category, $options: "i" }
         }
 
