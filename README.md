@@ -51,7 +51,7 @@ Skill Swap is a community-driven platform where users can list skills they offer
 
 ```
 skill-swap/
-├── skill-swap-frontend/     # React frontend application
+├── client/     # React frontend application
 │   ├── public/
 │   └── src/
 │       ├── assets/
@@ -61,7 +61,7 @@ skill-swap/
 │       ├── Socket.jsx
 │       └── App.jsx
 │
-└── Skill-swap-backend/      # Node.js/Express backend API
+└── server/      # Node.js/Express backend API
     ├── config/
     ├── middleware/
     ├── routes/
@@ -92,7 +92,7 @@ cd skill-swap
 ### 2. Setup the Backend
 
 ```bash
-cd Skill-swap-backend
+cd server
 npm install
 ```
 
@@ -122,7 +122,7 @@ The backend will run on `http://localhost:5000`
 Open a new terminal:
 
 ```bash
-cd skill-swap-frontend
+cd client
 npm install
 ```
 
