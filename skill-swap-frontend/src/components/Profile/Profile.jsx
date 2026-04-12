@@ -34,8 +34,9 @@ const Profile = () => {
                     username: data.profile.username,
                     bio: data.profile.bio,
                     location: data.profile.location,
-                    profileImage: data.profile.profile_image
-                }
+                    profileImage: data.profile.profile_image,
+                },
+                phoneNumber: data.phoneNumber
             })
         } catch (err) {
             console.log(err)

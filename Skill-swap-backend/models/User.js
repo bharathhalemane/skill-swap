@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
+    phoneNumber:{
+        type: Number,
+        required: true
+    },
      githubId: {
         type:String,
     },

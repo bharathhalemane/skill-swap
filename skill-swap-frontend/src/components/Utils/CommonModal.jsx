@@ -23,7 +23,8 @@ const CommonModal = ({ isOpen, onClose, title, children, width = "400px" }) => {
           padding: "30px",
           borderRadius: "16px",
           border: "none",
-          margin: "20px"
+          margin: "20px",
+          maxHeight: "80vh",
         }
       }}
     >

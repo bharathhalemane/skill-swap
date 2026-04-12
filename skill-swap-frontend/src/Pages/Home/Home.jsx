@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import useScrollReveal from "../../components/Utils/useScrollReveal";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie'
+import PhoneUpdateModal from "./PhoneUpdateModal";
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -61,10 +63,13 @@ const howItWorksSteps = [
 ]
 const Home = () => {
     const [apiData, setApiData] = useState([])
+    const [showPhoneUpdateModal, setShowPhoneUpdateModal] = useState(false)
     const howitworksRef = useScrollReveal();
     const categoriesRef = useScrollReveal();
     const featuresRef = useScrollReveal();
     const spaceRef = useScrollReveal();
+    const userId = Cookies.get("userId")
+    const token = Cookies.get("jwtToken")
 
     useEffect(() => {
         const getCategoriesCount = async () => {
@@ -72,6 +77,21 @@ const Home = () => {
             const response = await axios.get(url)
             setApiData(response.data.data)
         }
+
+        const getUserData = async () => {
+            const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const user = response.data.user
+            console.log(user)
+            if (!user.phoneNumber ) {
+                setShowPhoneUpdateModal(true)
+            }
+        }
+        getUserData()
         getCategoriesCount()
     }, [])
 
@@ -84,7 +104,11 @@ const Home = () => {
         }
     })
 
-    return (
+    return (<>
+        {
+            showPhoneUpdateModal && <PhoneUpdateModal showModal={showPhoneUpdateModal} setShowModal={setShowPhoneUpdateModal} />
+        }
+
         <div className="dashboard-page">
             <HomeHeader />
             <section className="banner-section">
@@ -177,6 +201,7 @@ const Home = () => {
             </section>
             <Footer />
         </div>
+    </>
     )
 }
 

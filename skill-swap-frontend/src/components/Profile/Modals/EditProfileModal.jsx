@@ -25,7 +25,8 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
     username: "",
     location: "",
     bio: "",
-    image: ""
+    image: "",
+    phoneNumber: ""
   });
 
   // Sync when profileDetails changes
@@ -37,7 +38,8 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
         username: profileDetails?.profile?.username || "",
         location: profileDetails?.profile?.location || "",
         bio: profileDetails?.profile?.bio || "",
-        image: ""
+        image: "",
+        phoneNumber: profileDetails?.phoneNumber || ""
       });
     }
   }, [profileDetails]);
@@ -138,6 +140,16 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
               }
             />
           </div>
+          <div className={styles.formGroup}>
+            <label>Phone Number</label>
+            <input
+              type="text"
+              value={profileData.phoneNumber}
+              onChange={e =>
+                setProfileData(prev => ({ ...prev, phoneNumber: e.target.value }))
+              }
+            />
+          </div>
 
           <div className={styles.formGroup}>
             <label>Location</label>
@@ -177,7 +189,6 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
               )}
             </button>
           </div>
-
         </form>
       </CommonModal>
     </>
