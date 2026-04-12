@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { useState, useEffect } from 'react';
 import axios from "axios"
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const HomeHeader = () => {
     const location = useLocation();
@@ -103,7 +103,7 @@ const HomeHeader = () => {
                 aria-label="Toggle menu"
                 aria-expanded={menuOpen}
             >
-                <Menu />
+                {menuOpen ? <X/>:<Menu />}
             </div>
 
             {/* ── MOBILE: Single unified menu ── */}
