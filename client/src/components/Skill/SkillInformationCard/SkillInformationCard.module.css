@@ -129,6 +129,19 @@
     gap: 10px;
 }
 
+.deleteButton{
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    padding: 10px 20px;
+    color: #fff;    
+    border-radius: 50px;
+}
+
+.deleteButton:hover{
+    background: transparent;
+    border:2px solid #ff416c;
+    color: #1a1a1a;
+}
+
 /* ════════════════════════════════════════════════════════
    RESPONSIVE — Tablet  (≤ 1024px)
 ════════════════════════════════════════════════════════ */

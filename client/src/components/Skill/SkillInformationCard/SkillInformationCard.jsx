@@ -1,6 +1,7 @@
 import { Mail, Phone } from "lucide-react";
 import RequestModel from "../Modals/RequestModel"
 import RequestWithSwap from "../Modals/RequestWithSwap"
+import EditSkillModal from "../Modals/EditSkillModal";
 import styles from './SkillInformationCard.module.css'
 import { BsPersonCircle } from "react-icons/bs";
 import Cookies from "js-cookie"
@@ -10,6 +11,21 @@ const SkillInformationCard = ({ data }) => {
     const { _id, category, level, title, imageUrl, description, user } = data
     const { name, email, profile, _id: userId, phoneNumber } = user || {}
     const { profile_image } = profile || {}
+
+    const deleteSkill = async (skillId) => {
+        try {
+            const url = `${import.meta.env.VITE_SKILL_API}/delete/${skillId}`
+            await axios.delete(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            toast.warning("Skill Deleted Successfully!")
+            getUserSkillData()
+        } catch (err) {
+            toast.error("Unable to delete Skill Retry!")
+        }
+    }
 
     return (
         <div className={styles.skillsInformation}>
@@ -48,7 +64,8 @@ const SkillInformationCard = ({ data }) => {
                 <div className={styles.actions}>
                     {
                         userId === uId ? <>
-                            <button>edit btn</button>
+                            <EditSkillModal skillId={_id} skillData={data} />
+                            <button className={styles.deleteButton} onClick={()=> deleteSkill(_id)}>Delete Skill</button>
                         </> : <>
                             <RequestModel skillId={_id} />
                             <RequestWithSwap skillId={_id} />
