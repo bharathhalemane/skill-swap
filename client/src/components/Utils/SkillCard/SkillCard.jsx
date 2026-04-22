@@ -50,11 +50,11 @@ const SkillCard = ({ skillsData }) => {
                 <div className={styles.instructorInfo}>
                     {
                         profileImage || profile_image ? <img
-                        src={profileImage || profile_image}
-                        alt={name}
-                        className={styles.instructorAvatar}
+                            src={profileImage || profile_image}
+                            alt={name}
+                            className={styles.instructorAvatar}
                         /> : <BsPersonCircle className={styles.profile} />
-                    }                    
+                    }
                     <span className={styles.instructorName}>
                         {name}
                     </span>

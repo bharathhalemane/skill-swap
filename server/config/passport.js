@@ -1,6 +1,8 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const User = require('../models/User')
+const cloudinary = require("./cloudinary")
+const upload = require("../middleware/upload")
 
 const GitHubStrategy = require("passport-github2").Strategy
 
@@ -14,7 +16,24 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const email = profile.emails[0].value;
-        const googlePic = profile.photos?.[0]?.value || null;
+        let googlePic = profile.photos?.[0]?.value || null;
+        if (googlePic) {
+          googlePic = googlePic.replace("s96-c", "s400")
+        }
+
+        let imageUrl = null 
+
+        if (googlePic) {
+          const uploadResult = await cloudinary.uploader.upload(googlePic, {
+            folder: "skill-swap/profile-images",
+            transformation: [
+              { width: 500, height: 500, crop: "fill" },
+              {quality: "auto"}
+            ]
+          })
+
+          imageUrl = uploadResult.secure_url
+        }
 
         let user = await User.findOne({ email });
 
@@ -26,8 +45,8 @@ passport.use(
             googleId: profile.id,
             password: "google-auth",
             profile: {
-              profile_image: googlePic,
-              imageType: "google"
+              profile_image: imageUrl,
+              imageType: "cloudinary"
             }
           });
         } else {
@@ -39,10 +58,10 @@ passport.use(
           // Update only if no custom image
           if (
             (!user.profile.profile_image || user.profile.imageType === "google") &&
-            googlePic
+            imageUrl
           ) {
-            user.profile.profile_image = googlePic;
-            user.profile.imageType = "google";
+            user.profile.profile_image = imageUrl;
+            user.profile.imageType = "cloudinary";
             await user.save();
           }
 
@@ -70,13 +89,29 @@ passport.use(
       scope: ['user:email']
     },
 
-    async(accessToken, refreshToken, profile, done) => {
-      try{
+    async (accessToken, refreshToken, profile, done) => {
+      try {
         const email = profile.emails?.[0]?.value || `${profile.username}@github.com`
 
         const githubPic = profile.photos?.[0]?.value || null
 
-        let user = await User.findOne({email})
+        let imageUrl = null
+
+        if (githubPic) {
+          const uploadResult = await cloudinary.uploader.upload(githubPic, {
+            folder: "skill-swap/profile-images",
+            public_id: `github_${profile.id}`,
+            overwrite: true,
+            transformation: [
+              {width: 500, height: 500, crop: "fill"},
+              {quality: "auto"}
+            ]
+          })
+
+          imageUrl = uploadResult.secure_url
+        }
+
+        let user = await User.findOne({ email })
 
         if (!user) {
           user = await User.create({
@@ -84,18 +119,18 @@ passport.use(
             github: profile.id,
             password: 'github-auth',
             profile: {
-              profile_image: githubPic,
-              imageType: "google"
+              profile_image: imageUrl,
+              imageType: "cloudinary"
             }
           })
         } else {
           if (!user.profile) user.profile = {}
 
-          if(
-            (!user.profile.profile_image || user.profile.imageType === "google") && githubPic
+          if (
+            (!user.profile.profile_image || user.profile.imageType === "google") && imageUrl
           ) {
-            user.profile.profile_image = githubPic;
-            user.profile.imageType = "google";
+            user.profile.profile_image = imageUrl;
+            user.profile.imageType = "cloudinary";
             await user.save();
           }
 
@@ -105,7 +140,7 @@ passport.use(
           }
         }
         return done(null, user)
-      }catch(err){
+      } catch (err) {
         return done(err, null)
       }
     }

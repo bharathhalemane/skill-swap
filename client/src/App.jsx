@@ -26,7 +26,6 @@ function App() {
     if (!userId) return
 
     const handleConnect = () => {      
-      console.log("Socket ID:", socket.id);
       socket.emit("register", userId);
     };
 

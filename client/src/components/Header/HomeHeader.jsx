@@ -41,8 +41,7 @@ const HomeHeader = () => {
         getProfileData()
     }, [])
 
-    const isActive = (path) =>
-        location.pathname === path ? styles.active : ""
+    const isActive = (path) => location.pathname === path ? styles.active : ""
 
     const closeMenu = () => setMenuOpen(false)
 

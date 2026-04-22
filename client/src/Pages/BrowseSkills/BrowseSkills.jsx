@@ -7,6 +7,7 @@ import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import SkillCard from '../../components/Utils/SkillCard/SkillCard';
 import SkillCardSkeleton from '../../components/Utils/SkillCard/SkillCardSkeleton'
+import { useSelector } from 'react-redux'
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -38,6 +39,7 @@ const getLimit = () => {
 }
 
 const BrowseSkills = () => {
+
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")

@@ -27,7 +27,7 @@ const Profile = () => {
                 }
             })
             const data = response.data.user
-            setProfileData({
+            const cData = {
                 email: data.email,
                 name: data.name,
                 profile: {
@@ -37,7 +37,8 @@ const Profile = () => {
                     profileImage: data.profile.profile_image,
                 },
                 phoneNumber: data.phoneNumber
-            })
+            }
+            setProfileData(cData)
         } catch (err) {
             console.log(err)
         }

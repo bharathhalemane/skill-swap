@@ -3,10 +3,12 @@ import RequestModel from "../Modals/RequestModel"
 import RequestWithSwap from "../Modals/RequestWithSwap"
 import styles from './SkillInformationCard.module.css'
 import { BsPersonCircle } from "react-icons/bs";
+import Cookies from "js-cookie"
 
 const SkillInformationCard = ({ data }) => {
+    const uId = Cookies.get("userId")
     const { _id, category, level, title, imageUrl, description, user } = data
-    const { name,email, profile, userId, phoneNumber } = user || {}
+    const { name, email, profile, _id: userId, phoneNumber } = user || {}
     const { profile_image } = profile || {}
 
     return (
@@ -28,24 +30,30 @@ const SkillInformationCard = ({ data }) => {
                         <h4>{name}</h4>
                         <div className={styles.contactInformation}>
                             <div>
-                                <Mail/>
+                                <Mail />
                                 <a href={`mailto:${email}`} target="_blank" rel="noopener noreferrer">
                                     {email}
                                 </a>
                             </div>
                             {
                                 phoneNumber && <div>
-                                <Phone/>
-                                <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
-                            </div>
+                                    <Phone />
+                                    <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+                                </div>
                             }
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.actions}>
-                    <RequestModel skillId={_id} />
-                    <RequestWithSwap skillId={_id} />
+                    {
+                        userId === uId ? <>
+                            <button>edit btn</button>
+                        </> : <>
+                            <RequestModel skillId={_id} />
+                            <RequestWithSwap skillId={_id} />
+                        </>
+                    }
                 </div>
             </div>
 

@@ -7,7 +7,6 @@ const router = express.Router()
 router.post("/img", upload.single("image"), async (req, res) => {
     try {
         const file = req.file
-        console.log(typeof upload)
         const result = await cloudinary.uploader.upload_stream(
             { folder: "skill-swap" },
             (error, result) => {
