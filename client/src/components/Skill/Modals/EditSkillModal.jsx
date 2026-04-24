@@ -11,7 +11,7 @@ const apiProgress = {
     success: "SUCCESS"
 }
 
-const EditSkillModal = ({skillId, skillData }) => {
+const EditSkillModal = ({ skillId, skillData }) => {
     const token = Cookies.get("jwtToken")
     const [isOpen, setIsOpen] = useState(false)
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
@@ -28,7 +28,7 @@ const EditSkillModal = ({skillId, skillData }) => {
     const handleChange = e => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
-
+ 
     const handleImageChange = e => {
         const file = e.target.files[0]
         if (file) {
@@ -70,7 +70,7 @@ const EditSkillModal = ({skillId, skillData }) => {
 
     return (
         <>
-            <button className="request-btn" onClick={()=>setIsOpen(true)}>Edit Skill</button>
+            <button className="request-btn" onClick={() => setIsOpen(true)}>Edit Skill</button>
             <CommonModal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Edit Skill" width="550px">
                 <form className={styles.modernForm} onSubmit={onSubmit}>
 
