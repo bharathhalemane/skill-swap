@@ -7,7 +7,8 @@ import { MdSearch } from "react-icons/md";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import SkillCard from '../../components/Utils/SkillCard/SkillCard';
 import SkillCardSkeleton from '../../components/Utils/SkillCard/SkillCardSkeleton'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchSkills } from '../../redux/features/skills/skillsActions'
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -39,7 +40,7 @@ const getLimit = () => {
 }
 
 const BrowseSkills = () => {
-
+    const dispatch = useDispatch()
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")
@@ -51,7 +52,8 @@ const BrowseSkills = () => {
     const [totalSkills, setTotalSkills] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [limit, setLimit] = useState(getLimit)
-
+    const { skills } = useSelector((state) => state.skills)
+    console.log(skills)
     const lastPage = Math.ceil(totalSkills / limit)
 
     // Update limit on window resize and reset to page 1
@@ -122,9 +124,14 @@ const BrowseSkills = () => {
         }
     }
 
+    // useEffect(() => {
+    //     getSkillData()
+    // }, [inputValue, category, level, currentPage, limit])
+
     useEffect(() => {
-        getSkillData()
-    }, [inputValue, category, level, currentPage, limit])
+        dispatch(fetchSkills())
+        setSkillDataProgress(apiProgress.success)
+    }, [dispatch])
 
     return (
         <>
@@ -210,7 +217,7 @@ const BrowseSkills = () => {
                                     .fill(0)
                                     .map((_, i) => <SkillCardSkeleton key={i} />)
                                 :
-                                skillData.map(each => (
+                                skills.map(each => (
                                     <li key={each.id}>
                                         <SkillCard skillsData={each} />
                                     </li>

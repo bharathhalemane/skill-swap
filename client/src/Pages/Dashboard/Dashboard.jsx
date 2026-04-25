@@ -149,6 +149,7 @@ const Dashboard = () => {
                             <div
 
                                 className="categories"
+                                keu={category.name}
                             >
                                 <span className="">{category.icon}</span>
                                 <h3 className="">

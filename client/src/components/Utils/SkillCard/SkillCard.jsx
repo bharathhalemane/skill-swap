@@ -12,7 +12,6 @@ const SkillCard = ({ skillsData }) => {
         description,
         user
     } = skillsData;
-
     const { name, profileImage, userId, profile } = user
     let profile_image
     if (profile) {

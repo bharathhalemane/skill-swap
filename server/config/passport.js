@@ -21,14 +21,14 @@ passport.use(
           googlePic = googlePic.replace("s96-c", "s400")
         }
 
-        let imageUrl = null 
+        let imageUrl = null
 
         if (googlePic) {
           const uploadResult = await cloudinary.uploader.upload(googlePic, {
             folder: "skill-swap/profile-images",
             transformation: [
               { width: 500, height: 500, crop: "fill" },
-              {quality: "auto"}
+              { quality: "auto" }
             ]
           })
 
@@ -103,8 +103,8 @@ passport.use(
             public_id: `github_${profile.id}`,
             overwrite: true,
             transformation: [
-              {width: 500, height: 500, crop: "fill"},
-              {quality: "auto"}
+              { width: 500, height: 500, crop: "fill" },
+              { quality: "auto" }
             ]
           })
 
