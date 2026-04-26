@@ -41,9 +41,7 @@ const BrowseSkills = () => {
     const userId = searchParams.get("userId")
     const {level} = useSelector((state) => state.skills.filters)
     const [skillData, setSkillData] = useState([])
-    const [skillDataProgress, setSkillDataProgress] = useState(apiProgress.loading)
     const { loading } = useSelector(state => state.skills)
-    console.log(loading)
     const {page} = useSelector(state=> state.skills)
     const {category} = useSelector((state) => state.skills.filters)
     const {inputValue} = useSelector((state) => state.skills.filters)
@@ -99,7 +97,6 @@ const BrowseSkills = () => {
         if (skills.length === 0) {
             dispatch(fetchSkills())
         }
-        setSkillDataProgress(apiProgress.success)
     }, [dispatch])
 
     return (
