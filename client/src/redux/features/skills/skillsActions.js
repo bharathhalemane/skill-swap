@@ -1,10 +1,10 @@
 import axios from "axios"
 
-import { fetchSkillsFailure, fetchSkillsSuccess, fetchSkillsStart } from "./skillsSlice"
+import { fetchSkillsFailure, fetchSkillsSuccess, fetchSkillsStart, setLimit, setCategory, setSearch, setLevel, setPage } from "./skillsSlice"
 
 export const fetchSkills = () => async (dispatch, getState) => {
     try {
-        dispatch(fetchSkillsStart)
+        dispatch(fetchSkillsStart())
         const { page, filters } = getState().skills
         const url = `${import.meta.env.VITE_BACKEND_API}/skills?category=${filters.category}&level=${filters.level}&title=${filters.inputValue}&page=${page}&limit=${filters.limit}`
         const response = await axios.get(url)
@@ -25,11 +25,39 @@ export const fetchSkills = () => async (dispatch, getState) => {
         }))
         dispatch(
             fetchSkillsSuccess({
-                skills:formattedSkills,
-                hasMore: hasMore
+                skills: formattedSkills,
+                hasMore: hasMore,
+                totalSkills: response.data.totalSkills
             })
         )
     } catch (err) {
         dispatch(fetchSkillsFailure(err.message))
     }
+}
+
+export const updateLimit = (limit) => (dispatch) => {
+    dispatch(
+        setLimit(limit)
+    )
+}
+
+export const updateSearch = (inputValue) => (dispatch) => {
+    dispatch(
+        setSearch(inputValue)
+    )
+}
+
+export const updateCategory = (category) => (dispatch) => {
+    dispatch(
+        setCategory(category)
+    )
+}
+
+export const updateLevel = (level) => (dispatch) => {
+    dispatch(setLevel(level))
+}
+
+export const updatePage = (page) => (dispatch) => {
+    dispatch(setPage(page))
+    dispatch(fetchSkills())
 }

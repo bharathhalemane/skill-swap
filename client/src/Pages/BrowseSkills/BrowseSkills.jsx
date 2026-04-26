@@ -8,7 +8,7 @@ import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import SkillCard from '../../components/Utils/SkillCard/SkillCard';
 import SkillCardSkeleton from '../../components/Utils/SkillCard/SkillCardSkeleton'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchSkills } from '../../redux/features/skills/skillsActions'
+import { fetchSkills, updateLimit, updateSearch, updateCategory, updateLevel, updatePage } from '../../redux/features/skills/skillsActions'
 
 const categories = [
     { name: "Academics", icon: "📚", count: 312 },
@@ -23,11 +23,6 @@ const levels = [
     { name: "Beginner" },
     { name: "Intermediate" }
 ]
-
-const apiProgress = {
-    loading: 'LOADING',
-    success: "SUCCESS"
-}
 
 const skillApi = import.meta.env.VITE_SKILL_API
 
@@ -44,92 +39,66 @@ const BrowseSkills = () => {
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")
-    const [category, setCategory] = useState(searchParams.get('category') || "")
-    const [level, setLevel] = useState("")
-    const [inputValue, setInputValue] = useState("")
+    const {level} = useSelector((state) => state.skills.filters)
     const [skillData, setSkillData] = useState([])
     const [skillDataProgress, setSkillDataProgress] = useState(apiProgress.loading)
-    const [totalSkills, setTotalSkills] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [limit, setLimit] = useState(getLimit)
+    const { loading } = useSelector(state => state.skills)
+    console.log(loading)
+    const {page} = useSelector(state=> state.skills)
+    const {category} = useSelector((state) => state.skills.filters)
+    const {inputValue} = useSelector((state) => state.skills.filters)
+    const {limit} = useSelector(state => state.skills.filters)
+    const skill  = useSelector(state => state)
+    const { totalSkills } = useSelector((state) => state.skills)
     const { skills } = useSelector((state) => state.skills)
-    console.log(skills)
     const lastPage = Math.ceil(totalSkills / limit)
 
     // Update limit on window resize and reset to page 1
-    useEffect(() => {
+    useEffect(() => {                
         const handleResize = () => {
             const newLimit = getLimit()
-            setLimit(prev => {
-                if (prev !== newLimit) {
-                    setCurrentPage(1)
-                    return newLimit
-                }
-                return prev
-            })
+            if (limit !== newLimit) {
+                dispatch(updatePage(1))
+            }
+            dispatch(updateLimit(
+                newLimit
+            ))
+            dispatch(fetchSkills())
         }
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
     const onChangeInputValue = e => {
-        setInputValue(e.target.value)
-        setCurrentPage(1)
+        dispatch(updateSearch(e.target.value))
+        dispatch(updatePage(1))
+        dispatch(fetchSkills())
     }
     const onChangeCategory = e => {
-        setCategory(e.target.value)
-        setCurrentPage(1)
+        dispatch(updateCategory(e.target.value))
+        dispatch(updatePage(1))
+        dispatch(fetchSkills())
     }
     const onChangeLevel = e => {
-        setLevel(e.target.value)
-        setCurrentPage(1)
+        dispatch(updateLevel(e.target.value))
+        dispatch(updatePage(1))
+        dispatch(fetchSkills())
     }
     const onClearLevel = () => {
-        setLevel("")
-        setCurrentPage(1)
-    }
-
-    const getSkillData = async () => {
-        setSkillDataProgress(apiProgress.loading)
-        try {
-            const url = new URL(window.location.href)
-            url.searchParams.set("category", category || "all")
-            url.searchParams.set("level", level)
-            url.searchParams.set("title", inputValue)
-            window.history.pushState({}, "", url)
-            const skillUrl = `${skillApi}?category=${category}&level=${level}&title=${inputValue}&page=${currentPage}&limit=${limit}`
-            const response = await fetch(skillUrl, { method: "GET" })
-            if (response.ok) {
-                const data = await response.json()
-                const formattedSkills = data.skills.map(skill => ({
-                    id: skill._id,
-                    title: skill.title,
-                    description: skill.description,
-                    duration: skill.duration,
-                    imageUrl: skill.imageUrl,
-                    category: skill.category,
-                    level: skill.level,
-                    user: {
-                        name: skill.user.name,
-                        profileImage: skill.user.profile?.profile_image,
-                        userId: skill.user._id
-                    }
-                }))
-                setSkillData(formattedSkills)
-                setTotalSkills(data.totalSkills)
-            }
-            setSkillDataProgress(apiProgress.success)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    // useEffect(() => {
-    //     getSkillData()
-    // }, [inputValue, category, level, currentPage, limit])
-
-    useEffect(() => {
+        dispatch(updateLevel(""))
+        dispatch(updateSearch(""))
+        dispatch(updatePage(1))
         dispatch(fetchSkills())
+    }
+
+    useEffect(() => {        
+        if (searchParams.get("category")) {
+            dispatch(updateCategory(searchParams.get("category")))
+            dispatch(fetchSkills())
+        }
+        if (skills.length === 0) {
+            dispatch(fetchSkills())
+        }
         setSkillDataProgress(apiProgress.success)
     }, [dispatch])
 
@@ -195,7 +164,7 @@ const BrowseSkills = () => {
                             ))}
                             <li>
                                 <button
-                                    className={`${styles.levelFilterBtn} ${level ? "" : styles.dNone}`}
+                                    className={`${styles.levelFilterBtn} ${level || inputValue ? "" : styles.dNone}`}
                                     onClick={onClearLevel}
                                 >
                                     Clear Filter
@@ -212,7 +181,7 @@ const BrowseSkills = () => {
                     </h1>
                     <ul className={styles.skillsList}>
                         {
-                            skillDataProgress === apiProgress.loading ?
+                            loading ?
                                 Array(limit)
                                     .fill(0)
                                     .map((_, i) => <SkillCardSkeleton key={i} />)
@@ -229,16 +198,16 @@ const BrowseSkills = () => {
                     {totalSkills > limit && (
                         <div className={styles.paginationButtonContainer}>
                             <button
-                                className={`${styles.prevButton} ${currentPage === 1 ? styles.buttonDisable : ""}`}
-                                disabled={currentPage === 1}
-                                onClick={() => setCurrentPage(prev => prev - 1)}
+                                className={`${styles.prevButton} ${page === 1 ? styles.buttonDisable : ""}`}
+                                disabled={page === 1}
+                                onClick={() => dispatch(updatePage(page - 1))}
                             >
                                 Prev
                             </button>
                             <button
-                                className={`${styles.nextButton} ${currentPage === lastPage ? styles.buttonDisable : ""}`}
-                                disabled={currentPage === lastPage}
-                                onClick={() => setCurrentPage(prev => prev + 1)}
+                                className={`${styles.nextButton} ${page === lastPage ? styles.buttonDisable : ""}`}
+                                disabled={page === lastPage}
+                                onClick={() => dispatch(updatePage(page + 1))}
                             >
                                 Next
                             </button>

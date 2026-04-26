@@ -1,16 +1,24 @@
 import {createSlice} from "@reduxjs/toolkit"
 
+const getLimit = () => {
+    if (typeof window === "undefined") return 8;
+    if (window.innerWidth <= 768) return 4;
+    if (window.innerWidth <= 1024) return 6;
+    return 8;
+};
+
 const initialState = {
     skills: [],
     loading: false,
     error: null,
     page: 1,
     hasMore: true,
+    totalSkills:0,
     filters: {
         category: "all",
         level: "",
         inputValue: "",
-        limit: "8"
+        limit: getLimit()
     }
 }
 
@@ -27,7 +35,8 @@ const skillsSlice = createSlice({
             state.loading = false
             state.error = null
             state.skills = action.payload.skills
-            state.page += 1
+            state.totalSkills = action.payload.totalSkills 
+            state.hasMore = action.payload.hasMore
         },
         
         fetchSkillsFailure : (state, action) => {
@@ -47,6 +56,17 @@ const skillsSlice = createSlice({
 
         setSearch: (state, action) => {
             state.filters.inputValue = action.payload
+        },
+
+        setLimit: (state, action) => {
+            state.filters.limit = action.payload
+        },
+        setLevel: (state, action) => {
+            state.filters.level = action.payload
+        },
+
+        setPage: (state, action) => {
+            state.page = action.payload
         }
     }
 })
@@ -57,7 +77,10 @@ export const {
     fetchSkillsSuccess,
     resetSkills,
     setCategory,
-    setSearch
+    setSearch,
+    setLimit,
+    setLevel,
+    setPage
 } = skillsSlice.actions 
 
 export default skillsSlice.reducer
