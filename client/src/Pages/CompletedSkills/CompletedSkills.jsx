@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import SkillCard from "../../components/Utils/SkillCard/SkillCard";
 import styles from './CompletedSkills.module.css';
 import CompletedSkillSkeleton from "./CompletedSkillSkeleton";
+import SkillCardSkeleton from '../../components/Utils/SkillCard/SkillCardSkeleton'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchComSkills } from "../../redux/features/completedSkills/comSkillsActions";
 
@@ -23,9 +24,10 @@ const CompletedSkills = () => {
     const { learned, taught, swaps } = skills
 
     useEffect(() => {
-        if (skills.length > 0) {
+        if (!skills || Object.keys(skills).length === 0) {
             dispatch(fetchComSkills())
         }
+
 
         const getEtcSkills = async () => {
             setEtcSkillsProgress(apiProgress.loading)
