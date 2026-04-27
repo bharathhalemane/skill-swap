@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import SkillCard from "../../components/Utils/SkillCard/SkillCard";
 import styles from './CompletedSkills.module.css';
 import CompletedSkillSkeleton from "./CompletedSkillSkeleton";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchComSkills } from "../../redux/features/completedSkills/comSkillsActions";
 
 const apiProgress = {
     loading: 'LOADING',
@@ -13,18 +15,16 @@ const apiProgress = {
 }
 
 const CompletedSkills = () => {
-    const [skills, setSkills] = useState([])
-    const [skillsProgress, setSkillsProgress] = useState(apiProgress.loading)
+    const dispatch = useDispatch()
+    const skills = useSelector(state => state.comSkills.completedSkills)
+    const { loading } = useSelector(state => state.comSkills)
     const [etcSkills, setEtcSkills] = useState([])
     const [etcSkillsProgress, setEtcSkillsProgress] = useState(apiProgress.loading)
     const { learned, taught, swaps } = skills
 
     useEffect(() => {
-        const getCompletedSkills = async () => {
-            setSkillsProgress(apiProgress.loading)
-            const response = await completedSkills()
-            setSkills(response.data.data)
-            setSkillsProgress(apiProgress.success)
+        if (skills.length > 0) {
+            dispatch(fetchComSkills())
         }
 
         const getEtcSkills = async () => {
@@ -40,10 +40,8 @@ const CompletedSkills = () => {
             setEtcSkills(data)
             setEtcSkillsProgress(apiProgress.success)
         }
-
-        getCompletedSkills()
         getEtcSkills()
-    }, [])
+    }, [dispatch])
 
     return (
         <>
@@ -54,7 +52,7 @@ const CompletedSkills = () => {
                     <div className={styles.completedSection}>
                         <h2>Skills Learned</h2>
                         <div className={styles.completedSkillsGrid}>
-                            {skillsProgress === apiProgress.loading ?
+                            {loading ?
                                 Array(3)
                                     .fill(0)
                                     .map((_, i) => <CompletedSkillSkeleton key={i} />)
@@ -75,7 +73,7 @@ const CompletedSkills = () => {
                     <div className={styles.completedSection}>
                         <h2>Skills Taught</h2>
                         <div className={styles.completedSkillsGrid}>
-                            {skillsProgress === apiProgress.loading ?
+                            {loading ?
                                 Array(3)
                                     .fill(0)
                                     .map((_, i) => <CompletedSkillSkeleton key={i} />)
@@ -98,7 +96,7 @@ const CompletedSkills = () => {
                         <h2>Swaps Completed</h2>
                         <div className={styles.completedSkillsGrid}>
                             {
-                                skillsProgress === apiProgress.loading ?
+                                loading ?
                                     Array(3)
                                         .fill(0)
                                         .map((_, i) => <CompletedSkillSkeleton key={i} />)
