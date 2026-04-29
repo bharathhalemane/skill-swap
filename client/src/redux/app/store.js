@@ -7,7 +7,7 @@ const store = configureStore({
     reducer: {
         skills: skillsReducer,
         comSkills: comSkillsReducer,
-        profile: profileReducer
+        profile: profileReducer,
     }
 })
 
