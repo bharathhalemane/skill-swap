@@ -1,21 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    profileImage: ""
+    profileImage: "",
+    profile: {},
+    loading: false,
+    error: null
 }
 
 const ProfileSlice = createSlice({
     name: "profile",
     initialState,
     reducers: {
+        fetchProfileStart: (state) => {
+            state.loading = true
+            state.error = null
+        },
+        
+        fetchProfileFailure : (state, action) => {
+            state.loading = false 
+            state.error = action.payload 
+        },
         fetchProfile: (state, action) => {
-            state.profileImage = action.payload.profile_image
-        }
+            state.profileImage = action.payload.profile.profileImage
+            state.profile = action.payload
+            state.loading = false 
+            state.error = null
+        },
     }
 })
 
 export const {
-    fetchProfile
+    fetchProfile,
+    fetchProfileStart,
+    fetchProfileFailure,
 } = ProfileSlice.actions
 
 export default ProfileSlice.reducer
