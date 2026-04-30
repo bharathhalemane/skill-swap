@@ -1,6 +1,7 @@
 import axios from "axios"
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify"
+import { fetchReceivedRequest } from "../../redux/features/requests/requestsAction"
 
 export const getReceivedRequests = async () => {
     
@@ -19,7 +20,7 @@ export const getReceivedRequests = async () => {
     }
 }
 
-export const acceptRequest = async (id, name) => {
+export const acceptRequest = async (dispatch, id, name) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/accept/${id}`
@@ -28,13 +29,14 @@ export const acceptRequest = async (id, name) => {
                 Authorization: `Bearer ${token}`
             }
         })
+        dispatch(fetchReceivedRequest())
         toast.success(`Accepted! ${name} request`)
     } catch (err) {
         toast.error(err.message)
     }
 }
 
-export const rejectRequest = async (id, name) => {
+export const rejectRequest = async (dispatch, id, name) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/reject/${id}`
@@ -44,6 +46,7 @@ export const rejectRequest = async (id, name) => {
                 Authorization: `Bearer ${token}`
             }
         })
+        dispatch(fetchReceivedRequest())
         toast.success(`Rejected! ${name} request`)
     } catch (err) {
         toast.error(err.message)
