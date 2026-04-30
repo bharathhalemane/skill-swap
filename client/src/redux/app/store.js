@@ -6,6 +6,7 @@ import profileReducer from "../features/profile/ProfileSlice"
 import requestsReducer from "../features/requests/requestsSlice"
 import teachingSkillsReducer from "../features/teachingSkills/teachingSkillsSlice"
 import scheduleAndAvailabilityReducer from "../features/scheduleAndAvailability/scheduleAndAvailabilitySlice"
+import learningSkillsReducer from "../features/learningSkills/learningSkillsSlice"
 const store = configureStore({
     reducer: {
         skills: skillsReducer,
@@ -13,7 +14,8 @@ const store = configureStore({
         profile: profileReducer,
         requests: requestsReducer,
         teachingSkills: teachingSkillsReducer,
-        scheduleAndAvailability : scheduleAndAvailabilityReducer
+        scheduleAndAvailability: scheduleAndAvailabilityReducer,
+        learningSkills: learningSkillsReducer
     }
 })
 

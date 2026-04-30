@@ -2,6 +2,7 @@ import axios from "axios"
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify"
 import { fetchReceivedRequest, fetchSentRequests } from "../../redux/features/requests/requestsAction"
+import { fetchLearningSkills } from "../../redux/features/learningSkills/learningSkillsActions"
 
 
 export const acceptRequest = async (dispatch, id, name) => {
@@ -24,7 +25,7 @@ export const rejectRequest = async (dispatch, id, name) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/reject/${id}`
-        
+
         await axios.put(url, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -63,7 +64,7 @@ export const resendRequest = async (dispatch, id) => {
         })
         dispatch(fetchSentRequests())
         toast.success("Request resent!")
-    }catch(err){
+    } catch (err) {
         toast.error(err.response?.data?.msg)
     }
 }
@@ -84,33 +85,17 @@ export const cancelRequest = async (dispatch, id) => {
     }
 }
 
-export const learningSkills = async () => {
-    const token = Cookies.get("jwtToken")
-    try {
-        const url = `${import.meta.env.VITE_BACKEND_API}/requests/learning`
-        const response = await axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        return response
-    }catch(err){
-        console.log(err)
-    }
-}
-
-export const endLearning = async (id) => {
+export const endLearning = async (dispatch, id) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/end/${id}`
-        const res = await axios.patch(url, {},{
+        const res = await axios.patch(url, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-
+        dispatch(fetchLearningSkills())
         toast.success("Learning ended")
-        return res
     } catch (err) {
         toast.error(err.response?.data?.msg)
     }

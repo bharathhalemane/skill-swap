@@ -1,23 +1,22 @@
 import styles from './LearningSkills.module.css'
-import { learningSkills, endLearning } from '../requestAPi'
+import { endLearning } from '../requestAPi'
 import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchLearningSkills } from '../../../redux/features/learningSkills/learningSkillsActions'
 
 const LearningSkills = () => {
-    const [skillsData, setSkillsData] = useState([])
-
-    const fetchData = async () => {
-        const response = await learningSkills()
-        setSkillsData(response.data.data)
-    }
+    const dispatch = useDispatch()
+    const skillsData = useSelector(state => state.learningSkills.learningSkills)
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        if (skillsData.length === 0) {
+            dispatch(fetchLearningSkills())
+        }
+    }, [dispatch])
 
     const handleLearning = async (id) => {
-        await endLearning(id)
-        fetchData()
+        await endLearning(dispatch, id)
     }
 
     if (skillsData.length === 0) return null
