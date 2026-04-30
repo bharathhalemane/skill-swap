@@ -21,12 +21,11 @@ export const fetchSkillsTitles = () => async (dispatch, getState) => {
     try {
         const userId = Cookies.get("userId")
         const token = Cookies.get("jwtToken")
-        const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}`
+        const url = `${import.meta.env.VITE_SKILL_API}/${userId}/titles`
         const response = await axios.get(url, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        const skills = response.data.skills.map(skill => skill.title)
-        dispatch(updateTitles(skills))
+        dispatch(updateTitles(response.data))
     } catch (err) {
         console.log(err)
     }
