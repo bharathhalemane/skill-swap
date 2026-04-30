@@ -5,13 +5,15 @@ import comSkillsReducer from "../features/completedSkills/comSkillsSlice"
 import profileReducer from "../features/profile/ProfileSlice"
 import requestsReducer from "../features/requests/requestsSlice"
 import teachingSkillsReducer from "../features/teachingSkills/teachingSkillsSlice"
+import scheduleAndAvailabilityReducer from "../features/scheduleAndAvailability/scheduleAndAvailabilitySlice"
 const store = configureStore({
     reducer: {
         skills: skillsReducer,
         comSkills: comSkillsReducer,
         profile: profileReducer,
         requests: requestsReducer,
-        teachingSkills: teachingSkillsReducer
+        teachingSkills: teachingSkillsReducer,
+        scheduleAndAvailability : scheduleAndAvailabilityReducer
     }
 })
 

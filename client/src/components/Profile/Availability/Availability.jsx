@@ -4,37 +4,27 @@ import Cookies from "js-cookie"
 import axios from "axios";
 import AvailabilityEditorModal from "../Modals/AvailabilityEditorModal";
 import styles from './Availability.module.css'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAvailabilityData } from "../../../redux/features/scheduleAndAvailability/scheduleAndAvailabilityActions";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 const Availability = () => {
+    const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
-    const [availabilityData, setAvailabilityData] = useState([])
-
-    const getAvailabilityData = async () => {
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_API}/availability/my`
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day))
-            setAvailabilityData(sorted)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    const availabilityData = useSelector(state => state.scheduleAndAvailability.availability)
 
     useEffect(() => {
-        getAvailabilityData()
-    }, [])
+        if (availabilityData.length === 0) {
+            dispatch(fetchAvailabilityData())
+        }
+    }, [dispatch])
 
     return (
         <div className={styles.availabilityEditorSection}>
             <div className={styles.headerSection}>
                 <h1><LuCalendar color="#ff7a00" /> My Availability</h1>
-                <AvailabilityEditorModal data={availabilityData} setData={setAvailabilityData} />
+                <AvailabilityEditorModal data={availabilityData} />
             </div>
 
             <div className={styles.availabilitySlots}>
