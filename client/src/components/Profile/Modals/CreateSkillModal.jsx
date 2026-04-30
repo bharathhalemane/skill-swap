@@ -4,12 +4,15 @@ import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import styles from './Modal.module.css'
+import { useDispatch } from "react-redux";
+import { fetchTeachingSkills } from "../../../redux/features/teachingSkills/teachingSkillsSlice";
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
 };
 
-const CreateSkillModal = ({buttonTitle, setChanges}) => {
+const CreateSkillModal = ({ buttonTitle }) => {
+  const dispatch = useDispatch()
   const token = Cookies.get("jwtToken");
   const [isOpen, setIsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiProgress.success);
@@ -69,7 +72,7 @@ const CreateSkillModal = ({buttonTitle, setChanges}) => {
       })
       setPreview(null)
       setApiStatus(apiProgress.success)
-      setChanges(true)
+      dispatch(fetchTeachingSkills())
       setIsOpen(false)
     }catch(err){
       console.log(err)

@@ -7,32 +7,17 @@ import axios from "axios"
 import Cookies from "js-cookie"
 import { toast } from "react-toastify";
 import styles from './SkillDetails.module.css'
+import { useDispatch, useSelector } from "react-redux"
+import { fetchTeachingSkills, updatePage } from "../../../redux/features/teachingSkills/teachingSkillsActions";
 
 const SkillDetails = () => {
-    const [teachingSkillData, setTeachingSkillData] = useState([])
-    const [changes, setChanges] = useState(false)
-    const [totalSkills, setTotalSkills] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
+    const dispatch = useDispatch()
+    const teachingSkillData = useSelector(state => state.teachingSkills.teachingSkills)
+    const { totalSkills, page } = useSelector(state => state.teachingSkills)
     const userId = Cookies.get("userId")
     const token = Cookies.get("jwtToken")
     const lastPage = Math.ceil(totalSkills / 4)
 
-    const getUserSkillData = async () => {
-        try {
-            const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}?page=${currentPage}&limit=4`
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            setTeachingSkillData(response.data.skills)
-            setTotalSkills(response.data.totalSkills)
-            setChanges(false)
-        } catch (err) {
-            console.log(err)
-            setChanges(false)
-        }
-    }
 
     const deleteSkill = async (skillId) => {
         try {
@@ -43,15 +28,17 @@ const SkillDetails = () => {
                 }
             })
             toast.warning("Skill Deleted Successfully!")
-            getUserSkillData()
+            dispatch(fetchTeachingSkills())
         } catch (err) {
             toast.error("Unable to delete Skill Retry!")
         }
     }
 
     useEffect(() => {
-        getUserSkillData()
-    }, [changes, currentPage])
+        if (teachingSkillData.length === 0) {
+            dispatch(fetchTeachingSkills())
+        }
+    }, [dispatch])
 
     return (
         <div className={styles.skillsDetailsList}>
@@ -84,22 +71,22 @@ const SkillDetails = () => {
 
             <div className={styles.createControllerContainer}>
                 {teachingSkillData.length > 4
-                    ? <CreateSkillModal buttonTitle="Add Skill" setChanges={setChanges} />
-                    : <CreateSkillModal buttonTitle="Create Skill" setChanges={setChanges} />
+                    ? <CreateSkillModal buttonTitle="Add Skill" />
+                    : <CreateSkillModal buttonTitle="Create Skill" />
                 }
                 {totalSkills > 0 && (
                     <div className={styles.paginationButtonContainer}>
                         <button
-                            className={`${styles.prevButton} ${currentPage === 1 ? styles.buttonDisable : ''}`}
-                            disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(prev => prev - 1)}
+                            className={`${styles.prevButton} ${page === 1 ? styles.buttonDisable : ''}`}
+                            disabled={page === 1}
+                            onClick={() => dispatch(updatePage(page - 1))}
                         >
                             Prev
                         </button>
                         <button
-                            className={`${styles.nextButton} ${currentPage === lastPage ? styles.buttonDisable : ''}`}
-                            disabled={currentPage === lastPage}
-                            onClick={() => setCurrentPage(prev => prev + 1)}
+                            className={`${styles.nextButton} ${page === lastPage ? styles.buttonDisable : ''}`}
+                            disabled={page === lastPage}
+                            onClick={() => dispatch(updatePage(page + 1))}
                         >
                             Next
                         </button>
