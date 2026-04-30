@@ -5,7 +5,7 @@ import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import styles from './Modal.module.css'
 import { useDispatch } from "react-redux";
-import { fetchTeachingSkills } from "../../../redux/features/teachingSkills/teachingSkillsSlice";
+import { fetchTeachingSkills } from "../../../redux/features/teachingSkills/teachingSkillsActions";
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
