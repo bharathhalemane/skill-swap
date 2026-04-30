@@ -1,24 +1,8 @@
 import axios from "axios"
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify"
-import { fetchReceivedRequest } from "../../redux/features/requests/requestsAction"
+import { fetchReceivedRequest, fetchSentRequests } from "../../redux/features/requests/requestsAction"
 
-export const getReceivedRequests = async () => {
-    
-    const token = Cookies.get("jwtToken")
-    try {
-        const url = `${import.meta.env.VITE_BACKEND_API}/requests/received`
-
-        const response = await axios(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        return response
-    }catch(err){
-        console.log(err)
-    }
-}
 
 export const acceptRequest = async (dispatch, id, name) => {
     const token = Cookies.get("jwtToken")
@@ -68,7 +52,7 @@ export const getSentRequest = async () => {
     }
 }
 
-export const resendRequest = async (id) => {
+export const resendRequest = async (dispatch, id) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/resend/${id}`
@@ -77,14 +61,14 @@ export const resendRequest = async (id) => {
                 Authorization: `Bearer ${token}`
             }
         })
+        dispatch(fetchSentRequests())
         toast.success("Request resent!")
-        return res
     }catch(err){
         toast.error(err.response?.data?.msg)
     }
 }
 
-export const cancelRequest = async (id) => {
+export const cancelRequest = async (dispatch, id) => {
     const token = Cookies.get("jwtToken")
     try {
         const url = `${import.meta.env.VITE_BACKEND_API}/requests/cancel/${id}`
@@ -93,6 +77,7 @@ export const cancelRequest = async (id) => {
                 Authorization: `Bearer ${token}`
             }
         })
+        dispatch(fetchSentRequests())
         toast.success("Request cancelled!")
     } catch (err) {
         toast.error(err.response?.data?.msg)

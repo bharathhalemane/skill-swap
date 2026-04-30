@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react'
 import styles from './SentRequests.module.css'
-import { getSentRequest, resendRequest, cancelRequest } from '../../requestAPi'
+import { resendRequest, cancelRequest } from '../../requestAPi'
 import { ArrowRight, ArrowRightLeft, RotateCcw, Send, X } from 'lucide-react'
 import { BsPersonCircle } from 'react-icons/bs'
 import { socket } from '../../../../Socket'
 import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from "react-redux"
+import { fetchSentRequests } from '../../../../redux/features/requests/requestsAction'
 
 const SentRequests = () => {
-    const [data, setData] = useState([])
-    const [callData, setCallData] = useState(false)
-
-    const fetchData = async () => {
-        try {
-            const res = await getSentRequest()
-            setData(res.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    const dispatch = useDispatch()
+    const data = useSelector(state => state.requests.sentRequest)
 
     useEffect(() => {
-        fetchData()
-    }, [callData])
+        if (data.length === 0) {
+            dispatch(fetchSentRequests())
+        }
+    }, [dispatch])
 
     const showToast = msg => {
         toast.info(msg, {
@@ -33,12 +28,13 @@ const SentRequests = () => {
 
     useEffect(() => {
         const handleRequestAccepted = msg => {
-            fetchData()
+            dispatch(fetchSentRequests())
             showToast(msg)
         }
         const handleRequestRejected = msg => {
+            dispatch(fetchSentRequests())
             showToast(msg)
-            fetchData()
+
         }
 
         socket.on("request_accepted", handleRequestAccepted)
@@ -51,13 +47,11 @@ const SentRequests = () => {
     })
 
     const handleResentRequest = async (id) => {
-        await resendRequest(id)
-        setCallData(!callData)
+        await resendRequest(dispatch, id)
     }
 
     const handleCancelRequest = async (id) => {
-        await cancelRequest(id)
-        setCallData(!callData)
+        await cancelRequest(dispatch, id)
     }
 
     const getTimeAgo = (date) => {

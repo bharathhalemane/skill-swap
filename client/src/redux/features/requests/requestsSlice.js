@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    sentRequest: {},
+    sentRequest: [],
     receivedRequest: [],
     loading: false,
     error: null
@@ -23,6 +23,10 @@ const requestsSlice = createSlice({
             state.loading = false 
             state.error = null 
             state.receivedRequest = action.payload
+        },
+        fetchSentRequestsSuccess: (state, action) => {
+            state.loading = false
+            state.sentRequest = action.payload
         }
     }
 })
@@ -30,7 +34,8 @@ const requestsSlice = createSlice({
 export const {
     fetchRequestFailure,
     fetchRequestStart,
-    fetchReceivedRequestSuccess
+    fetchReceivedRequestSuccess,
+    fetchSentRequestsSuccess
 } = requestsSlice.actions
 
 export default requestsSlice.reducer
