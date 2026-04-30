@@ -1,4 +1,4 @@
-import { getReceivedRequests, acceptRequest, rejectRequest } from "../../requestAPi"
+import { acceptRequest, rejectRequest } from "../../requestAPi"
 import { useEffect, useState } from "react"
 import styles from "./ReceivedRequest.module.css"
 import { ArrowRight, ArrowRightLeft, Calendar, Check, X } from "lucide-react"
@@ -6,26 +6,18 @@ import { BsPersonCircle } from "react-icons/bs"
 import Cookies from "js-cookie"
 import { socket } from "../../../../Socket"
 import { toast } from "react-toastify"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchReceivedRequest } from "../../../../redux/features/requests/requestsAction"
 
 const ReceivedRequest = () => {
-    const [requestsData, setRequestsData] = useState([])
+    const dispatch = useDispatch()
     const [callData, setCallData] = useState(false)
-
-    const fetchReceivedRequests = async () => {
-        try {
-            const response = await getReceivedRequests()
-            setRequestsData(response.data.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
+    const requestsData = useSelector(state => state.requests.receivedRequest)
     useEffect(() => {
-        const token = Cookies.get("jwtToken")
-        if (token) {
-            fetchReceivedRequests()
+        if (requestsData.length === 0) {
+            dispatch(fetchReceivedRequest())
         }
-    }, [callData])
+    }, [dispatch])
 
     const showToast = msg => {
         toast.info(msg, {
@@ -37,11 +29,11 @@ const ReceivedRequest = () => {
 
     useEffect(() => {
         const handleNewRequest = (data, msg) => {
-            setRequestsData(prev => [data, ...prev])
+            dispatch(fetchReceivedRequest())
             showToast(msg)
         }
         const handleCancelRequest = (data, msg) => {
-            setRequestsData(prev => prev.filter(req => req._id !== data._id))
+            dispatch(fetchReceivedRequest())
             showToast(msg)
         }
 
@@ -55,15 +47,11 @@ const ReceivedRequest = () => {
     }, [])
 
     const handleAcceptRequest = async (id, name) => {
-        acceptRequest(id, name)
-        setCallData(!callData)
-        fetchReceivedRequests()
+        acceptRequest(dispatch, id, name)
     }
 
     const handleRejectRequest = async (id, name) => {
-        rejectRequest(id, name)
-        setCallData(!callData)
-        fetchReceivedRequests()
+        rejectRequest(dispatch, id, name)
     }
 
     const getTimeAgo = (date) => {

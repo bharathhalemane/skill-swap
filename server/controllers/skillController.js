@@ -374,3 +374,16 @@ exports.getCategoryWiseSkillCount = async (req, res) => {
     }
 }
 
+exports.getUserSkillsTitles = async (req, res) => {
+    try {
+        const { userId } = req.params
+        const skills = await Skill.find({user: userId})
+        
+        const titles = skills.map(skill => skill.title)
+        res.status(200).json(titles)
+    } catch (err) {
+        res.status(500).json({
+            message: "server error"
+        })
+    }
+}

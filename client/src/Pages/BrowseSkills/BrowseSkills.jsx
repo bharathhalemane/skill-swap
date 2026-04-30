@@ -39,20 +39,13 @@ const BrowseSkills = () => {
     const [searchParams] = useSearchParams()
     const token = searchParams.get('token')
     const userId = searchParams.get("userId")
-    const {level} = useSelector((state) => state.skills.filters)
+    const { level, category, inputValue, limit } = useSelector((state) => state.skills.filters)
     const [skillData, setSkillData] = useState([])
-    const { loading } = useSelector(state => state.skills)
-    const {page} = useSelector(state=> state.skills)
-    const {category} = useSelector((state) => state.skills.filters)
-    const {inputValue} = useSelector((state) => state.skills.filters)
-    const {limit} = useSelector(state => state.skills.filters)
-    const skill  = useSelector(state => state)
-    const { totalSkills } = useSelector((state) => state.skills)
-    const { skills } = useSelector((state) => state.skills)
+    const { loading, page, totalSkills, skills } = useSelector(state => state.skills)
     const lastPage = Math.ceil(totalSkills / limit)
 
     // Update limit on window resize and reset to page 1
-    useEffect(() => {                
+    useEffect(() => {
         const handleResize = () => {
             const newLimit = getLimit()
             if (limit !== newLimit) {
@@ -89,7 +82,7 @@ const BrowseSkills = () => {
         dispatch(fetchSkills())
     }
 
-    useEffect(() => {        
+    useEffect(() => {
         if (searchParams.get("category")) {
             dispatch(updateCategory(searchParams.get("category")))
             dispatch(fetchSkills())

@@ -6,6 +6,8 @@ import CommonModal from "../../Utils/CommonModal";
 import { TailSpin } from "react-loader-spinner"
 import { toast } from "react-toastify";
 import styles from './ClassSchedule.module.css'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchScheduleData, fetchSkillsTitles } from "../../../redux/features/scheduleAndAvailability/scheduleAndAvailabilityActions";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TIMES = [
@@ -21,12 +23,13 @@ const apiProgress = {
 }
 
 const ClassSchedule = () => {
+    const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
-    const [classSchedule, setClassSchedule] = useState([])
+    const classSchedule = useSelector(state => state.scheduleAndAvailability.schedule)
+    const { titles } = useSelector(state => state.scheduleAndAvailability)
     const [isOpen, setIsOpen] = useState(false)
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
-    const [titles, setTitles] = useState([])
     const [formData, setFormData] = useState({
         day: "",
         title: "",
@@ -39,35 +42,14 @@ const ClassSchedule = () => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const getClassScheduleData = async () => {
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_API}/classes`
-            const response = await axios.get(url, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-            setClassSchedule(response.data)
-        } catch (err) {
-            toast.error("Unable to get Scheduled Data!")
-        }
-    }
-
-    const getUserSkillTitle = async () => {
-        try {
-            const url = `${import.meta.env.VITE_SKILL_API}/user/${userId}`
-            const response = await axios.get(url, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-            const skills = response.data.skills
-            setTitles(skills.map(skill => skill.title))
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     useEffect(() => {
-        getClassScheduleData()
-        getUserSkillTitle()
-    }, [])
+        if (classSchedule.length === 0) {
+            dispatch(fetchScheduleData())
+        }
+        if (titles.length === 0) {
+            dispatch(fetchSkillsTitles())
+        }
+    }, [dispatch])
 
     const removeClassScheduleData = async (id) => {
         try {
@@ -76,7 +58,7 @@ const ClassSchedule = () => {
                 headers: { Authorization: `Bearer ${token}` }
             })
             toast.warning("Removed your class schedule!")
-            getClassScheduleData()
+            dispatch(fetchScheduleData())
         } catch (err) {
             toast.error("Unable to remove your class schedule.")
         }
@@ -94,7 +76,7 @@ const ClassSchedule = () => {
             setFormData({ day: "", title: "", startTime: "", endTime: "", location: "" })
             toast.success("Scheduled Successfully!")
             setIsOpen(false)
-            getClassScheduleData()
+            dispatch(fetchScheduleData())
         } catch (err) {
             toast.error("Unable to scheduled your class!")
             setIsOpen(false)

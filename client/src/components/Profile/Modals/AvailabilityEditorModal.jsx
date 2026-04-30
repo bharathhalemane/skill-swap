@@ -7,6 +7,8 @@ import CommonModal from "../../Utils/CommonModal";
 import { LuX, LuClock } from "react-icons/lu";
 import { toast } from "react-toastify";
 import styles from "./Modal.module.css"
+import { useDispatch } from "react-redux";
+import { fetchAvailabilityData } from "../../../redux/features/scheduleAndAvailability/scheduleAndAvailabilityActions";
 const apiProgress = {
     loading: "LOADING",
     success: "SUCCESS"
@@ -18,7 +20,8 @@ const TIME_OPTIONS = [
     "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM"
 ];
 
-const AvailabilityEditorModal = ({ data, setData }) => {
+const AvailabilityEditorModal = ({ data }) => {
+    const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
     const [isOpen, setIsOpen] = useState(false)
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
@@ -40,8 +43,7 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                 }
             })
             toast.success("Availability Slot Created Successfully!")
-            const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
-            setData(sorted)
+            dispatch(fetchAvailabilityData())
         } catch (err) {
             toast.error("Something went wrong Retry!")
         }
@@ -56,8 +58,7 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                 }
             })            
             toast.warning("Slot Deleted!")
-            const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
-            setData(sorted)
+            dispatch(fetchAvailabilityData())
         }catch(err){
             toast.error("Something went wrong Retry!")
         }
@@ -72,8 +73,7 @@ const AvailabilityEditorModal = ({ data, setData }) => {
                 }
             })
             toast.warning("All slot of that day cleared!!")
-            const sorted = response.data.sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
-            setData(sorted)
+            dispatch(fetchAvailabilityData())
         }catch(err){
             toast.error("Something went wrong Retry!")
         }

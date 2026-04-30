@@ -7,14 +7,15 @@ import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import { toast } from "react-toastify";
 import styles from './Modal.module.css'
-
+import { useDispatch } from "react-redux";
+import { fetchProfileData } from "../../../redux/features/profile/ProfileActions";
 const apiProgress = {
   loading: "LOADING",
   success: "SUCCESS"
 };
 
-const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
-
+const EditProfileModel = ({ profileDetails }) => {
+  const dispatch = useDispatch()
   const token = Cookies.get("jwtToken");
   const [isOpen, setIsOpen] = useState(false);
   const [apiStatus, setApiStatus] = useState(apiProgress.success);
@@ -75,15 +76,13 @@ const EditProfileModel = ({ profileDetails, onProfileUpdated }) => {
         }
       });
       toast.success("Hurry! your profile updated successfully.")
+      dispatch(fetchProfileData())
       setApiStatus(apiProgress.success);
-      onProfileUpdated();
-      setIsOpen(false);
-
     } catch (err) {
       setApiStatus(apiProgress.success)
-      setIsOpen(false)
       toast.error("Oops! Something unexpect thing happened. Try Again!")
     }
+    setIsOpen(false)
   };
 
   return (

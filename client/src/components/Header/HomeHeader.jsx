@@ -6,40 +6,29 @@ import Cookies from "js-cookie"
 import { useState, useEffect } from 'react';
 import axios from "axios"
 import { Menu, X } from 'lucide-react';
+import { useSelector, useDispatch } from "react-redux"
+import { fetchProfileData } from '../../redux/features/profile/ProfileActions';
 
 const HomeHeader = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const [menuOpen, setMenuOpen] = useState(false)
-    const [profileImage, setProfileImage] = useState(null)
+    const {profileImage} = useSelector(state=> state.profile)
 
     const navLinks = [
-        { href: "/home",              label: "Home" },
-        { href: "/find-skills",       label: "Find Skills" },
-        { href: "/study-groups",      label: "Study Groups" },
-        { href: "/completed-skills",  label: "Completed Skills" },
+        { href: "/home", label: "Home" },
+        { href: "/find-skills", label: "Find Skills" },
+        { href: "/study-groups", label: "Study Groups" },
+        { href: "/completed-skills", label: "Completed Skills" },
     ];
 
     useEffect(() => {
-        const getProfileData = async () => {
-            const token  = Cookies.get("jwtToken")
-            const userId = Cookies.get("userId")
-            if (!userId || !token) return
-
-            try {
-                const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
-                const res = await axios.get(url, {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                setProfileImage(res.data.user?.profile?.profile_image)
-            } catch (err) {
-                console.log(err)
-            }
+        if(!profileImage){
+            dispatch(fetchProfileData())
         }
-
-        getProfileData()
-    }, [])
+    }, [dispatch])
 
     const isActive = (path) => location.pathname === path ? styles.active : ""
 
@@ -102,7 +91,7 @@ const HomeHeader = () => {
                 aria-label="Toggle menu"
                 aria-expanded={menuOpen}
             >
-                {menuOpen ? <X/>:<Menu />}
+                {menuOpen ? <X /> : <Menu />}
             </div>
 
             {/* ── MOBILE: Single unified menu ── */}

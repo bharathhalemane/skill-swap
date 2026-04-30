@@ -12,44 +12,22 @@ import Availability from './Availability/Availability'
 import ReceivedRequest from './requests/ReceivedRequests/ReceivedRequest'
 import SentRequests from './requests/SentRequests/SentRequests'
 import LearningSkills from './LearningSkills/LearningSkills'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchProfileData } from '../../redux/features/profile/ProfileActions'
 
 const Profile = () => {
+    const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
-    const [profileData, setProfileData] = useState()
+    const profileData = useSelector(state => state.profile.profile)
+    
 
     const getProfileData = async () => {
-        try {
-            const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const data = response.data.user
-            const cData = {
-                email: data.email,
-                name: data.name,
-                profile: {
-                    username: data.profile.username,
-                    bio: data.profile.bio,
-                    location: data.profile.location,
-                    profileImage: data.profile.profile_image,
-                },
-                phoneNumber: data.phoneNumber
-            }
-            setProfileData(cData)
-        } catch (err) {
-            console.log(err)
-        }
+        dispatch(fetchProfileData())
     }
 
-    useEffect(() => {
-        getProfileData()
-    }, [])
-
     const handleProfileEditor = () => {
-        return <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
+        return <EditProfileModal profileDetails={profileData} />
     }
 
     const ProfileDetails = () => {
@@ -86,7 +64,7 @@ const Profile = () => {
                             </div>
 
                             <div className={styles.editProfileButtonContainer}>
-                                <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
+                                <EditProfileModal profileDetails={profileData} />
                             </div>
                         </>
                     ) : (
@@ -94,7 +72,7 @@ const Profile = () => {
                             <BsPersonCircle size={80} color='#e76f51' className={styles.noProfileImage} />
                             <p>No profile data found</p>
                             <div className={styles.editProfileButtonContainer}>
-                                <EditProfileModal profileDetails={profileData} onProfileUpdated={getProfileData} />
+                                <EditProfileModal profileDetails={profileData}  />
                             </div>
                         </div>
                     )}
