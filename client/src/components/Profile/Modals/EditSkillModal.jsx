@@ -6,13 +6,16 @@ import { TailSpin } from "react-loader-spinner";
 import CommonModal from "../../Utils/CommonModal";
 import { toast } from "react-toastify";
 import styles from './Modal.module.css'
+import { useDispatch } from "react-redux";
+import { fetchTeachingSkills } from "../../../redux/features/teachingSkills/teachingSkillsSlice";
 
 const apiProgress = {
     loading: "LOADING",
     success: "SUCCESS"
 }
 
-const EditSkillModal = ({ setChanges, skillId, skillData }) => {
+const EditSkillModal = ({ skillId, skillData }) => {
+    const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
     const [isOpen, setIsOpen] = useState(false)
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
@@ -56,7 +59,7 @@ const EditSkillModal = ({ setChanges, skillId, skillData }) => {
             })
             toast.success("Skill edited!")
             setApiStatus(apiProgress.success)
-            setChanges(true)
+            dispatch(fetchTeachingSkills())
             setIsOpen(false)
         } catch (err) {
             toast.error("Unable to edit the skill. try Again!!")

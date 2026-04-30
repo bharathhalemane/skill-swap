@@ -61,7 +61,7 @@ const SkillDetails = () => {
                                 </div>
                             </div>
                             <div className={styles.skillOperationContainer}>
-                                <EditSkillModal setChanges={setChanges} skillId={each.id} skillData={each} />
+                                <EditSkillModal skillId={each.id} skillData={each} />
                                 <BsTrash size={25} color="#ff0000" onClick={() => deleteSkill(each.id)} />
                             </div>
                         </div>
