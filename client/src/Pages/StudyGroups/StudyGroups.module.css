@@ -1,0 +1,89 @@
+.dashboardSection {
+    background-color: #FBF6EF;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+}
+
+.dashboardSection h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dashboardSection p {
+    font-size: 15px;
+    color: #a99f98;
+    width: 500px;
+}
+
+.dashboardSectionCon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #727c7d;
+    border-radius: 20px;
+    padding: 2px 10px;
+    width: fit-content;
+}
+
+.dashboardSectionCon h1 {
+    font-size: 15px;
+}
+
+.searchBarContainer {
+    background-color: #FCFAF7;
+    padding: 20px 40px;
+    display: flex;
+    gap: 30px;
+}
+
+.inputSection {
+    display: flex;
+    align-items: center;
+    width: 80vw;
+    padding: 10px;
+    gap: 10px;
+    border: 2px solid #7b7b7b;
+    border-radius: 10px;
+}
+
+.inputSection:focus-within {
+    border: 2px solid #ff7a59;
+}
+
+.createSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+.createSection h1 {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.createSection p {
+    font-size: 15px;
+    text-align: center;
+    color: #7b7b7b;
+}
+
+@media(max-width: 468px) {
+    .dashboardSection p {
+        font-size: 15px;
+        color: #a99f98;
+        width: 350px;
+    }
+
+    .searchBarContainer {
+        background-color: #FCFAF7;
+        padding: 20px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+}

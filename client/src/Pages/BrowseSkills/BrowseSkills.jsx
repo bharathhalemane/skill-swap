@@ -95,7 +95,7 @@ const BrowseSkills = () => {
     return (
         <>
             <HomeHeader />
-            <div className={styles.browseSkillPage}>
+            <div className={styles.browseSkillPage} >
                 {/* ── Hero ── */}
                 <div className={styles.dashboardSection}>
                     <h1>Browse Skills</h1>
