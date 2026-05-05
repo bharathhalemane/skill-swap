@@ -7,6 +7,7 @@ import requestsReducer from "../features/requests/requestsSlice"
 import teachingSkillsReducer from "../features/teachingSkills/teachingSkillsSlice"
 import scheduleAndAvailabilityReducer from "../features/scheduleAndAvailability/scheduleAndAvailabilitySlice"
 import learningSkillsReducer from "../features/learningSkills/learningSkillsSlice"
+import groupReducer from "../features/groups/groupsSlice"
 const store = configureStore({
     reducer: {
         skills: skillsReducer,
@@ -15,7 +16,8 @@ const store = configureStore({
         requests: requestsReducer,
         teachingSkills: teachingSkillsReducer,
         scheduleAndAvailability: scheduleAndAvailabilityReducer,
-        learningSkills: learningSkillsReducer
+        learningSkills: learningSkillsReducer,
+        groups: groupReducer
     }
 })
 

@@ -3,7 +3,8 @@ import { createGroup, fetchGroups } from "./groupsActions";
 
 const initialState = {
     groups: [],
-    loading: false,
+    createLoading: false,
+    loading:false,
     error: null
 }
 
@@ -14,14 +15,14 @@ const groupSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(createGroup.pending, (state) => {
-                state.loading = true
+                state.createLoading = true
             })
             .addCase(createGroup.fulfilled, (state, action) => {
-                state.loading = false,
+                state.createLoading = false,
                     state.groups.unshift(action.payload)
             })
             .addCase(createGroup.rejected, (state, action) => {
-                state.loading = false,
+                state.createLoading = false,
                     state.error = action.payload
             })
 
