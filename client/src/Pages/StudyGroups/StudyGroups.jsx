@@ -3,8 +3,19 @@ import Footer from "../../components/Footer/Footer";
 import styles from "./StudyGroups.module.css"
 import { Calendar1, Search, Users } from "lucide-react";
 import CreateGroupModal from "./Modals/CreateGroupModal";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchGroups } from "../../redux/features/groups/groupsActions";
+import StudyGroupsCard from "./studyGroupsCard";
 
 const StudyGroups = () => {
+    const dispatch = useDispatch()
+    const { groups } = useSelector(state => state.groups)
+    useEffect(() => {
+        if (groups.length === 0) {
+            dispatch(fetchGroups())
+        }
+    }, [dispatch])
     return (
         <>
             <HomeHeader />
@@ -23,6 +34,15 @@ const StudyGroups = () => {
                 </div>
                 <CreateGroupModal title="Create Groups" />
             </div>
+            <ul className={styles.groupsListContainer}>
+                {
+                    groups.map(group => (
+                        <li key={group._id}>
+                            <StudyGroupsCard data={group} />
+                        </li>
+                    ))
+                }
+            </ul>
             <div className={styles.createSection}>
                 <Calendar1 size={35} color="#ff7a59" />
                 <h1>Can't Find What You Need?</h1>

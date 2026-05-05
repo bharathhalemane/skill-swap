@@ -4,7 +4,7 @@ import { createGroup, fetchGroups } from "./groupsActions";
 const initialState = {
     groups: [],
     createLoading: false,
-    loading:false,
+    loading: false,
     error: null
 }
 
@@ -27,12 +27,12 @@ const groupSlice = createSlice({
             })
 
             .addCase(fetchGroups.pending, (state) => {
-                state.loading = true;
+                state.loading = true
             })
-            .addCase(fetchGroups.fulfilled, (state, action) => [
-                state.loading = false,
+            .addCase(fetchGroups.fulfilled, (state, action) => {
+                state.loading = false
                 state.groups = action.payload
-            ])
+            })
             .addCase(fetchGroups.rejected, (state, action) => {
                 state.loading = false,
                     state.error = action.payload
