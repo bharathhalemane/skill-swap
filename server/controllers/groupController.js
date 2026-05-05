@@ -25,8 +25,8 @@ exports.createGroup = async (req, res) => {
             date,
             time,
             maxMembers,
-            host: req.user.id,
-            members: [req.user.id],
+            host: req.user.userId,
+            members: [req.user.userId],
         });
 
         await group.save();
@@ -37,6 +37,7 @@ exports.createGroup = async (req, res) => {
             data : group,
         })
     } catch (err) {
+        console.log(err.message)
         res.status(500).json({ message: "Internal server error!" })
     }
 }
