@@ -37,7 +37,6 @@ exports.createGroup = async (req, res) => {
             data : group,
         })
     } catch (err) {
-        console.log(err.message)
         res.status(500).json({ message: "Internal server error!" })
     }
 }
