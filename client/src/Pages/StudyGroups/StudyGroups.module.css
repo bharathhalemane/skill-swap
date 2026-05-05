@@ -72,6 +72,12 @@
     color: #7b7b7b;
 }
 
+.groupsListContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 30px;
+}
+
 @media(max-width: 468px) {
     .dashboardSection p {
         font-size: 15px;
@@ -85,5 +91,10 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
+    }
+
+    .groupsListContainer {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 10px;
     }
 }

@@ -1,0 +1,152 @@
+.groupCardContainer {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+    width: 400px;
+    margin-top: 20px;
+}
+
+.groupCardContainer:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.description {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.mode {
+    display: inline-block;
+    padding: 4px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    width: fit-content;
+}
+
+/* Mode colors */
+.mode::before {
+    content: "• ";
+}
+
+.mode:contains("online") {
+    background: #e6f4ff;
+    color: #007bff;
+}
+
+.mode:contains("offline") {
+    background: #e8f8f1;
+    color: #1abc9c;
+}
+
+/* fallback if :contains not supported */
+.online {
+    background: #e6f4ff;
+    color: #007bff;
+}
+
+.offline {
+    background: #e8f8f1;
+    color: #1abc9c;
+}
+
+.groupInfo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 16px;
+    color: #555;
+    margin-top: 5px;
+}
+.timeInfo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+}
+.joinLink {
+   color:#555;
+   display: flex;
+   gap: 10px;
+}
+
+.joinLink:hover{
+    color: #007bff;
+}
+
+.hr{
+    margin-inline: 10px;
+    border: .5px solid #bab7b7;
+}
+
+
+.location {
+    font-size: 16px;
+    color: #444;
+    margin-top: 6px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.hostInfo{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.profileImage{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.hostName{
+    font-size: 1rem;
+    color: #555;
+}
+
+.hostSame{
+    color: #ff7a59;
+    font-size: 1rem;
+}
+
+/* Responsive Grid Support */
+@media (max-width: 768px) {
+    .groupCardContainer {
+        padding: 14px;
+    }
+
+    .title {
+        font-size: 1rem;
+    }
+
+    .description {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .groupCardContainer {
+        padding: 12px;
+    }
+
+    .groupInfo {
+        gap: 4px;
+    }
+}

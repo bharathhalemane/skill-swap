@@ -2,7 +2,7 @@ import { useState } from "react";
 import CommonModal from "../../../components/Utils/CommonModal";
 import styles from './modal.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { createGroup } from "../../../redux/features/groups/groupsActions";
+import { createGroup, fetchGroups } from "../../../redux/features/groups/groupsActions";
 import { TailSpin } from "react-loader-spinner";
 
 const CreateGroupModal = ({ title }) => {
@@ -28,6 +28,7 @@ const CreateGroupModal = ({ title }) => {
         e.preventDefault()
         console.log(data)
         await dispatch(createGroup(data))
+        await dispatch(fetchGroups())
 
         if (!createLoading) {
             setIsOpen(false)

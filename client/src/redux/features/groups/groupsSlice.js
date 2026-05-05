@@ -18,8 +18,7 @@ const groupSlice = createSlice({
                 state.createLoading = true
             })
             .addCase(createGroup.fulfilled, (state, action) => {
-                state.createLoading = false,
-                    state.groups.unshift(action.payload)
+                state.createLoading = false
             })
             .addCase(createGroup.rejected, (state, action) => {
                 state.createLoading = false,

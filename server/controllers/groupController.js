@@ -44,7 +44,7 @@ exports.createGroup = async (req, res) => {
 exports.getAllGroups = async (req, res) => {
     try {
         const groups = await Group.find()
-            .populate("host", "name")
+            .populate("host", "name profile")
             .sort({ createdAt: -1 });
 
         const updatedGroups = groups.map(group => ({

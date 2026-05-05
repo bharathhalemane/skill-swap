@@ -5,7 +5,8 @@ export const createGroup = createAsyncThunk(
     "groups/create",
     async (data, { rejectWithValue }) => {
         try {
-            return await createGroupApi(data)
+            await createGroupApi(data)
+            
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Error")
         }
