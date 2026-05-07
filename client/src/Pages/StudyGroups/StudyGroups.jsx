@@ -3,7 +3,7 @@ import Footer from "../../components/Footer/Footer";
 import styles from "./StudyGroups.module.css"
 import { Calendar1, Search, Users } from "lucide-react";
 import CreateGroupModal from "./Modals/CreateGroupModal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../../redux/features/groups/groupsActions";
 import StudyGroupsCard from "./studyGroupsCard";
@@ -11,11 +11,20 @@ import StudyGroupsCard from "./studyGroupsCard";
 const StudyGroups = () => {
     const dispatch = useDispatch()
     const { groups } = useSelector(state => state.groups)
+    const [search, setSearch] = useState("")
     useEffect(() => {
         if (groups.length === 0) {
             dispatch(fetchGroups())
         }
     }, [dispatch])
+
+    const onChangeSearch = e => {
+        setSearch(e.target.value)
+    }
+
+    const filteredGroups = groups.filter((group) =>
+        group.title.toLowerCase().includes(search.toLowerCase()) || group.description.toLowerCase().includes(search.toLowerCase())
+    );
     return (
         <>
             <HomeHeader />
@@ -30,13 +39,13 @@ const StudyGroups = () => {
             <div className={styles.searchBarContainer}>
                 <div className={styles.inputSection}>
                     <Search size={20} color="#7b7b7b" />
-                    <input type="text" placeholder="Search Study Groups..." />
+                    <input type="text" placeholder="Search Study Groups..." value={search} onChange={onChangeSearch} />
                 </div>
                 <CreateGroupModal title="Create Groups" />
             </div>
             <ul className={styles.groupsListContainer}>
                 {
-                    groups.map(group => (
+                    filteredGroups.map(group => (
                         <li key={group._id}>
                             <StudyGroupsCard data={group} />
                         </li>
