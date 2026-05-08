@@ -9,12 +9,10 @@ import ManageModal from "../Modals/ManageModal"
 
 const StudyGroupsCard = ({ data, dispatch }) => {
     const userId = Cookies.get("userId")
-    // console.log(data)
     const { title, description, mode, membersCount, maxMembers, date, time, joinLink, location, host, joinRequests, members } = data
     const { name, profile, _id } = host
     const [requestLoading, setRequestLoading] = useState(false)
     const modifiedDate = date.split("T")[0]
-
     const onHandleSendRequest = async (groupId) => {
         const response = await sendRequest(dispatch, groupId, setRequestLoading)
     }
@@ -28,7 +26,9 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                         userId === _id && <>
                             <div className={styles.notificationContainer}>
                                 <Bell size={28} />
-                                <span className={styles.badge}>{joinRequests.length}</span>
+                                {
+                                    joinRequests.length > 0 && <span className={styles.badge}>{joinRequests.length}</span>
+                                }
                             </div>
                         </>
                     }
@@ -49,14 +49,18 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                 </div>
 
             </Link>
-                {
-                    mode === "online" ? (
+            {
+                mode === "online" ? (
 
-                        <a href={joinLink} target="_blank" className={styles.joinLink}><MLink />Meeting Link</a>
-                    ) : (
-                        <p className={styles.location}><Map color="#555" /> {location}</p>
-                    )
-                }
+                    <a href={joinLink} target="_blank" className={styles.joinLink}
+                        onClick={(e) => {
+                           !members.includes(userId) && e.preventDefault()
+                        }}
+                    ><MLink />Meeting Link {!members.includes(userId) && "\"only after joining\"" }</a>
+                ) : (
+                    <p className={styles.location}><Map color="#555" /> {location}</p>
+                )
+            }
             <hr className={styles.hr} />
             <div className={styles.controlGroupRequest}>
                 <div className={styles.hostInfo}>
@@ -71,8 +75,7 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                 {
 
                     userId === _id ? <>
-                        {/* <button className={styles.manageRequestButton}>Manage</button> */}
-                        <ManageModal title={title} host={host} groupId={data._id} />
+                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id} disabled={!joinRequests.length > 0} />
                     </> : <>
                         {
                             joinRequests.includes(userId) ? <>
@@ -83,9 +86,13 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                                         e.preventDefault()
                                         e.stopPropagation()
                                         onHandleSendRequest(data._id)
-                                    }}>
+                                    }}
+                                    disabled={members.includes(userId)}
+                                >
                                     {
-                                        requestLoading ? <TailSpin width={20} height={20} color="#fff" /> : "Join"
+                                        requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
+                                           members.includes(userId) ? "Joined" : "Join"
+
                                     }
                                 </button></>
                         }

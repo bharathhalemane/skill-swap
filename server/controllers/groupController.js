@@ -211,7 +211,7 @@ exports.rejectJoinRequest = async (req, res) => {
         }
 
         group.joinRequests = group.joinRequests.filter(
-            requests => request.toString() !== userId
+            requests => requests.toString() !== userId
         )
 
         await group.save()

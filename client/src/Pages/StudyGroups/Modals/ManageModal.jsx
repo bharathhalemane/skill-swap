@@ -3,20 +3,29 @@ import styles from "./styles/manageModal.module.css"
 import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
-import { getJoinRequests } from "../studyGroupsApi";
+import { getJoinRequests, acceptRequest, rejectRequest } from "../studyGroupsApi";
 
-const ManageModal = ({title, host, groupId}) => {
+const ManageModal = ({dispatch, title, host, groupId, disabled }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [requests, setRequests] = useState([])
 
+    const getRequests = async () => {
+        const response = await getJoinRequests(groupId)
+        setRequests(response.data.data)
+    }
     useEffect(() => {
-        const getRequests = async () => {
-            const response = await getJoinRequests(groupId)
-            setRequests(response.data.data)
-        }
         getRequests()
-    },[])
+    }, [])
 
+    const onClickAccept = async (senderId) => {
+        await acceptRequest(dispatch, groupId, senderId)
+        getRequests()
+    }
+
+    const onClickReject = async (senderId) => {
+        await rejectRequest(dispatch, groupId, senderId)
+        getRequests()
+    }
     const requestCard = (data) => {
         return (
             <div className={styles.requestCard}>
@@ -25,9 +34,9 @@ const ManageModal = ({title, host, groupId}) => {
                     <h1>{data.name}</h1>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button className={styles.declineButton}> <X /> Decline</button>
-                    <button className={styles.buttonAccept}>
-                        <Check/> Accept
+                    <button className={styles.declineButton} onClick={() => onClickReject(data._id)}> <X /> Decline</button>
+                    <button className={styles.buttonAccept} onClick={() => onClickAccept(data._id)}>
+                        <Check /> Accept
                     </button>
                 </div>
             </div>
@@ -40,7 +49,8 @@ const ManageModal = ({title, host, groupId}) => {
                 setIsOpen(true)
                 e.stopPropagation()
                 e.preventDefault()
-            }} className={styles.manageButton}>
+
+            }} className={styles.manageButton} disabled={disabled}>
                 Manage
             </button>
 
@@ -56,7 +66,7 @@ const ManageModal = ({title, host, groupId}) => {
                         ))
                     }
                 </ul>
-                
+
             </CommonModal>
         </>
     )
