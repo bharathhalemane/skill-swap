@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CommonModal from "../../../components/Utils/CommonModal";
-import styles from './modal.module.css'
+import styles from './styles/modal.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { createGroup, fetchGroups } from "../../../redux/features/groups/groupsActions";
 import { TailSpin } from "react-loader-spinner";

@@ -76,6 +76,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 30px;
+    background-color: #e0d3c0;
 }
 
 @media(max-width: 468px) {

@@ -18,7 +18,7 @@ const groupSchema = new mongoose.Schema(
             type: String
         },
         date: {
-            type: Date, 
+            type: Date,
             required: true
         },
         time: {
@@ -33,6 +33,12 @@ const groupSchema = new mongoose.Schema(
             required: true,
         },
         members: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
+        ],
+        joinRequests: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User"

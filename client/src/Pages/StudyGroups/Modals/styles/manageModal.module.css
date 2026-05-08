@@ -1,0 +1,77 @@
+.manageButton{
+    margin-right: 10px;
+    border: 2px solid #ff7a00;
+    width: 100px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.description{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.requestsList{
+    display: flex;
+    flex-direction: column;
+}
+
+.requestCard{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+    background-color: #FCFAF7;
+    border-radius: 20px;
+    border: 1px solid #333;
+    margin-block-start: 20px;
+}
+
+.requestCardHeader{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.requestCardHeader img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.requestCardHeader h1{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.declineButton{
+    color: #ff7a00;
+    border: 2px solid #ff7a00;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonAccept{
+    background-color: #ff7a00;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    width: 150px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}

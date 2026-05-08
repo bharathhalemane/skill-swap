@@ -6,7 +6,7 @@ import CreateGroupModal from "./Modals/CreateGroupModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../../redux/features/groups/groupsActions";
-import StudyGroupsCard from "./studyGroupsCard";
+import StudyGroupsCard from "./StudyGroupCard/studyGroupsCard";
 
 const StudyGroups = () => {
     const dispatch = useDispatch()
@@ -47,7 +47,7 @@ const StudyGroups = () => {
                 {
                     filteredGroups.map(group => (
                         <li key={group._id}>
-                            <StudyGroupsCard data={group} />
+                            <StudyGroupsCard dispatch={dispatch} data={group} />
                         </li>
                     ))
                 }

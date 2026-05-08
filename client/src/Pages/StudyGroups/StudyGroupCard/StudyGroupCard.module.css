@@ -7,20 +7,53 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    cursor: pointer;
     width: 400px;
     margin-top: 20px;
 }
-
 .groupCardContainer:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.linkContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.titleCon{
+    display: flex;    
+    justify-content: space-between;
+    align-items: center;
+    margin-inline-end: 10px;
 }
 
 .title {
     font-size: 1.2rem;
     font-weight: 600;
     color: #222;
+}
+
+.notificationContainer{
+    position: relative;
+    width: fit-content;
+    cursor: pointer;
+}
+
+.badge{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    font-size: 12;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .description {
@@ -73,23 +106,25 @@
     color: #555;
     margin-top: 5px;
 }
-.timeInfo{
+
+.timeInfo {
     display: flex;
     align-items: center;
     gap: 10px;
     color: #555;
 }
+
 .joinLink {
-   color:#555;
-   display: flex;
-   gap: 10px;
+    color: #555;
+    display: flex;
+    gap: 10px;
 }
 
-.joinLink:hover{
+.joinLink:hover {
     color: #007bff;
 }
 
-.hr{
+.hr {
     margin-inline: 10px;
     border: .5px solid #bab7b7;
 }
@@ -104,26 +139,50 @@
     align-items: center;
 }
 
-.hostInfo{
+.hostInfo {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
-.profileImage{
+.profileImage {
     width: 40px;
     height: 40px;
     border-radius: 20px;
 }
 
-.hostName{
+.hostName {
     font-size: 1rem;
     color: #555;
 }
 
-.hostSame{
+.hostSame {
     color: #ff7a59;
     font-size: 1rem;
+}
+
+.controlGroupRequest {
+    display: flex;
+    justify-content: space-between;
+}
+
+.joinRequestButton {
+    margin-right: 10px;
+    color: #fff;
+    background: linear-gradient(90deg, #ff7a00, #ff9900);
+    padding: 10px 30px;
+    width: 100px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+
+.manageRequestButton{
+    margin-right: 10px;
+    border: 2px solid #ff7a00;
+    width: 100px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 /* Responsive Grid Support */
