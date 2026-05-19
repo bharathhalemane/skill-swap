@@ -107,7 +107,7 @@ exports.sendJoinRequest = async (req, res) => {
 
         const group = await Group.findById(groupId)
 
-        if (!groupId) {
+        if (!group) {
             return res.status(404).json({
                 message: "Group not found"
             })
@@ -124,7 +124,7 @@ exports.sendJoinRequest = async (req, res) => {
         }
 
         const alreadyRequested = group.joinRequests.some(
-            requests => request.toString() === userId
+            request => request.user.toString() === userId
         )
 
         if (alreadyRequested) {
@@ -139,13 +139,15 @@ exports.sendJoinRequest = async (req, res) => {
             })
         }
 
-        group.joinRequests.push(userId)
+        group.joinRequests.push({
+            user:userId,
+            requestedAt: new Date()
+        })
 
         await group.save()
 
         const io = getIO()
         const ownerId = group.host.toString()
-        console.log(ownerId)
         const ownerSocketId = onlineUsers[ownerId]
         if (ownerSocketId) {
             io.to(ownerSocketId).emit("new_group_join_request")
@@ -186,7 +188,7 @@ exports.acceptJoinRequest = async (req, res) => {
         }
 
         group.joinRequests = group.joinRequests.filter(
-            request => request.toString() !== userId
+            request => request.user.toString() !== userId
         )
 
         group.members.push(userId)
@@ -227,7 +229,7 @@ exports.rejectJoinRequest = async (req, res) => {
         }
 
         group.joinRequests = group.joinRequests.filter(
-            requests => requests.toString() !== userId
+            requests => requests.user.toString() !== userId
         )
 
         await group.save()
@@ -306,7 +308,7 @@ exports.getJoinRequests = async (req, res) => {
         const userId = req.user.userId
 
         const group = await Group.findById(groupId)
-            .populate("joinRequests", "name profile")
+            .populate("joinRequests.user", "name profile")
 
         if (!group) {
             return res.status(404).json({
@@ -321,7 +323,7 @@ exports.getJoinRequests = async (req, res) => {
         }
 
         res.status(200).json({
-            data: group.joinRequests
+            data: group.joinRequests            
         })
     } catch (err) {
         res.status(500).json({

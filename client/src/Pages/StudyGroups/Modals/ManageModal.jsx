@@ -33,16 +33,42 @@ const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
         await rejectRequest(dispatch, groupId, senderId)
         getRequests()
     }
+
+    const getTimeAgo = (date) => {
+        const now = new Date()
+        const seconds = Math.floor((now - new Date(date)) / 1000)
+        if (seconds < 60) return `${seconds} sec ago`
+        const minutes = Math.floor(seconds / 60)
+        if (minutes < 60) return `${minutes} min ago`
+        const hours = Math.floor(minutes / 60)
+        if (hours < 24) return `${hours} hr ago`
+        const days = Math.floor(hours / 24)
+        if (days < 7) return `${days} days ago`
+        const weeks = Math.floor(days / 7)
+        if (weeks < 4) return `${weeks} weeks ago`
+        const months = Math.floor(days / 30)
+        if (months < 12) return `${months} months ago`
+        const years = Math.floor(days / 365)
+        return `${years} years ago`
+    }
+
     const requestCard = (data) => {
+        console.log(data)
+        const { user, _id } = data
+        const { profile_image } = user.profile
+        const time = data.requestedAt
         return (
             <div className={styles.requestCard}>
                 <div className={styles.requestCardHeader}>
-                    <img src={data.profile.profile_image} alt="" />
-                    <h1>{data.name}</h1>
+                    <img src={profile_image} alt="" />
+                    <div className={styles.headerInfo}>
+                        <h1>{user.name}</h1>
+                        <p>{getTimeAgo(time)}</p>
+                    </div>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button className={`${styles.declineButton} ${styles.button}`} onClick={() => onClickReject(data._id)}> <X /> Decline</button>
-                    <button className={`${styles.acceptButton} ${styles.button}`} onClick={() => onClickAccept(data._id)}>
+                    <button className={`${styles.declineButton} ${styles.button}`} onClick={() => onClickReject(data.user._id)}> <X /> Decline</button>
+                    <button className={`${styles.acceptButton} ${styles.button}`} onClick={() => onClickAccept(data.user._id)}>
                         <Check /> Accept
                     </button>
                 </div>

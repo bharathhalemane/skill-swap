@@ -21,6 +21,28 @@ const StudyGroupsCard = ({ data, dispatch }) => {
     const onHandleLeaveGroup = async (groupId) => {
         const response = await leaveGroup(dispatch, groupId, setRequestLoading)
     }
+    const requestsUser = joinRequests.map(
+        request => request.user
+    )
+    console.log(requestsUser)
+
+    const getTimeAgo = (date) => {
+        const now = new Date()
+        const seconds = Math.floor((now - new Date(date)) / 1000)
+        if (seconds < 60) return `${seconds} sec ago`
+        const minutes = Math.floor(seconds / 60)
+        if (minutes < 60) return `${minutes} min ago`
+        const hours = Math.floor(minutes / 60)
+        if (hours < 24) return `${hours} hr ago`
+        const days = Math.floor(hours / 24)
+        if (days < 7) return `${days} days ago`
+        const weeks = Math.floor(days / 7)
+        if (weeks < 4) return `${weeks} weeks ago`
+        const months = Math.floor(days / 30)
+        if (months < 12) return `${months} months ago`
+        const years = Math.floor(days / 365)
+        return `${years} years ago`
+    }
 
     return <>
         <div className={styles.groupCardContainer}>
@@ -59,9 +81,9 @@ const StudyGroupsCard = ({ data, dispatch }) => {
 
                     <a href={joinLink} target="_blank" className={styles.joinLink}
                         onClick={(e) => {
-                           !members.includes(userId) && e.preventDefault()
+                            !members.includes(userId) && e.preventDefault()
                         }}
-                    ><MLink />Meeting Link {!members.includes(userId) && "\"only after joining\"" }</a>
+                    ><MLink />Meeting Link {!members.includes(userId) && "\"only after joining\""}</a>
                 ) : (
                     <p className={styles.location}><Map color="#555" /> {location}</p>
                 )
@@ -80,22 +102,22 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                 {
 
                     userId === _id ? <>
-                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id}  />
+                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id} />
                     </> : <>
                         {
-                            joinRequests.includes(userId) ? <>
+                            requestsUser.includes(userId) ? <>
                                 <button className={styles.manageRequestButton} disabled>requested</button>
                             </> : <>
-                                <button className={`${members.includes(userId) ? styles.leaveButton : styles.joinRequestButton }`}
+                                <button className={`${members.includes(userId) ? styles.leaveButton : styles.joinRequestButton}`}
                                     onClick={(e) => {
                                         e.preventDefault()
-                                        e.stopPropagation()                                        
-                                        {members.includes(userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id)}
+                                        e.stopPropagation()
+                                        { members.includes(userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id) }
                                     }}
                                 >
                                     {
                                         requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
-                                           members.includes(userId) ? "Leave" : "Join"
+                                            members.includes(userId) ? "Leave" : "Join"
 
                                     }
                                 </button></>
