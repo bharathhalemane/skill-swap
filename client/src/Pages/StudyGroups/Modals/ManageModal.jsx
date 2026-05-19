@@ -4,8 +4,9 @@ import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
 import { getJoinRequests, acceptRequest, rejectRequest } from "../studyGroupsApi";
+import { socket } from "../../../Socket"
 
-const ManageModal = ({dispatch, title, host, groupId, disabled }) => {
+const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [requests, setRequests] = useState([])
 
@@ -15,6 +16,12 @@ const ManageModal = ({dispatch, title, host, groupId, disabled }) => {
     }
     useEffect(() => {
         getRequests()
+        socket.on("new_group_join_get_request", () => {
+            getRequests()
+        })
+        return () => {
+            socket.off("new_group_get_join_request")
+        }
     }, [])
 
     const onClickAccept = async (senderId) => {
@@ -34,10 +41,15 @@ const ManageModal = ({dispatch, title, host, groupId, disabled }) => {
                     <h1>{data.name}</h1>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button className={styles.declineButton} onClick={() => onClickReject(data._id)}> <X /> Decline</button>
-                    <button className={styles.buttonAccept} onClick={() => onClickAccept(data._id)}>
+                    <button className={`${styles.declineButton} ${styles.button}`} onClick={() => onClickReject(data._id)}> <X /> Decline</button>
+                    <button className={`${styles.acceptButton} ${styles.button}`} onClick={() => onClickAccept(data._id)}>
                         <Check /> Accept
                     </button>
+                </div>
+                <div>
+                    {
+                        requests.length === 0 && <p>No Requests pending</p>
+                    }
                 </div>
             </div>
         )

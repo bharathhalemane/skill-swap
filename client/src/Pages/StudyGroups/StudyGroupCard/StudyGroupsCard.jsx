@@ -1,7 +1,7 @@
 import { Bell, Calendar, Cookie, Link as MLink, Locate, Map, Users } from "lucide-react"
 import styles from "./StudyGroupCard.module.css"
 import Cookies from "js-cookie"
-import { sendRequest } from "../studyGroupsApi"
+import { sendRequest, leaveGroup } from "../studyGroupsApi"
 import { useState } from "react"
 import { TailSpin } from "react-loader-spinner"
 import { Link } from "react-router-dom"
@@ -13,8 +13,13 @@ const StudyGroupsCard = ({ data, dispatch }) => {
     const { name, profile, _id } = host
     const [requestLoading, setRequestLoading] = useState(false)
     const modifiedDate = date.split("T")[0]
+
     const onHandleSendRequest = async (groupId) => {
         const response = await sendRequest(dispatch, groupId, setRequestLoading)
+    }
+
+    const onHandleLeaveGroup = async (groupId) => {
+        const response = await leaveGroup(dispatch, groupId, setRequestLoading)
     }
 
     return <>
@@ -75,23 +80,22 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                 {
 
                     userId === _id ? <>
-                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id} disabled={!joinRequests.length > 0} />
+                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id}  />
                     </> : <>
                         {
                             joinRequests.includes(userId) ? <>
-                                <button className={styles.manageRequestButton} disabled>Sent</button>
+                                <button className={styles.manageRequestButton} disabled>requested</button>
                             </> : <>
-                                <button className={styles.joinRequestButton}
+                                <button className={`${members.includes(userId) ? styles.leaveButton : styles.joinRequestButton }`}
                                     onClick={(e) => {
                                         e.preventDefault()
-                                        e.stopPropagation()
-                                        onHandleSendRequest(data._id)
+                                        e.stopPropagation()                                        
+                                        {members.includes(userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id)}
                                     }}
-                                    disabled={members.includes(userId)}
                                 >
                                     {
                                         requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
-                                           members.includes(userId) ? "Joined" : "Join"
+                                           members.includes(userId) ? "Leave" : "Join"
 
                                     }
                                 </button></>

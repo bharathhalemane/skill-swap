@@ -64,6 +64,7 @@ exports.sendRequest = async (req, res) => {
             .populate("skill", "title category")
             .populate("swapSkill", "title category")
         const msg = `New Skill swap request from ${populatedRequest.sender.name}`
+        
         const io = getIO()
         const receiverId = skill.user._id.toString()
         const receiverSocketId = onlineUsers[receiverId]

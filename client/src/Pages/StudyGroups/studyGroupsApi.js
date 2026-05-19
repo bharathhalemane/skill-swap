@@ -27,6 +27,28 @@ export const sendRequest = async (dispatch, groupId, setRequestLoading) => {
     }
 }
 
+export const leaveGroup = async (dispatch, groupId, setRequestLoading) => {
+    try {
+        setRequestLoading(true)
+        const token = Cookies.get("jwtToken")
+        const response = await axios.put(
+            `${API}/groups/leave-group/${groupId}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        )
+        setRequestLoading(false)
+        dispatch(fetchGroups())
+        toast.info(response.data.message)
+        return response
+    } catch (err) {
+        return err
+    }
+}
+
 export const getJoinRequests = async (groupId) => {
     try {
         const token = Cookies.get("jwtToken")
@@ -37,6 +59,7 @@ export const getJoinRequests = async (groupId) => {
             }
         }
         )
+        toast.info(response.data.message)
         return response
     } catch (err) {
         toast.error(err)

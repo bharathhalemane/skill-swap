@@ -11,7 +11,7 @@ const initSocket = (server) => {
     io.on("connection", (socket) => {
         socket.on("register", (userId) => {
             onlineUsers[userId] = socket.id
-            // console.log("📡 Online Users:", onlineUsers);
+            console.log("📡 Online Users:", onlineUsers);
         })
 
         socket.on("disconnect", () => {

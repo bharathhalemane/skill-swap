@@ -185,6 +185,16 @@
     cursor: pointer;
 }
 
+.leaveButton{
+    margin-right: 10px;
+    color: #fff;
+    background: linear-gradient(90deg, #df1f1f, #c23331);
+    padding: 10px 30px;
+    width: 100px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
 /* Responsive Grid Support */
 @media (max-width: 768px) {
     .groupCardContainer {

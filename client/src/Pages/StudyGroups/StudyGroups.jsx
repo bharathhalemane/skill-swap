@@ -6,6 +6,7 @@ import CreateGroupModal from "./Modals/CreateGroupModal";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../../redux/features/groups/groupsActions";
+import { socket } from "../../Socket"
 import StudyGroupsCard from "./StudyGroupCard/studyGroupsCard";
 
 const StudyGroups = () => {
@@ -15,6 +16,25 @@ const StudyGroups = () => {
     useEffect(() => {
         if (groups.length === 0) {
             dispatch(fetchGroups())
+        }
+
+        socket.on("new_group_join_request", () => {
+            dispatch(fetchGroups())
+        })
+        socket.on("request_rejected", () => {
+            dispatch(fetchGroups())
+        })
+        socket.on("request_accepted", () => {
+            dispatch(fetchGroups())
+        })
+        socket.on("member_left_group", () => {
+            dispatch(fetchGroups())
+        })
+        return () => {
+            socket.off("new_group_join_request")
+            socket.off("request_rejected")
+            socket.off("request_accepted")
+            socket.off("member_left_group")
         }
     }, [dispatch])
 

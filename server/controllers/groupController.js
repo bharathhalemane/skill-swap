@@ -1,4 +1,5 @@
 const Group = require("../models/Group")
+const { getIO, onlineUsers } = require("../socket.js")
 
 exports.createGroup = async (req, res) => {
     try {
@@ -101,7 +102,7 @@ exports.searchGroups = async (req, res) => {
 
 exports.sendJoinRequest = async (req, res) => {
     try {
-        const groupId = req.params.id
+        const groupId = req.params.groupId
         const userId = req.user.userId
 
         const group = await Group.findById(groupId)
@@ -142,6 +143,15 @@ exports.sendJoinRequest = async (req, res) => {
 
         await group.save()
 
+        const io = getIO()
+        const ownerId = group.host.toString()
+        console.log(ownerId)
+        const ownerSocketId = onlineUsers[ownerId]
+        if (ownerSocketId) {
+            io.to(ownerSocketId).emit("new_group_join_request")
+            io.to(ownerSocketId).emit("new_group_join_get_request")
+        }
+
         res.status(200).json({
             message: "join request sent successfully"
         })
@@ -154,8 +164,8 @@ exports.sendJoinRequest = async (req, res) => {
 
 exports.acceptJoinRequest = async (req, res) => {
     try {
-        const { id, userId } = req.params
-        const group = await Group.findById(id)
+        const { groupId, userId } = req.params
+        const group = await Group.findById(groupId)
 
         if (!group) {
             return res.status(404).json({
@@ -183,6 +193,12 @@ exports.acceptJoinRequest = async (req, res) => {
 
         await group.save()
 
+        const senderSocketId = onlineUsers[userId]
+        const io = getIO()
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("request_accepted")
+        }
+
         res.status(200).json({
             message: "Request accepted"
         })
@@ -195,8 +211,8 @@ exports.acceptJoinRequest = async (req, res) => {
 
 exports.rejectJoinRequest = async (req, res) => {
     try {
-        const { id, userId } = req.params
-        const group = await Group.findById(id)
+        const { groupId, userId } = req.params
+        const group = await Group.findById(groupId)
 
         if (!group) {
             return res.status(404).json({
@@ -216,6 +232,12 @@ exports.rejectJoinRequest = async (req, res) => {
 
         await group.save()
 
+        const senderSocketId = onlineUsers[userId]
+        const io = getIO()
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("request_rejected")
+        }
+
         res.status(200).json({
             message: "Request rejected"
         })
@@ -226,10 +248,61 @@ exports.rejectJoinRequest = async (req, res) => {
     }
 }
 
+exports.leaveGroup = async (req, res) => {
+    try {
+        const { groupId } = req.params
+
+        const group = await Group.findById(groupId)
+
+        if (!group) {
+            return res.status(404).json({
+                message: "Group Not Found"
+            })
+        }
+
+        if (group.host.toString() === req.user.userId) {
+            return res.status(400).json({
+                message: "Host cannot leave the group"
+            })
+        }
+
+        const isMember = group.members.some(
+            member => member.toString() === req.user.userId
+        )
+
+        if (!isMember) {
+            return res.status(400).json({
+                message: "You are not a member of this group"
+            })
+        }
+
+        group.members = group.members.filter(
+            member => member.toString() !== req.user.userId 
+        )
+
+        await group.save() 
+
+        const io = getIO() 
+        const hostSocketId = onlineUsers[group.host.toString()]
+        if (hostSocketId) {
+            io.to(hostSocketId).emit("member_left_group")
+        }
+
+        res.status(200).json({
+            message: "Left group successfully"
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 
 exports.getJoinRequests = async (req, res) => {
     try {
-        const groupId = req.params.id
+        const groupId = req.params.groupId
         const userId = req.user.userId
 
         const group = await Group.findById(groupId)
