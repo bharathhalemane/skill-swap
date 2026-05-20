@@ -63,6 +63,35 @@ exports.getAllGroups = async (req, res) => {
     }
 }
 
+exports.getGroupById = async (req, res) => {
+    try {
+        const { groupId } = req.params
+
+        const group = await Group.findById(groupId)
+            .populate("host", "name profile.profile_image email phoneNumber")
+            .populate("members.user", "name profile.profile_image email phoneNumber")
+
+        if (!group) {
+            return res.status(404).json({
+                message: "Group not found"
+            })
+        }
+
+        const updatedGroup = {
+            ...group.toObject(),
+            membersCount: group.members.length
+        }
+
+        res.status(200).json({
+            data: updatedGroup
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 exports.searchGroups = async (req, res) => {
     try {
         const { query } = req.query
@@ -140,7 +169,7 @@ exports.sendJoinRequest = async (req, res) => {
         }
 
         group.joinRequests.push({
-            user:userId,
+            user: userId,
             requestedAt: new Date()
         })
 
@@ -279,12 +308,12 @@ exports.leaveGroup = async (req, res) => {
         }
 
         group.members = group.members.filter(
-            member => member.toString() !== req.user.userId 
+            member => member.toString() !== req.user.userId
         )
 
-        await group.save() 
+        await group.save()
 
-        const io = getIO() 
+        const io = getIO()
         const hostSocketId = onlineUsers[group.host.toString()]
         if (hostSocketId) {
             io.to(hostSocketId).emit("member_left_group")
@@ -323,7 +352,7 @@ exports.getJoinRequests = async (req, res) => {
         }
 
         res.status(200).json({
-            data: group.joinRequests            
+            data: group.joinRequests
         })
     } catch (err) {
         res.status(500).json({

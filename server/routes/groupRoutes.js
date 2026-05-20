@@ -1,5 +1,5 @@
 const express = require("express")
-const { createGroup, getAllGroups, searchGroups, sendJoinRequest, acceptJoinRequest, rejectJoinRequest, getJoinRequests, leaveGroup } = require("../controllers/groupController")
+const { createGroup, getAllGroups, searchGroups, sendJoinRequest, acceptJoinRequest, rejectJoinRequest, getJoinRequests, leaveGroup, getGroupById } = require("../controllers/groupController")
 
 const auth = require("../middleWare/auth")
 
@@ -13,5 +13,6 @@ router.post("/:groupId/accept/:userId", auth, acceptJoinRequest)
 router.post("/:groupId/reject/:userId", auth, rejectJoinRequest)
 router.get("/:groupId/requests", auth, getJoinRequests)
 router.put("/leave-group/:groupId", auth, leaveGroup)
+router.get("/:groupId", auth, getGroupById);
 
 module.exports = router

@@ -4,23 +4,52 @@ import { useParams } from "react-router-dom";
 import styles from "./GroupPage.module.css"
 import { BiLeftArrow } from "react-icons/bi";
 import { ArrowLeft, Bell, BookOpen, Share2, Clock, Users } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getGroupData } from "./GroupPageApi";
+import Cookies from "js-cookie";
 
 const GroupPage = () => {
     const { groupId } = useParams()
+    const userId = Cookies.get("userId")
     const [state, setState] = useState(true)
+    const [groupData, setGroupData] = useState({
+        host: {
+            email: "",
+            phoneNumber: "",
+            profile: {
+                profile_image: "",
+            },
+            _id: ""
+        },
+        joinRequests: [],
+        members: [],
+        title: "",
+        maxMembers: 0,
+        location: "",
+        time: "",
+        mode: ""
+    })
     const [points, setPointes] = useState([
         "Review of core concepts and key formulas",
         "Walkthrough of practice problems together",
         "Open Q&A and exam prep tips",
         "Group challenge to test what you've learned"
     ])
-    const [members, setMembers] = useState([
-        { name: 'Jordan Lee', host: true },
-        { name: 'Jordan Lee', host: false },
-        { name: 'Jordan Lee', host: false },
-        { name: 'Jordan Lee', host: false }
-    ])
+
+    const getGroupInfo = async () => {
+        const response = await getGroupData(groupId)
+        setGroupData(response)
+        console.log(response)
+    }
+
+    useEffect(() => {
+        getGroupInfo()
+    }, [])
+
+    const { host, joinRequests, members, membersCount, title, maxMembers, location, time, mode } = groupData
+    const { email: hostEmail, name: hostName, phoneNumber: hostPhoneNumber, profile: hostProfile, _id: hostId } = host
+
+
     return <>
         <HomeHeader />
         <div className={styles.headContainer}>
@@ -28,21 +57,21 @@ const GroupPage = () => {
             <div className={styles.infoContainer}>
                 <div className={styles.hostInfoContainer}>
                     {
-                        state &&
+                        userId === host._id &&
                         <div className={styles.hostingBadge}>
                             <p>You're Hosting</p>
                         </div>
                     }
-                    <h1 className={styles.groupTitle}>ECON 101 Final Prep
+                    <h1 className={styles.groupTitle}>{title}
                     </h1>
                     <div className={styles.hostInfo}>
-                        <img src="" alt="profile" className={styles.hostProfileImage} />
-                        <h1 className={styles.hostName}><span>Hosted By</span><br /> Jordan Lee</h1>
+                        <img src={hostProfile.profile_image} alt="profile" className={styles.hostProfileImage} />
+                        <h1 className={styles.hostName}><span>Hosted By</span><br /> {hostName}</h1>
                     </div>
                 </div>
                 <div className={styles.controlContainer}>
                     <button className={styles.button}><Share2 /> Share</button>
-                    {state && <button className={styles.button}><Bell color="#ff7a00" /> Requests <span>2</span></button>}
+                    {state && <button className={styles.button}><Bell color="#ff7a00" /> Requests</button>}
                 </div>
             </div>
         </div>
@@ -57,24 +86,24 @@ const GroupPage = () => {
                     <h1><Clock color="#ff7a00" /> What we'll cover</h1>
                     <ul>
                         {
-                            points.map((each,index) => (
+                            points.map((each, index) => (
                                 <li key={index}>{each}</li>
                             ))
                         }
                     </ul>
                 </div>
                 <div className={styles.infoCard}>
-                    <h1><Users color="#ff7a00" /> Members(4/8)</h1>
+                    <h1><Users color="#ff7a00" /> Members({membersCount}/{maxMembers})</h1>
                     <ul className={styles.members}>
                         {
-                            members.map((each,index) => (
-                                <li key={index} className={styles.membersCard}>
-                                    <img src="" alt="" className={styles.profileImage} />
+                            members.map((each) => (
+                                <li key={each._id} className={styles.membersCard}>
+                                    <img src={each.user.profile.profile_image} alt="" className={styles.profileImage} />
                                     <div>
                                         <h1>
-                                            {each.name}
+                                            {each.user.name}
                                         </h1>
-                                        <p>{each.host ? "host" : "member"}</p>
+                                        <p>{userId === each.user._id ? "host" : "member"}</p>
                                     </div>
                                 </li>
                             ))
