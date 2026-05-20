@@ -46,7 +46,7 @@ const StudyGroupsCard = ({ data, dispatch }) => {
 
     return <>
         <div className={styles.groupCardContainer}>
-            <Link to="/home" className={styles.linkContainer}>
+            <Link to={`/study-group/${data._id}`} className={styles.linkContainer}>
                 <div className={styles.titleCon}>
                     <h3 className={styles.title}>{title}</h3>
                     {

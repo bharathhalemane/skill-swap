@@ -1,0 +1,181 @@
+.headContainer {
+    padding: 50px;
+    padding-top: 13vh;
+    background-color: #FBF7F3;
+
+}
+
+.previousLink {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: #555;
+}
+
+.infoContainer {
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hostInfoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hostingBadge {
+    background-color: #ff7a00;
+    padding: 3px;
+    padding-inline: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+.groupTitle {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.hostInfo {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.hostProfileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.hostName {
+    font-weight: bold;
+}
+
+.hostName span {
+    font-size: 15px;
+    color: #666;
+    font-weight: normal;
+}
+
+.button {
+    padding: 10px 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 150px;
+    color: #ff7a00;
+    border: 2px solid #ff7a00;
+}
+
+.button span {
+    background-color: #ff7a00;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.controlContainer {
+    display: flex;
+    gap: 20px;
+}
+
+.groupInfoContainer {
+    background-color: #FCFAF7;
+    padding: 50px;
+}
+
+.hr {
+    border-color: #777;
+}
+
+.infoCards {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.infoCard {
+    border: 1.5px solid #888;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: 20px 30px;
+    width: 60vw;
+}
+
+.infoCard h1 {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.infoCard p {
+    padding-top: 20px;
+    color: #666;
+}
+
+.infoCard ul {
+    padding-top: 20px;
+    padding-left: 20px;
+    list-style-type: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+
+.infoCard ul li::marker {
+    color: #ff7a00;
+}
+
+.members {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+}
+
+.membersCard {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background-color: #FAF9F8;
+    padding: 10px 30px;
+    border-radius: 10px;
+    width: 350px;
+}
+
+.membersCard h1{
+    font-size: 20px;
+}
+
+.membersCard div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.membersCard p{
+    padding: 0;
+    font-size: 14px;
+}
