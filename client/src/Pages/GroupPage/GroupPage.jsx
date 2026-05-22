@@ -3,10 +3,12 @@ import Footer from "../../components/Footer/Footer";
 import { useParams } from "react-router-dom";
 import styles from "./GroupPage.module.css"
 import { BiLeftArrow } from "react-icons/bi";
-import { ArrowLeft, Bell, BookOpen, Share2, Clock, Users } from "lucide-react";
+import { ArrowLeft, Bell, BookOpen, Share2, Clock, Users, Mail, Phone, SquarePen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getGroupData } from "./GroupPageApi";
 import Cookies from "js-cookie";
+import AboutGroup from "./AboutGroup/AboutGroup";
+import CoverPoints from "./CoverPoints/CoverPoints";
 
 const GroupPage = () => {
     const { groupId } = useParams()
@@ -39,7 +41,6 @@ const GroupPage = () => {
     const getGroupInfo = async () => {
         const response = await getGroupData(groupId)
         setGroupData(response)
-        console.log(response)
     }
 
     useEffect(() => {
@@ -77,21 +78,9 @@ const GroupPage = () => {
         </div>
         <hr className={styles.hr} />
         <div className={styles.groupInfoContainer}>
-            <div className={styles.infoCards}>
-                <div className={styles.infoCard}>
-                    <h1><BookOpen color="#ff7a00" /> About this group</h1>
-                    <p>Join us for a focused economics study session. We'll work through practice problems, review key concepts, and help each other prepare. Bring your notes, questions, and a willingness to collaborate. All levels welcome.</p>
-                </div>
-                <div className={styles.infoCard}>
-                    <h1><Clock color="#ff7a00" /> What we'll cover</h1>
-                    <ul>
-                        {
-                            points.map((each, index) => (
-                                <li key={index}>{each}</li>
-                            ))
-                        }
-                    </ul>
-                </div>
+            <div className={styles.infoCards}>                
+                <AboutGroup data={groupData} groupId={groupId}/>
+                <CoverPoints data={groupData} groupId={groupId} />
                 <div className={styles.infoCard}>
                     <h1><Users color="#ff7a00" /> Members({membersCount}/{maxMembers})</h1>
                     <ul className={styles.members}>
@@ -104,6 +93,10 @@ const GroupPage = () => {
                                             {each.user.name}
                                         </h1>
                                         <p>{userId === each.user._id ? "host" : "member"}</p>
+                                        <div className={styles.emailAndPhone}>
+                                            <a href={`mailto:${each.user.email}`} target="_blank" rel="noopener noreferrer"><Mail size={13} /> {each.user.email}</a>
+                                            <a href={`tel:${each.user.phoneNumber}`}><Phone size={13} />{each.user.phoneNumber}</a>
+                                        </div>
                                     </div>
                                 </li>
                             ))

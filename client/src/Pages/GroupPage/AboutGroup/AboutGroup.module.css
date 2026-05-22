@@ -1,0 +1,84 @@
+/* AboutGroup.module.css */
+
+.container {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 950px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.titleWrapper h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.icon {
+    color: #f97316;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.saveBtn,
+.editBtn,
+.cancelBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.saveBtn {
+    color: #16a34a;
+}
+
+.cancelBtn {
+    color: #1e293b;
+}
+.editBtn{
+    color: #f97316
+}
+
+.textarea {
+    width: 100%;
+    min-height: 180px;
+    border: 2px solid #f97316;
+    border-radius: 18px;
+    padding: 22px;
+    font-size: 15px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    color: #475569;
+    box-sizing: border-box;
+}
+
+.textarea::placeholder {
+    color: #94a3b8;
+}
+
+.description{
+    color: #475569;
+}

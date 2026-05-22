@@ -9,6 +9,14 @@ const groupSchema = new mongoose.Schema(
         description: {
             type: String,
         },
+        briefDescription: {
+            type: String
+        },
+        coverPoints: [
+            {
+                type: String
+            }
+        ],
         mode: {
             type: String,
             enum: ["online", "offline"],

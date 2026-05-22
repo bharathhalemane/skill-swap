@@ -360,3 +360,71 @@ exports.getJoinRequests = async (req, res) => {
         })
     }
 }
+
+exports.updateBriefDescription = async (req, res) => {
+    try {
+        const { groupId } = req.params
+        const { briefDescription } = req.body
+
+        const group = await Group.findById(groupId)
+
+        if (!group) {
+            return res.status(404).json({
+                message: "Group not found"
+            })
+        }
+
+        if (group.host.toString() !== req.user.userId) {
+            return res.status(403).json({
+                message: "Only host can edit"
+            })
+        }
+
+        group.briefDescription = briefDescription
+
+        await group.save()
+
+        res.status(200).json({
+            message: "Brief description updated",
+            group
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+exports.updateCoverPoints = async (req, res) => {
+    try {
+        const { groupId } = req.params
+        const { coverPoints } = req.body 
+
+        const group = await Group.findById(groupId)
+
+        if (!group) {
+            return res.status(404).json({
+                message: "Group not found"
+            })
+        }
+
+        if(group.host.toString() !== req.user.userId){
+            return res.status(403).json({
+                message: "Only host can edit"
+            })
+        }
+
+        group.coverPoints = coverPoints 
+
+        await group.save() 
+
+        res.status(200).json({
+            message: "Cover points updated",
+            group
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
