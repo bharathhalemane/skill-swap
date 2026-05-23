@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../../redux/features/groups/groupsActions";
 import { socket } from "../../Socket"
-import StudyGroupsCard from "./StudyGroupCard/studyGroupsCard";
+import StudyGroupsCard from "./StudyGroupCard/StudyGroupCard";
 
 const StudyGroups = () => {
     const dispatch = useDispatch()
