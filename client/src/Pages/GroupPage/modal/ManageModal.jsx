@@ -1,5 +1,5 @@
 import CommonModal from "../../../components/Utils/CommonModal";
-import styles from "./ManageModal.module.css"
+import styles from "./manageModal.module.css"
 import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import { Check, X, Bell } from "lucide-react";
