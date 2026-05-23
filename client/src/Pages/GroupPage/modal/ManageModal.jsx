@@ -3,7 +3,7 @@ import styles from "./ManageModal.module.css"
 import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import { Check, X, Bell } from "lucide-react";
-import { acceptRequest, rejectRequest } from "../../StudyGroups/StudyGroupsApi";
+import { acceptRequest, rejectRequest } from "../../StudyGroups/studyGroupsApi";
 import { socket } from "../../../Socket"
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";

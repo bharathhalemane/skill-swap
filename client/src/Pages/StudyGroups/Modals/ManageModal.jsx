@@ -3,7 +3,7 @@ import styles from "./styles/manageModal.module.css"
 import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
-import { getJoinRequests, acceptRequest, rejectRequest } from "../StudyGroupsApi";
+import { getJoinRequests, acceptRequest, rejectRequest } from "../studyGroupsApi";
 import { socket } from "../../../Socket"
 
 const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
