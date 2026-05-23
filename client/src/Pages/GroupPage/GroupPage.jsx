@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import AboutGroup from "./AboutGroup/AboutGroup";
 import CoverPoints from "./CoverPoints/CoverPoints";
 import { useDispatch } from "react-redux";
-import ManageModal from "./modal/ManageModal";
+import ManageModal from "./Modal/ManageModal";
 import { socket } from "../../Socket"
 
 const GroupPage = () => {
