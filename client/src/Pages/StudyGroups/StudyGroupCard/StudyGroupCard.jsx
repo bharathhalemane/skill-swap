@@ -24,7 +24,6 @@ const StudyGroupsCard = ({ data, dispatch }) => {
     const requestsUser = joinRequests.map(
         request => request.user
     )
-    console.log(requestsUser)
 
     const getTimeAgo = (date) => {
         const now = new Date()
@@ -108,16 +107,16 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                             requestsUser.includes(userId) ? <>
                                 <button className={styles.manageRequestButton} disabled>requested</button>
                             </> : <>
-                                <button className={`${members.includes(userId) ? styles.leaveButton : styles.joinRequestButton}`}
+                                <button className={`${members.some(member => member.user === userId) ? styles.leaveButton : styles.joinRequestButton}`}
                                     onClick={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
-                                        { members.includes(userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id) }
+                                        { members.some(member => member.user === userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id) }
                                     }}
                                 >
                                     {
                                         requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
-                                            members.includes(userId) ? "Leave" : "Join"
+                                            members.some(member => member.user === userId) ? "Leave" : "Join"
 
                                     }
                                 </button></>

@@ -220,7 +220,7 @@ exports.acceptJoinRequest = async (req, res) => {
             request => request.user.toString() !== userId
         )
 
-        group.members.push(userId)
+        group.members.push({ user: userId })
 
         await group.save()
 
@@ -229,7 +229,10 @@ exports.acceptJoinRequest = async (req, res) => {
         if (senderSocketId) {
             io.to(senderSocketId).emit("request_accepted")
         }
-
+        const hostSocketId = onlineUsers[req.user.userId]
+        if (hostSocketId) {
+            io.to(hostSocketId).emit("render_new_member")
+        }
         res.status(200).json({
             message: "Request accepted"
         })
@@ -298,7 +301,7 @@ exports.leaveGroup = async (req, res) => {
         }
 
         const isMember = group.members.some(
-            member => member.toString() === req.user.userId
+            member => member.user.toString() === req.user.userId
         )
 
         if (!isMember) {
@@ -308,7 +311,7 @@ exports.leaveGroup = async (req, res) => {
         }
 
         group.members = group.members.filter(
-            member => member.toString() !== req.user.userId
+            member => member.user.toString() !== req.user.userId
         )
 
         await group.save()
@@ -398,7 +401,7 @@ exports.updateBriefDescription = async (req, res) => {
 exports.updateCoverPoints = async (req, res) => {
     try {
         const { groupId } = req.params
-        const { coverPoints } = req.body 
+        const { coverPoints } = req.body
 
         const group = await Group.findById(groupId)
 
@@ -408,15 +411,15 @@ exports.updateCoverPoints = async (req, res) => {
             })
         }
 
-        if(group.host.toString() !== req.user.userId){
+        if (group.host.toString() !== req.user.userId) {
             return res.status(403).json({
                 message: "Only host can edit"
             })
         }
 
-        group.coverPoints = coverPoints 
+        group.coverPoints = coverPoints
 
-        await group.save() 
+        await group.save()
 
         res.status(200).json({
             message: "Cover points updated",

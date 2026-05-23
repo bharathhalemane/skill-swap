@@ -1,37 +1,54 @@
 import CommonModal from "../../../components/Utils/CommonModal";
-import styles from "./styles/manageModal.module.css"
+import styles from "./manageModal.module.css"
 import { TailSpin } from "react-loader-spinner";
 import { useEffect, useState } from "react";
-import { Check, X } from "lucide-react";
-import { getJoinRequests, acceptRequest, rejectRequest } from "../StudyGroupsApi";
+import { Check, X, Bell } from "lucide-react";
+import { acceptRequest, rejectRequest } from "../../StudyGroups/StudyGroupsApi";
 import { socket } from "../../../Socket"
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
+const API = import.meta.env.VITE_BACKEND_API
+const ManageModal = ({ dispatch, title, host, groupId }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [requests, setRequests] = useState([])
 
-    const getRequests = async () => {
-        const response = await getJoinRequests(groupId)
-        setRequests(response.data.data)
+    const getJoinRequests = async (groupId) => {
+        try {
+            const token = Cookies.get("jwtToken")
+            const response = await axios.get(
+                `${API}/groups/${groupId}/requests`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            )
+            setRequests(response.data.data)
+        } catch (err) {
+            err.response?.data?.message || "Failed to fetch requests"
+
+        }
     }
+
     useEffect(() => {
-        getRequests()
+        getJoinRequests(groupId)
         socket.on("new_group_join_get_request", () => {
-            getRequests()
+            getJoinRequests(groupId)
         })
         return () => {
             socket.off("new_group_join_get_request")
         }
-    }, [])
+    }, [groupId])
 
     const onClickAccept = async (senderId) => {
         await acceptRequest(dispatch, groupId, senderId)
-        getRequests()
+        getJoinRequests(groupId)
     }
 
     const onClickReject = async (senderId) => {
         await rejectRequest(dispatch, groupId, senderId)
-        getRequests()
+        getJoinRequests(groupId)
     }
 
     const getTimeAgo = (date) => {
@@ -88,8 +105,11 @@ const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
                 e.stopPropagation()
                 e.preventDefault()
 
-            }} className={styles.manageButton} disabled={disabled}>
-                Manage
+            }} className={styles.manageButton}>
+                <Bell size={20} /> Requests
+                {
+                    requests.length > 0 && <span className={styles.badge}>{requests.length}</span>
+                }
             </button>
 
             <CommonModal title="Join Requests" isOpen={isOpen} onClose={() => setIsOpen(false)} width="550px">

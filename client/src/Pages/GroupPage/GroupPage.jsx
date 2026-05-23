@@ -9,17 +9,22 @@ import { getGroupData } from "./GroupPageApi";
 import Cookies from "js-cookie";
 import AboutGroup from "./AboutGroup/AboutGroup";
 import CoverPoints from "./CoverPoints/CoverPoints";
+import { useDispatch } from "react-redux";
+import ManageModal from "./modal/ManageModal";
+import { socket } from "../../Socket"
 
 const GroupPage = () => {
+    const dispatch = useDispatch()
     const { groupId } = useParams()
     const userId = Cookies.get("userId")
     const [state, setState] = useState(true)
+    const [openModal, setOpenModal] = useState(true)
     const [groupData, setGroupData] = useState({
         host: {
             email: "",
             phoneNumber: "",
             profile: {
-                profile_image: "",
+                profile_image: "img.png",
             },
             _id: ""
         },
@@ -45,11 +50,35 @@ const GroupPage = () => {
 
     useEffect(() => {
         getGroupInfo()
+        socket.on("render_new_member", () => {
+            getGroupInfo()
+        })
+        socket.on("member_left_group", () => {
+            getGroupInfo()
+        })
+        return () => {
+            socket.off("render_new_member")
+            socket.off("member_left_group")
+        }
     }, [])
+
+    const handleShare = async () => {
+        const shareData = {
+            title: groupData.title,
+            text: groupData.description,
+            url: `${window.location.origin}/study-group/${groupData._id}`
+        }
+        try {
+            // await navigator.clipboard.writeText(shareData.url)
+            await navigator.share(shareData)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
 
     const { host, joinRequests, members, membersCount, title, maxMembers, location, time, mode } = groupData
     const { email: hostEmail, name: hostName, phoneNumber: hostPhoneNumber, profile: hostProfile, _id: hostId } = host
-
 
     return <>
         <HomeHeader />
@@ -71,15 +100,15 @@ const GroupPage = () => {
                     </div>
                 </div>
                 <div className={styles.controlContainer}>
-                    <button className={styles.button}><Share2 /> Share</button>
-                    {state && <button className={styles.button}><Bell color="#ff7a00" /> Requests</button>}
+                    <button className={styles.button} onClick={handleShare}><Share2 size={ 20} /> Share</button>
+                    {state && <ManageModal dispatch={dispatch} title={groupData.title} host={groupData.host} groupId={groupData._id} />}
                 </div>
             </div>
         </div>
         <hr className={styles.hr} />
         <div className={styles.groupInfoContainer}>
-            <div className={styles.infoCards}>                
-                <AboutGroup data={groupData} groupId={groupId}/>
+            <div className={styles.infoCards}>
+                <AboutGroup data={groupData} groupId={groupId} />
                 <CoverPoints data={groupData} groupId={groupId} />
                 <div className={styles.infoCard}>
                     <h1><Users color="#ff7a00" /> Members({membersCount}/{maxMembers})</h1>
@@ -92,7 +121,7 @@ const GroupPage = () => {
                                         <h1>
                                             {each.user.name}
                                         </h1>
-                                        <p>{userId === each.user._id ? "host" : "member"}</p>
+                                        <p>{host._id === each.user._id ? "host" : "member"}</p>
                                         <div className={styles.emailAndPhone}>
                                             <a href={`mailto:${each.user.email}`} target="_blank" rel="noopener noreferrer"><Mail size={13} /> {each.user.email}</a>
                                             <a href={`tel:${each.user.phoneNumber}`}><Phone size={13} />{each.user.phoneNumber}</a>
