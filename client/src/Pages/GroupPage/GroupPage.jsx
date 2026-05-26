@@ -3,7 +3,7 @@ import Footer from "../../components/Footer/Footer";
 import { useParams } from "react-router-dom";
 import styles from "./GroupPage.module.css"
 import { BiLeftArrow } from "react-icons/bi";
-import { ArrowLeft, Bell, BookOpen, Share2, Clock, Users, Mail, Phone, SquarePen } from "lucide-react";
+import { ArrowLeft, Bell, BookOpen, Share2, Clock, Users, Mail, Phone, SquarePen, Calendar, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getGroupData } from "./GroupPageApi";
 import Cookies from "js-cookie";
@@ -34,14 +34,11 @@ const GroupPage = () => {
         maxMembers: 0,
         location: "",
         time: "",
-        mode: ""
+        mode: "",
+        joinLink: "",
+        date: ""
     })
-    const [points, setPointes] = useState([
-        "Review of core concepts and key formulas",
-        "Walkthrough of practice problems together",
-        "Open Q&A and exam prep tips",
-        "Group challenge to test what you've learned"
-    ])
+    console.log(groupData)
 
     const getGroupInfo = async () => {
         const response = await getGroupData(groupId)
@@ -69,7 +66,6 @@ const GroupPage = () => {
             url: `${window.location.origin}/study-group/${groupData._id}`
         }
         try {
-            // await navigator.clipboard.writeText(shareData.url)
             await navigator.share(shareData)
         } catch (err) {
             console.log(err)
@@ -77,7 +73,7 @@ const GroupPage = () => {
     }
 
 
-    const { host, joinRequests, members, membersCount, title, maxMembers, location, time, mode } = groupData
+    const { host, joinRequests, members, membersCount, title, maxMembers, location, time, mode, joinLink, date } = groupData
     const { email: hostEmail, name: hostName, phoneNumber: hostPhoneNumber, profile: hostProfile, _id: hostId } = host
 
     return <>
@@ -100,7 +96,7 @@ const GroupPage = () => {
                     </div>
                 </div>
                 <div className={styles.controlContainer}>
-                    <button className={styles.button} onClick={handleShare}><Share2 size={ 20} /> Share</button>
+                    <button className={styles.button} onClick={handleShare}><Share2 size={20} /> Share</button>
                     {state && <ManageModal dispatch={dispatch} title={groupData.title} host={groupData.host} groupId={groupData._id} />}
                 </div>
             </div>
@@ -131,6 +127,41 @@ const GroupPage = () => {
                             ))
                         }
                     </ul>
+                </div>
+            </div>
+            <div className={`${styles.infoCard} ${styles.sessionCard}`}>
+                <h1>Session Details</h1>
+                <div className={styles.detailsContainer}>
+                    <Calendar className={styles.icon} />
+                    <div>
+                        <p>When</p>
+                        <h1>
+                            <h1>
+                                {new Date(`${date.split("T")[0]}T${time.split(" ")[0]}`).toLocaleString("en-US", {
+                                    weekday: "short",
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                })}
+                            </h1>
+                        </h1>
+                    </div>
+                </div>
+                <div className={styles.detailsContainer}>
+                    <MapPin className={styles.icon} />
+                    <div>
+                        <p>Where</p>
+                        {
+                            mode === "online" ? <><a href={joinLink} target="_blank">Online Link</a></> : <><h1>{location}</h1></>
+                        }
+                    </div>
+                </div>
+                <div className={styles.detailsContainer}>
+                    <Users className={styles.icon} />
+                    <div>
+                        <p>Spots</p>
+                        <h1>{maxMembers - members.length} left</h1>
+                    </div>
                 </div>
             </div>
         </div>

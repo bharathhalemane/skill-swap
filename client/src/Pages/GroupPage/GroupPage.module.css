@@ -103,6 +103,9 @@
 .groupInfoContainer {
     background-color: #FCFAF7;
     padding: 50px;
+    display: flex;
+    gap: 30px;
+    align-items: start;
 }
 
 .hr {
@@ -113,6 +116,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    width: 80vw;
 }
 
 .infoCard {
@@ -150,6 +154,35 @@
 
 .infoCard ul li::marker {
     color: #ff7a00;
+}
+
+.sessionCard{
+    max-width: 30vw;
+}
+
+.detailsContainer{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.icon{
+    color: #ff7a00;
+    font-size: 20px;
+}
+
+.sessionCard p{
+    font-size: 15px;
+}
+
+.sessionCard h1{
+    font-size: 17px;
+    color: #444;
+}
+
+.sessionCard a{
+    color: #2779d5;
+    font-weight: bold;
 }
 
 .members {
@@ -204,6 +237,15 @@
 
     .groupInfoContainer {
         padding: 30px;
+        flex-direction: column;
+    }
+
+    .infoCards{
+        width: 100%;
+    }
+
+    .sessionCard{
+        min-width: 100%;
     }
 
     .members {
