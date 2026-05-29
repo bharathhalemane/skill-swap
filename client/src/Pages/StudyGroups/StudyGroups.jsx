@@ -8,35 +8,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGroups } from "../../redux/features/groups/groupsActions";
 import { socket } from "../../Socket"
 import StudyGroupsCard from "./StudyGroupCard/StudyGroupCard";
+import StudyGroupCardSkeleton from "./StudyGroupCard/StudyGroupCardSkeleton";
+
 
 const StudyGroups = () => {
     const dispatch = useDispatch()
     const { groups } = useSelector(state => state.groups)
+    const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState("")
     useEffect(() => {
-        if (groups.length === 0) {
+
+        const getGroups = async () => {
+            if (groups.length === 0) {
+                setLoading(true)
+
+                await dispatch(fetchGroups())
+
+                setLoading(false)
+            }
+        }
+
+        getGroups()
+
+        const refreshGroups = () => {
             dispatch(fetchGroups())
         }
 
-        socket.on("new_group_join_request", () => {
-            dispatch(fetchGroups())
-        })
-        socket.on("request_rejected", () => {
-            dispatch(fetchGroups())
-        })
-        socket.on("request_accepted", () => {
-            dispatch(fetchGroups())
-        })
-        socket.on("member_left_group", () => {
-            dispatch(fetchGroups())
-        })
+        socket.on("new_group_join_request", refreshGroups)
+        socket.on("request_rejected", refreshGroups)
+        socket.on("request_accepted", refreshGroups)
+        socket.on("member_left_group", refreshGroups)
+
         return () => {
-            socket.off("new_group_join_request")
-            socket.off("request_rejected")
-            socket.off("request_accepted")
-            socket.off("member_left_group")
+            socket.off("new_group_join_request", refreshGroups)
+            socket.off("request_rejected", refreshGroups)
+            socket.off("request_accepted", refreshGroups)
+            socket.off("member_left_group", refreshGroups)
         }
-    }, [dispatch])
+    }, [dispatch, groups.length])
 
     const onChangeSearch = e => {
         setSearch(e.target.value)
@@ -64,13 +73,22 @@ const StudyGroups = () => {
                 <CreateGroupModal title="Create Groups" />
             </div>
             <ul className={styles.groupsListContainer}>
-                {
-                    filteredGroups.map(group => (
-                        <li key={group._id}>
-                            <StudyGroupsCard dispatch={dispatch} data={group} />
+                {loading ? <>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <li key={index}>
+                            <StudyGroupCardSkeleton />
                         </li>
-                    ))
-                }
+                    ))}
+                </> : <>
+                    {
+                        filteredGroups.map(group => (
+                            <li key={group._id}>
+                                <StudyGroupsCard dispatch={dispatch} data={group} />
+                            </li>
+                        ))
+                    }
+                </>}
+
             </ul>
             <div className={styles.createSection}>
                 <Calendar1 size={35} color="#ff7a59" />
