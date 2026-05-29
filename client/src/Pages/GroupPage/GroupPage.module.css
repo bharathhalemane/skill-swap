@@ -225,6 +225,36 @@
     gap: 10px;
 }
 
+.leaveButton{
+    margin-right: 10px;
+    color: #ff7a00;
+    background: linear-gradient(90deg, #df1f1f, #c23331);
+    padding: 10px 30px;
+    width: 150px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+
+.joinRequestButton {
+    margin-right: 10px;
+    color: #ff7a00;
+    background: linear-gradient(90deg, #ff7a00, #ff9900);
+    padding: 10px 30px;
+    width: 150px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.manageRequestButton{
+    margin-right: 10px;
+    border: 2px solid #ff7a00;
+    width: 150px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #ff7a00;
+}
+
 @media (max-width: 780px) {
     .headContainer {
         padding: 30px;

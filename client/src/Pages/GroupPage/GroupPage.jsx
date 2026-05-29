@@ -12,13 +12,15 @@ import CoverPoints from "./CoverPoints/CoverPoints";
 import { useDispatch } from "react-redux";
 import ManageModal from "./modal/ManageModal.jsx";
 import { socket } from "../../Socket"
+import { sendRequest, leaveGroup } from "../StudyGroups/studyGroupsApi.js";
+import { TailSpin } from "react-loader-spinner";
 
 const GroupPage = () => {
     const dispatch = useDispatch()
     const { groupId } = useParams()
     const userId = Cookies.get("userId")
-    const [state, setState] = useState(true)
     const [openModal, setOpenModal] = useState(true)
+    const [requestLoading, setRequestLoading] = useState(false)
     const [groupData, setGroupData] = useState({
         host: {
             email: "",
@@ -38,7 +40,6 @@ const GroupPage = () => {
         joinLink: "",
         date: ""
     })
-    console.log(groupData)
 
     const getGroupInfo = async () => {
         const response = await getGroupData(groupId)
@@ -71,11 +72,19 @@ const GroupPage = () => {
             console.log(err)
         }
     }
+    const onHandleSendRequest = async (groupId) => {
+        const response = await sendRequest(dispatch, groupId, setRequestLoading)
+    }
 
+    const onHandleLeaveGroup = async (groupId) => {
+        const response = await leaveGroup(dispatch, groupId, setRequestLoading)
+    }
 
     const { host, joinRequests, members, membersCount, title, maxMembers, location, time, mode, joinLink, date } = groupData
     const { email: hostEmail, name: hostName, phoneNumber: hostPhoneNumber, profile: hostProfile, _id: hostId } = host
-
+    const requestsUser = joinRequests.map(
+        request => request.user
+    )
     return <>
         <HomeHeader />
         <div className={styles.headContainer}>
@@ -97,7 +106,24 @@ const GroupPage = () => {
                 </div>
                 <div className={styles.controlContainer}>
                     <button className={styles.button} onClick={handleShare}><Share2 size={20} /> Share</button>
-                    {state && <ManageModal dispatch={dispatch} title={groupData.title} host={groupData.host} groupId={groupData._id} />}
+                    {hostId === userId ? <ManageModal dispatch={dispatch} title={groupData.title} host={groupData.host} groupId={groupData._id} /> : <>
+                        {
+                            requestsUser.includes(userId) ? <>
+                                <button className={styles.manageRequestButton} disabled>requested</button>
+                            </> : <>
+                                <button className={`${members.some(member => member.user === userId) ? styles.leaveButton : styles.joinRequestButton}`}
+                                    onClick={() => {
+                                        { members.some(member => member.user === userId) ? onHandleLeaveGroup(groupData._id) : onHandleSendRequest(groupData._id) }
+                                    }}
+                                >
+                                    {
+                                        requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
+                                            members.some(member => member.user === userId) ? "Leave" : "Join"
+
+                                    }
+                                </button></>
+                        }
+                    </>}
                 </div>
             </div>
         </div>
@@ -163,6 +189,9 @@ const GroupPage = () => {
                         <h1>{maxMembers - members.length} left</h1>
                     </div>
                 </div>
+                {
+
+                }
             </div>
         </div>
         <Footer />
