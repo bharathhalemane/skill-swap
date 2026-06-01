@@ -178,7 +178,7 @@ const BrowseSkills = () => {
                                 :
                                 skills.map(each => (
                                     <li key={each.id}>
-                                        <SkillCard skillsData={each} />
+                                        <SkillCard skillsData={each} creationPage={false} />
                                     </li>
                                 ))
 

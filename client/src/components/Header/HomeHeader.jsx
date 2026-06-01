@@ -22,6 +22,7 @@ const HomeHeader = () => {
         { href: "/find-skills", label: "Find Skills" },
         { href: "/study-groups", label: "Study Groups" },
         { href: "/completed-skills", label: "Completed Skills" },
+        { href: "/creations", label: "Creations" }
     ];
 
     useEffect(() => {

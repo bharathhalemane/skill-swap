@@ -8,6 +8,8 @@ import teachingSkillsReducer from "../features/teachingSkills/teachingSkillsSlic
 import scheduleAndAvailabilityReducer from "../features/scheduleAndAvailability/scheduleAndAvailabilitySlice"
 import learningSkillsReducer from "../features/learningSkills/learningSkillsSlice"
 import groupReducer from "../features/groups/groupsSlice"
+import createdContentReducer from "../features/creations/createdContentSlice"
+
 const store = configureStore({
     reducer: {
         skills: skillsReducer,
@@ -17,7 +19,8 @@ const store = configureStore({
         teachingSkills: teachingSkillsReducer,
         scheduleAndAvailability: scheduleAndAvailabilityReducer,
         learningSkills: learningSkillsReducer,
-        groups: groupReducer
+        groups: groupReducer,
+        createdContent: createdContentReducer
     }
 })
 

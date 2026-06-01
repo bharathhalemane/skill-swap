@@ -7,7 +7,7 @@ import { TailSpin } from "react-loader-spinner"
 import { Link } from "react-router-dom"
 import ManageModal from "../Modals/ManageModal"
 
-const StudyGroupsCard = ({ data, dispatch }) => {
+const StudyGroupsCard = ({ data, dispatch, creationPage }) => {
     const userId = Cookies.get("userId")
     const { title, description, mode, membersCount, maxMembers, date, time, joinLink, location, host, joinRequests, members } = data
     const { name, profile, _id } = host
@@ -66,7 +66,7 @@ const StudyGroupsCard = ({ data, dispatch }) => {
 
                 <div className={styles.groupInfo}>
                     <Users color="#555" />
-                    <span>{membersCount}/{maxMembers} members joined</span>
+                    <span>{members.length}/{maxMembers} members joined</span>
                 </div>
                 <div className={styles.timeInfo}>
                     <span><Calendar color="#555" /></span>
@@ -87,43 +87,46 @@ const StudyGroupsCard = ({ data, dispatch }) => {
                     <p className={styles.location}><Map color="#555" /> {location}</p>
                 )
             }
-            <hr className={styles.hr} />
-            <div className={styles.controlGroupRequest}>
-                <div className={styles.hostInfo}>
-                    <img src={profile.profile_image} alt="profile" className={styles.profileImage} />
+            {
+                !creationPage && <>
+                    <hr className={styles.hr} />
+                    <div className={styles.controlGroupRequest}>
+                        <div className={styles.hostInfo}>
+                            <img src={profile.profile_image} alt="profile" className={styles.profileImage} />
 
-                    {
-                        userId === _id ? <p className={styles.hostSame}>You're hosting</p>
-                            :
-                            <p className={styles.hostName}>{name}</p>
-                    }
-                </div>
-                {
-
-                    userId === _id ? <>
-                        <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id} />
-                    </> : <>
+                            {
+                                userId === _id ? <p className={styles.hostSame}>You're hosting</p>
+                                    :
+                                    <p className={styles.hostName}>{name}</p>
+                            }
+                        </div>
                         {
-                            requestsUser.includes(userId) ? <>
-                                <button className={styles.manageRequestButton} disabled>requested</button>
-                            </> : <>
-                                <button className={`${members.some(member => member.user === userId) ? styles.leaveButton : styles.joinRequestButton}`}
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        { members.some(member => member.user === userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id) }
-                                    }}
-                                >
-                                    {
-                                        requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
-                                            members.some(member => member.user === userId) ? "Leave" : "Join"
 
-                                    }
-                                </button></>
+                            userId === _id ? <>
+                                <ManageModal dispatch={dispatch} title={title} host={host} groupId={data._id} />
+                            </> : <>
+                                {
+                                    requestsUser.includes(userId) ? <>
+                                        <button className={styles.manageRequestButton} disabled>requested</button>
+                                    </> : <>
+                                        <button className={`${members.some(member => member.user === userId) ? styles.leaveButton : styles.joinRequestButton}`}
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                { members.some(member => member.user === userId) ? onHandleLeaveGroup(data._id) : onHandleSendRequest(data._id) }
+                                            }}
+                                        >
+                                            {
+                                                requestLoading ? <TailSpin width={20} height={20} color="#fff" /> :
+                                                    members.some(member => member.user === userId) ? "Leave" : "Join"
+
+                                            }
+                                        </button></>
+                                }
+                            </>
                         }
-                    </>
-                }
-            </div>
+                    </div></>
+            }
 
         </div>
     </>

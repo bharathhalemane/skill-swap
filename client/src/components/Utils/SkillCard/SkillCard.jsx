@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import styles from './SkillCard.module.css'
 import { BsPersonCircle } from "react-icons/bs";
 
-const SkillCard = ({ skillsData }) => {
+const SkillCard = ({ skillsData, creationPage }) => {
     const {
         id,
         title,
@@ -52,7 +52,7 @@ const SkillCard = ({ skillsData }) => {
                             src={profileImage || profile_image}
                             alt={name}
                             className={styles.instructorAvatar}
-                        /> : <BsPersonCircle className={styles.profile} />
+                        /> : !creationPage && <BsPersonCircle className={styles.profile} />
                     }
                     <span className={styles.instructorName}>
                         {name}

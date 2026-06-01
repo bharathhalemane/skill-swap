@@ -17,6 +17,7 @@ import { useEffect } from "react"
 import Cookies from "js-cookie"
 import socket from './Socket'
 import CompletedSkills from './Pages/CompletedSkills/CompletedSkills'
+import Creations from './Pages/Creations/Creations'
 
 
 function App() {
@@ -64,6 +65,9 @@ function App() {
           </ProtectedRoute>} />
           <Route path="/completed-skills" element={<ProtectedRoute>
             <CompletedSkills />
+          </ProtectedRoute>} />
+          <Route path="/creations" element={<ProtectedRoute>
+            <Creations />
           </ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute>
             <Profile />

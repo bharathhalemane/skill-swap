@@ -1,4 +1,6 @@
 const User = require("../models/User")
+const Skill = require("../models/Skill")
+const Group = require("../models/Group")
 const cloudinary = require("../config/cloudinary")
 
 exports.getProfile = async (req, res) => {
@@ -115,6 +117,26 @@ exports.updatePhoneNumber = async (req, res) => {
         res.status(500).json({
             message: "server error",
             error: err.message            
+        })
+    }
+}
+
+exports.getCreatedContent = async (req, res) => {
+    try{
+        const userId = req.user.userId 
+
+        const skills = await Skill.find({ user: userId })
+            .sort({ createdAt: -1 })
+        
+        const groups = await Group.find({ host: userId })
+            .sort({ createdAt: -1 })
+
+        res.status(200).json({ skills, groups })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: "Server error",
+            error: error.message
         })
     }
 }
