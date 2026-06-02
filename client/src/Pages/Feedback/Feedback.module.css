@@ -1,0 +1,221 @@
+.feedbackContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #FCFAF7;
+    padding-bottom: 30px;
+    padding-top: 15vh;
+}
+
+.feedbackIcon {
+    background: linear-gradient(90deg, #E8724B, #F5A623);
+    padding: 20px;
+    color: #fff;
+    border-radius: 10%;
+}
+
+.feedbackTitle {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #333;
+}
+
+.feedbackHighlight {
+    background: linear-gradient(90deg, #E8724B, #F5A623);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feedbackDescription {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #666;
+    text-align: center;
+    max-width: 600px;
+}
+
+.feedbackForm {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 60%;
+}
+
+.feedbackForm .mainTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.feedbackForm p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.personInfoContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 48%;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.labelTitle {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.feedbackTypes {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.feedbackType {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid #555;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 180px;
+}
+
+.feedbackType span {
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.feedbackType:hover {
+    color: #fff;
+    border-color: #E8724B;
+    border: 2px solid #E8724B;
+}
+
+.feedbackType.active {
+    color: #fff;
+    background: #FEF8F6;
+    border: 2px solid #E8724B;
+}
+
+.ratingContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.ratingContainer span {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.ratingContainer .starActive {
+    color: #E8724B;
+    fill: #E8724B;
+}
+
+.feedbackTextarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.feedbackTextarea::placeholder {
+    color: #999;
+}
+
+.feedbackTextarea:focus {
+    outline: none;
+    border: 2px solid #E8724B;
+}
+
+.submitBtn {
+    background: linear-gradient(90deg, #E8724B, #F5A623);
+    width: 80%;
+    margin: auto;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .feedbackContainer {
+        padding-top: 15vh;
+    }
+
+    .feedbackTitle {
+        font-size: 2rem;
+    }
+
+    .feedbackDescription {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+
+    .feedbackForm {
+        width: 90%;
+    }
+
+    .personInfoContainer {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .inputGroup {
+        width: 100%;
+    }
+
+    .feedbackTypes {
+        flex-wrap: wrap;
+    }
+
+    .feedbackType {
+        min-width: 150px;
+        padding: 10px;
+    }
+
+    .submitBtn {
+        width: 100%;
+    }
+}

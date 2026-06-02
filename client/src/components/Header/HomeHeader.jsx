@@ -15,18 +15,19 @@ const HomeHeader = () => {
     const navigate = useNavigate()
 
     const [menuOpen, setMenuOpen] = useState(false)
-    const {profileImage} = useSelector(state=> state.profile)
+    const { profileImage } = useSelector(state => state.profile)
 
     const navLinks = [
         { href: "/home", label: "Home" },
         { href: "/find-skills", label: "Find Skills" },
         { href: "/study-groups", label: "Study Groups" },
         { href: "/completed-skills", label: "Completed Skills" },
-        { href: "/creations", label: "Creations" }
+        { href: "/creations", label: "Creations" },
+        { href: "/feedback", label: "Feedback" }
     ];
 
     useEffect(() => {
-        if(!profileImage){
+        if (!profileImage) {
             dispatch(fetchProfileData())
         }
     }, [dispatch])

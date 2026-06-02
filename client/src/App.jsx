@@ -18,6 +18,7 @@ import Cookies from "js-cookie"
 import socket from './Socket'
 import CompletedSkills from './Pages/CompletedSkills/CompletedSkills'
 import Creations from './Pages/Creations/Creations'
+import Feedback from './Pages/Feedback/Feedback'
 
 
 function App() {
@@ -68,6 +69,9 @@ function App() {
           </ProtectedRoute>} />
           <Route path="/creations" element={<ProtectedRoute>
             <Creations />
+          </ProtectedRoute>} />
+          <Route path="/feedback" element={<ProtectedRoute>
+            <Feedback />
           </ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute>
             <Profile />
