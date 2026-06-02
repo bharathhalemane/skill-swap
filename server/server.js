@@ -15,6 +15,7 @@ const availabilityRoute = require("./routes/availabilityRoutes")
 const authRoutes = require("./routes/authRoutes")
 const requestRoutes = require("./routes/requestRoutes")
 const groupRoutes = require("./routes/groupRoutes")
+const feedbackRoutes = require("./routes/feedbackRoutes")
 
 
 require("./config/passport")
@@ -37,6 +38,7 @@ app.use("/api/classes", classScheduleRoutes)
 app.use("/api/availability", availabilityRoute)
 app.use("/api/requests", requestRoutes)
 app.use("/api/groups", groupRoutes)
+app.use("/api/feedback", feedbackRoutes)
 
 
 const PORT = process.env.PORT || 5000

@@ -40,6 +40,7 @@ const SkillPage = () => {
 
         const fetchAllSkillsData = async () => {
             const response = await allSkillsOfOwner(userId)
+            console.log(response)
             const formattedSkills = response.data.skills.map(skill => ({
                 id: skill._id,
                 title: skill.title,

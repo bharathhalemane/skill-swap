@@ -9,6 +9,8 @@ import { fetchCreatedContent } from '../../redux/features/creations/createdConte
 import Cookies from 'js-cookie'
 import SkillCard from '../../components/Utils/SkillCard/SkillCard'
 import StudyGroupsCard from '../StudyGroups/StudyGroupCard/StudyGroupCard'
+import CreateGroupModal from '../StudyGroups/Modals/CreateGroupModal'
+import CreateSkillModal from '../../components/Profile/Modals/CreateSkillModal'
 
 const Creations = () => {
     const dispatch = useDispatch()
@@ -24,14 +26,18 @@ const Creations = () => {
         getCreatedContent()
     }, [dispatch, skills.length])
 
-    console.log("Created Skills:", skills)
-    console.log("Created Groups:", groups)
+
 
     return (
         <>
             <HomeHeader />
             <div className={styles.container}>
-                <h2>Created Skills</h2>
+                <div className={styles.header}>
+                    <h2>Created Skills</h2>
+                    <div className={styles.createContentButton}>
+                        <CreateSkillModal buttonTitle="Create Skill" />
+                    </div>
+                </div>
                 <ul className={styles.skillsList}>
                     {
                         loading ?
@@ -53,7 +59,10 @@ const Creations = () => {
                             </>
                     }
                 </ul>
-                <h2>Created Groups</h2>
+                <div className={styles.header}>
+                    <h2>Created Groups</h2>
+                    <CreateGroupModal title="Create" />
+                </div>
                 <ul className={styles.groupsList}>
                     {
                         loading ? <>

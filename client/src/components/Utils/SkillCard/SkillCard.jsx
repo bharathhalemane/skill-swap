@@ -20,7 +20,7 @@ const SkillCard = ({ skillsData, creationPage }) => {
 
     return (
         <Link
-            to={`/skill/${id}/${userId}`}
+            to={`/skill/${id|| skillsData._id}/${userId|| user}`}
             className={styles.skillsCard}
         >
             <div className={styles.skillCardContainer}>
