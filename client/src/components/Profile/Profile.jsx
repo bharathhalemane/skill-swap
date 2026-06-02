@@ -6,7 +6,6 @@ import EditProfileModal from "./Modals/EditProfileModal"
 import Cookies from 'js-cookie'
 import axios from "axios"
 import { BsPersonCircle } from "react-icons/bs";
-import SkillDetails from './Skill/SkillDetails'
 import ClassSchedule from './Schedule/ClassSchedule'
 import Availability from './Availability/Availability'
 import ReceivedRequest from './requests/ReceivedRequests/ReceivedRequest'
@@ -88,8 +87,6 @@ const Profile = () => {
                 {ProfileDetails()}
                 <ReceivedRequest />
                 <SentRequests />
-                <hr />
-                <SkillDetails />
                 <hr />
                 <ClassSchedule />
                 <Availability />
