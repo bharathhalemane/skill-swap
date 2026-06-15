@@ -1,12 +1,13 @@
 import { IoMdSwap } from "react-icons/io";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { FiLock, FiMail } from "react-icons/fi";
-import {useState} from 'react'
-import { useNavigate} from "react-router-dom"
+import { useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import Cookies from "js-cookie"
 import "./Login.css";
-import {TailSpin} from "react-loader-spinner"
+import { TailSpin } from "react-loader-spinner"
+import LoadingPage from "../../../Pages/LoadingPage/LoadingPage";
 
 const ApiURL = import.meta.env.VITE_AUTH_API_URL;
 
@@ -19,26 +20,26 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError]= useState(false);
+    const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [passwordShow, setPasswordShow] = useState(false);    
+    const [passwordShow, setPasswordShow] = useState(false);
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
 
     const onChangeEmail = e => {
         setEmail(e.target.value);
     }
     const onChangePassword = e => {
-        setPassword(e.target.value);        
+        setPassword(e.target.value);
     }
 
     const onClickPasswordShow = () => {
         setPasswordShow(prevState => !prevState);
     }
-    
+
     const onSubmitSuccess = (data) => {
         Cookies.set('jwtToken', data.jwt_token, { expires: 1 })
-        Cookies.set("userId", data.userId, {expires: 1})
-        navigate(`/home?token=${data.jwt_token}&userId=${data.userId}`, {replace: true})        
+        Cookies.set("userId", data.userId, { expires: 1 })
+        navigate(`/home?token=${data.jwt_token}&userId=${data.userId}`, { replace: true })
     }
 
     const onSubmitForm = async e => {
@@ -46,7 +47,7 @@ const Login = () => {
         setApiStatus(apiProgress.loading)
         setError(false)
         try {
-            const userDetails = {email:email, password:password,}
+            const userDetails = { email: email, password: password, }
             const url = `${ApiURL}/login`
             const options = {
                 method: 'POST',
@@ -61,22 +62,27 @@ const Login = () => {
                 setError(false)
                 setErrorMessage('')
                 setEmail('')
-                setPassword('')                
+                setPassword('')
                 onSubmitSuccess(data)
             } else {
                 setErrorMessage(data.message)
                 setError(true)
             }
-        setApiStatus(apiProgress.success)
+            setApiStatus(apiProgress.success)
         } catch (err) {
             setErrorMessage("Sorry, we are fixing try after sometime")
-            setError(true)   
+            setError(true)
             setApiStatus(apiProgress.success)
         }
-        
+
     }
 
-    const googleCallback = () => {        
+    const googleCallback = () => {
+        // navigate("/loading-page", {
+        //     state: {
+        //         redirectUrl: `${ApiURL}/google`
+        //     }
+        // })
         window.location.href = `${ApiURL}/google`;
     }
 
@@ -102,7 +108,7 @@ const Login = () => {
                 setApiStatus(apiProgress.success)
             } else {
                 setErrorMessage(data.message)
-                setError(true)  
+                setError(true)
             }
         } catch (err) {
             setErrorMessage("error")
@@ -116,11 +122,11 @@ const Login = () => {
                         <IoMdSwap className="swap-icon" />
                     </div>
                     <h1>Skill<span>Swap</span></h1>
-                </div>       
+                </div>
                 <div className="welcome-text">
                     <h1>Welcome Back</h1>
                     <p>Sign in to continue your learning journey.</p>
-                </div>  
+                </div>
                 <form className="form-container" onSubmit={onSubmitForm}>
                     <div className="email-input-container">
                         <label htmlFor="email">Email</label>
@@ -132,37 +138,37 @@ const Login = () => {
                     <div className="password-container">
                         <div className="password-forgot-container">
                             <label htmlFor="password">Password</label>
-                            <p className="forgot-password" onClick={onForgetPassword}>Forgot password?</p>                    
+                            <p className="forgot-password" onClick={onForgetPassword}>Forgot password?</p>
                         </div>
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
-                            <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************"  value={password} onChange={onChangePassword} />
+                            <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************" value={password} onChange={onChangePassword} />
                             <button type="button" className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
-                        
+
                     </div>
                     <button type="submit" className="login-button">
                         {
                             apiStatus === apiProgress.success ? "Login" :
-                                <TailSpin width={20} height={20} color="#fff"/>
+                                <TailSpin width={20} height={20} color="#fff" />
                         }
                     </button>
                     {error && <p className="error-message">*{errorMessage}</p>}
                     <p className="or">OR CONTINUE WITH</p>
                     <div className="social-login-container">
                         <div className="google-login btn" onClick={googleCallback}>
-                            <FaGoogle size={20} className="google-icon"/>
+                            <FaGoogle size={20} className="google-icon" />
                             <span>Google</span>
                         </div>
                         <div className="github-login btn" onClick={githubCallback}>
-                            <FaGithub size={20} className="github-icon"/>
+                            <FaGithub size={20} className="github-icon" />
                             <span>GitHub</span>
                         </div>
                     </div>
                     <p className="signup-text">Don't have an account? <span><a href="/signup">Sign Up</a></span></p>
                 </form>
             </div>
-            <div className="login-section">                        
+            <div className="login-section">
                 <div className="logo-icon-container">
                     <IoMdSwap className="swap-icon" />
                 </div>

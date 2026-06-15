@@ -1,0 +1,151 @@
+.loading-page {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg,
+            #0f172a,
+            #1e293b,
+            #334155);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: white;
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.logo-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,
+            #E8724B, #F5A623);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: auto;
+    margin-bottom: 20px;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+}
+
+.logo-section h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.logo-section p {
+    opacity: 0.8;
+}
+
+.swap-animation {
+    position: relative;
+    width: 350px;
+    height: 150px;
+    margin-bottom: 50px;
+}
+
+.skill-card {
+    position: absolute;
+    width: 120px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-1 {
+    left: 0;
+    animation: moveRight 3s infinite ease-in-out;
+}
+
+.card-2 {
+    right: 0;
+    animation: moveLeft 3s infinite ease-in-out;
+}
+
+.exchange-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    color: #E8724B;
+    animation: rotateIcon 2s infinite linear;
+}
+
+.loading-bar {
+    width: 350px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,
+            #E8724B, #F5A623);
+    animation: progressFill 30s linear forwards;
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 15px;
+    opacity: 0.8;
+}
+
+@keyframes moveRight {
+
+    0%,
+    100% {
+        left: 0;
+    }
+
+    50% {
+        left: 230px;
+    }
+}
+
+@keyframes moveLeft {
+
+    0%,
+    100% {
+        right: 0;
+    }
+
+    50% {
+        right: 230px;
+    }
+}
+
+@keyframes rotateIcon {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes progressFill {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}

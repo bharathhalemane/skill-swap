@@ -19,6 +19,7 @@ import socket from './Socket'
 import CompletedSkills from './Pages/CompletedSkills/CompletedSkills'
 import Creations from './Pages/Creations/Creations'
 import Feedback from './Pages/Feedback/Feedback'
+import LoadingPage from "./Pages/LoadingPage/LoadingPage"
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
 
     if (!userId) return
 
-    const handleConnect = () => {      
+    const handleConnect = () => {
       socket.emit("register", userId);
     };
 
@@ -79,6 +80,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/loading-page" element={<LoadingPage />} />
         </Routes>
       </Router>
     </>
