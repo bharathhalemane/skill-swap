@@ -100,3 +100,37 @@ export const endLearning = async (dispatch, id) => {
         toast.error(err.response?.data?.msg)
     }
 }
+
+export const createReview = async ({
+    requestId,
+    revieweeId,
+    rating,
+    review
+}) => {
+    const token = Cookies.get("jwtToken")
+
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_API}/reviews/create`
+        const response = await axios.post(
+            url,
+            {
+                requestId,
+                revieweeId,
+                rating,
+                review 
+            },
+            {
+                headers: {Authorization: `Bearer ${token}`}
+            }
+        )
+        toast.success("Review submitted successfully!")
+        return response.data 
+    } catch (err) {
+        toast.error(
+            err.response?.data?.msg || 
+            err.response?.data?.message ||
+            "Failed to submit review"
+        )
+        throw err 
+    }
+}

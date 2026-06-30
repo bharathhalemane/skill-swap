@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchLearningSkills } from '../../../redux/features/learningSkills/learningSkillsActions'
+import ReviewModal from '../Modals/ReviewModal'
 
 const LearningSkills = () => {
     const dispatch = useDispatch()
     const skillsData = useSelector(state => state.learningSkills.learningSkills)
+    const [reviewTarget, setReviewTarget] = useState(null)
+    const [isReviewOpen, setIsReviewOpen] = useState(false)
 
     useEffect(() => {
         if (skillsData.length === 0) {
@@ -15,8 +18,17 @@ const LearningSkills = () => {
         }
     }, [dispatch])
 
-    const handleLearning = async (id) => {
-        await endLearning(dispatch, id)
+    const handleComplete = (item) => {
+        setReviewTarget(item)
+        setIsReviewOpen(true)
+    }
+
+    const handleReviewClose = async () => {
+        setIsReviewOpen(false)
+        if (reviewTarget) {
+            await endLearning(dispatch, reviewTarget.id)
+            setReviewTarget
+        }
     }
 
     if (skillsData.length === 0) return null
@@ -47,7 +59,9 @@ const LearningSkills = () => {
                                     <span className={styles.status}>In Progress</span>
                                     <button
                                         className={styles.completeBtn}
-                                        onClick={() => handleLearning(item.id)}
+                                        onClick={() => {
+                                            handleComplete(item)
+                                        }}
                                     >
                                         Completed
                                     </button>
@@ -57,6 +71,7 @@ const LearningSkills = () => {
                     ))}
                 </div>
             </div>
+            <ReviewModal isOpen={isReviewOpen} onClose={handleReviewClose} learningItem={reviewTarget}/>
         </>
     )
 }

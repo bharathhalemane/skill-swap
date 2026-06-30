@@ -13,13 +13,14 @@ import SentRequests from './requests/SentRequests/SentRequests'
 import LearningSkills from './LearningSkills/LearningSkills'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProfileData } from '../../redux/features/profile/ProfileActions'
+import TeacherReviews from './Reviews/TeacherReviews'
 
 const Profile = () => {
     const dispatch = useDispatch()
     const token = Cookies.get("jwtToken")
     const userId = Cookies.get("userId")
     const profileData = useSelector(state => state.profile.profile)
-    
+
 
     const getProfileData = async () => {
         dispatch(fetchProfileData())
@@ -71,7 +72,7 @@ const Profile = () => {
                             <BsPersonCircle size={80} color='#e76f51' className={styles.noProfileImage} />
                             <p>No profile data found</p>
                             <div className={styles.editProfileButtonContainer}>
-                                <EditProfileModal profileDetails={profileData}  />
+                                <EditProfileModal profileDetails={profileData} />
                             </div>
                         </div>
                     )}
@@ -91,6 +92,13 @@ const Profile = () => {
                 <ClassSchedule />
                 <Availability />
                 <LearningSkills />
+                <hr />
+                <div style={{ maxWidth: "90%", margin: "0 auto" }}>
+                    <h2 style={{ marginBottom: "16px" }}>
+                        Reviews as Teacher
+                    </h2>
+                    <TeacherReviews teacherId={userId} />
+                </div>
             </div>
             <Footer />
         </>

@@ -56,11 +56,42 @@
     margin: 5px 0;
     color: #777;
 }
-.etcSkillsGrid{
+
+.etcSkillsGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding: 20px;
+}
+
+.reviewBtn {
+    margin-top: 10px;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #ff7a00, #ff9900);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 8px rgba(255, 122, 0, 0.25);
+}
+
+.reviewBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(255, 122, 0, 0.35);
+}
+
+.reviewedBadge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 /* ── Tablet (≤ 1024px) ── */
@@ -132,9 +163,10 @@
         font-size: 1.1rem;
         padding-left: 10px;
     }
-    .etcSkillsGrid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+
+    .etcSkillsGrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }

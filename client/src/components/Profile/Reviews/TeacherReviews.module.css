@@ -1,0 +1,165 @@
+/* ============================================================
+   FILE: client/src/components/Profile/Reviews/TeacherReviews.module.css
+   [NEW FILE]
+   ============================================================ */
+
+.container {
+  max-width: 90%;
+  margin: 0 auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Summary bar ── */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: #f9fafb;
+  padding: 14px 20px;
+  border-radius: 14px;
+}
+
+.avgScore {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+}
+
+.totalCount {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ── Stars ── */
+.starRow {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.starFilled {
+  color: #f59e0b;
+  font-size: 18px;
+}
+
+.starEmpty {
+  color: #d1d5db;
+  font-size: 18px;
+}
+
+/* ── Card list ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+}
+
+/* ── Card header ── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatarFallback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7a00, #ff9900);
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewerName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.skillTag {
+  margin-left: auto;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ── Review text ── */
+.reviewText {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.date {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ── Empty / loading states ── */
+.empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 30px;
+}
+
+.emptyIcon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.loading {
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 16px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 540px) {
+  .container {
+    max-width: 100%;
+    padding-inline: 12px;
+  }
+
+  .skillTag {
+    display: none;
+  }
+}

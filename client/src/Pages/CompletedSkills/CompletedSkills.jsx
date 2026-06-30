@@ -9,6 +9,7 @@ import CompletedSkillSkeleton from "./CompletedSkillSkeleton";
 import SkillCardSkeleton from '../../components/Utils/SkillCard/SkillCardSkeleton'
 import { useSelector, useDispatch } from "react-redux";
 import { fetchComSkills } from "../../redux/features/completedSkills/comSkillsActions";
+import ReviewModal from "../../components/Profile/Modals/ReviewModal";
 
 const apiProgress = {
     loading: 'LOADING',
@@ -22,6 +23,10 @@ const CompletedSkills = () => {
     const [etcSkills, setEtcSkills] = useState([])
     const [etcSkillsProgress, setEtcSkillsProgress] = useState(apiProgress.loading)
     const { learned, taught, swaps } = skills
+
+    const [reviewedMap, setReviewedMap] = useState({})
+    const [reviewTarget, setReviewTarget] = useState(null)
+    const [isReviewOpen, setIsReviewOpen] = useState(false)
 
     useEffect(() => {
         if (!skills || Object.keys(skills).length === 0) {
@@ -44,6 +49,38 @@ const CompletedSkills = () => {
         }
         getEtcSkills()
     }, [dispatch])
+
+    useEffect(() => {
+        if (!learned?.length) return
+        const token = Cookies.get("jwtToken")
+        learned.forEach(async (item) => {
+            try {
+                const res = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_API}/reviews/check/${item._id}`, { headers: { Authorization: 'Bearer ${token' } }
+                )
+                if (res.data.reviewed) {
+                    setReviewedMap(prev => ({ ...prev, [item._id]: true }))
+                }
+            } catch (_) { }
+        })
+    }, [learned])
+
+    const handleOpenReview = (item) => {
+        setReviewTarget({
+            id: item._id,
+            skill: item.skill,
+            partner: item.receiver,
+        })
+        setIsReviewOpen(true)
+    }
+
+    const handleReviewClose = () => {
+        setIsReviewOpen(false)
+        if (reviewTarget) {
+            setReviewedMap(prev => ({ ...prev, [reviewTarget.id]: true }))
+            setReviewTarget(null)
+        }
+    }
 
     return (
         <>
@@ -147,8 +184,8 @@ const CompletedSkills = () => {
                         </div>
                     </div>
                 )}
-
             </div>
+            <ReviewModal isOpen={isReviewOpen} onCLose={handleReviewClose} learningItem={reviewTarget} />
             <Footer />
         </>
     )

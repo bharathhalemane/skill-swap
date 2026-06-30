@@ -9,6 +9,7 @@ import scheduleAndAvailabilityReducer from "../features/scheduleAndAvailability/
 import learningSkillsReducer from "../features/learningSkills/learningSkillsSlice"
 import groupReducer from "../features/groups/groupsSlice"
 import createdContentReducer from "../features/creations/createdContentSlice"
+import reviewsReducer from "../features/reviews/reviewsSlice"
 
 const store = configureStore({
     reducer: {
@@ -20,7 +21,8 @@ const store = configureStore({
         scheduleAndAvailability: scheduleAndAvailabilityReducer,
         learningSkills: learningSkillsReducer,
         groups: groupReducer,
-        createdContent: createdContentReducer
+        createdContent: createdContentReducer,
+        reviews: reviewsReducer,
     }
 })
 
