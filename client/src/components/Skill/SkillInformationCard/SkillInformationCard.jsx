@@ -1,16 +1,20 @@
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Star } from "lucide-react";
 import RequestModel from "../Modals/RequestModel"
 import RequestWithSwap from "../Modals/RequestWithSwap"
 import EditSkillModal from "../Modals/EditSkillModal";
 import styles from './SkillInformationCard.module.css'
 import { BsPersonCircle } from "react-icons/bs";
 import Cookies from "js-cookie"
+import TeacherReviews from "../../Profile/Reviews/TeacherReviews"
+
 
 const SkillInformationCard = ({ data }) => {
     const uId = Cookies.get("userId")
-    const { _id, category, level, title, imageUrl, description, user } = data
+    const { _id, category, level, title, imageUrl, description, user, rating } = data
     const { name, email, profile, _id: userId, phoneNumber } = user || {}
     const { profile_image } = profile || {}
+    const avgRating = rating?.avgRating || 0 
+    const reviewCount = rating?.reviewCount || 0
 
     const deleteSkill = async (skillId) => {
         try {
@@ -44,6 +48,15 @@ const SkillInformationCard = ({ data }) => {
                     }
                     <div className={styles.userInformation}>
                         <h4>{name}</h4>
+                        {
+                            reviewCount > 0 && (
+                                <div className={styles.teacherRating}>
+                                    <Star size={16} className={styles.teacherRatingStar}/>
+                                    <span className={styles.teacherRatingValue}>{avgRating}</span>
+                                    <span className={styles.teacherRatingCount}>{reviewCount} review{reviewCount !== 1 ? 's' : ''}</span>
+                                </div>
+                            )
+                        }
                         <div className={styles.contactInformation}>
                             <div>
                                 <Mail />
@@ -72,6 +85,14 @@ const SkillInformationCard = ({ data }) => {
                         </>
                     }
                 </div>
+                {
+                    userId && (
+                        <div className={styles.topReviews}>
+                            <h3 className={styles.topREviewsHeading}>What learners say</h3>
+                            <TeacherReviews teacherId={userId} limit={3} compact/>
+                        </div>
+                    )
+                }
             </div>
 
             <div className={styles.skillRight}>

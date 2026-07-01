@@ -51,6 +51,14 @@ const userSchema = new mongoose.Schema({
         profile_image: {
             type: String
         }
+    },
+    averageRating: {
+        type: Number,
+        default: 0
+    },
+    totalReviews: {
+        type: Number,
+        default: 0
     }
 },
 {timestamps: true})

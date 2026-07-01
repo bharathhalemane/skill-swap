@@ -142,6 +142,42 @@
     color: #1a1a1a;
 }
 
+/* ── Teacher Rating ─────────────────────────────────────── */
+.teacherRating{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px 0 8px;
+}
+
+.teacherRatingStar{
+    color: #f5c518;
+    fill: #f5c518;
+}
+
+.teacherRatingValue{
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.teacherRatingCount{
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.topReviews{
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.topReviewsHeading{
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 14px;
+    color: #333;
+}
 /* ════════════════════════════════════════════════════════
    RESPONSIVE — Tablet  (≤ 1024px)
 ════════════════════════════════════════════════════════ */

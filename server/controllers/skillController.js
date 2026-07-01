@@ -1,7 +1,39 @@
 const Skill = require("../models/Skill")
 const Request = require("../models/Request")
+const Review = require("../models/Review")
 const cloudinary = require("../config/cloudinary")
 const mongoose = require("mongoose")
+
+const getRatingMapForTeachers = async (teacherIds) => {
+    if (!teacherIds || teacherIds.length === 0) return {}
+
+    const objectIds = teacherIds.map(id => new mongoose.Types.ObjectId(id))
+
+    const results = await Review.aggregate([
+        {
+            $match: {
+                teacher: { $in: objectIds }
+            }
+        },
+        {
+            $group: {
+                _id: "$teacher",
+                avgRating: { $avg: "$rating" },
+                reviewCount: { $sum: 1 }
+            }
+        }
+    ])
+
+    const ratingMap = {}
+    results.forEach(result => {
+        ratingMap[result._id.toString()] = {
+            avgRating: Number(result.avgRating.toFixed(1)),
+            reviewCount: result.reviewCount
+        }
+    })
+
+    return ratingMap
+}
 
 exports.getAllSkills = async (req, res) => {
     try {
@@ -30,10 +62,20 @@ exports.getAllSkills = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(Number(limit))
+            .lean()
 
         const totalSkills = await Skill.countDocuments(filter)
+        const teacherIds = [...new Set(skills.map(skill => skill.user._id.toString()).filter(Boolean))]
+        const ratingMap = await getRatingMapForTeachers(teacherIds)
 
-        res.status(200).json({ skills, totalSkills })
+        const skillsWithRatings = skills.map(skill => ({
+            ...skill,
+            rating: ratingMap[skill.user._id.toString()] || { avgRating: 0, reviewCount: 0 }
+        }))
+
+
+
+        res.status(200).json({ skills: skillsWithRatings, totalSkills })
     } catch (error) {
         res.status(500).json({ message: "Server Error", error })
     }
@@ -43,10 +85,14 @@ exports.getSkillById = async (req, res) => {
     try {
         const skill = await Skill.findById(req.params.skillId)
             .populate("user", "name profile.profile_image _id email phoneNumber")
+            .lean()
 
         if (!skill) {
             return res.status(404).json({ message: "skill not found" })
         }
+
+        const ratingMap = await getRatingMapForTeachers([skill.user._id.toString()])
+        skill.rating = ratingMap[skill.user._id.toString()] || { avgRating: 0, reviewCount: 0 }
 
         res.status(200).json(skill)
     } catch (error) {
@@ -292,6 +338,28 @@ exports.getFourSkills = async (req, res) => {
                 $unwind: "$user"
             },
             {
+                $lookup: {
+                    from: "reviews",
+                    localField: "user._id",
+                    foreignField: "teacher",
+                    as: "reviews"
+                }
+            },
+            {
+                $addFields: {
+                    rating: {
+                        avgRating: {
+                            $cond: [
+                                { $gt: [{ $size: "$teacherReviews" }, 0] },
+                                { $avg: [{ $avg: "$teacherReviews.rating" }, 1] },
+                                0
+                            ]
+                        },
+                        reviewCount: { $size: "$teacherReviews" }
+                    }
+                }
+            },
+            {
                 $project: {
                     id: "$_id",
                     title: 1,
@@ -299,12 +367,13 @@ exports.getFourSkills = async (req, res) => {
                     category: 1,
                     level: 1,
                     description: 1,
+                    rating: 1,
 
                     user: {
                         userId: "$user._id",
                         name: "$user.name",
                         profileImage: "$user.profile.profile_image",
-                        profile: "$user.profile"                        
+                        profile: "$user.profile"
                     }
                 }
             }
@@ -377,8 +446,8 @@ exports.getCategoryWiseSkillCount = async (req, res) => {
 exports.getUserSkillsTitles = async (req, res) => {
     try {
         const { userId } = req.params
-        const skills = await Skill.find({user: userId})
-        
+        const skills = await Skill.find({ user: userId })
+
         const titles = skills.map(skill => skill.title)
         res.status(200).json(titles)
     } catch (err) {

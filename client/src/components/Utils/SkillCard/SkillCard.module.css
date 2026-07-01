@@ -85,6 +85,30 @@
     color: #fff;
 }
 
+/* ── Rating Section ───────────────────────────────────── */
+.ratingRow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.ratingStar {
+    color: #f5a623; /* Gold color for the star */
+    fill: #f5a623; /* Ensure the star is filled with gold */
+}
+
+.ratingValue{
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.ratingCount {
+    font-size: 0.8rem;
+    color: #888;
+}
+
 /* ── Card Detail Section ──────────────────────────────── */
 .skillDetailSection {
     padding: 1rem;

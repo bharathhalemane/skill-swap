@@ -6,7 +6,7 @@ export const fetchSkills = () => async (dispatch, getState) => {
     try {
         dispatch(fetchSkillsStart())
         const { page, filters } = getState().skills
-        const url = `${import.meta.env.VITE_BACKEND_API}/skills?category=${filters.category}&level=${filters.level}&title=${filters.inputValue}&page=${page}&limit=${filters.limit}`
+        const url = `${import.meta.env.VITE_BACKEND_API}/skills?category=${filters.category}&level=${filters.level}&title=${filters.inputValue}&page=${page}&limit=${page === 1? 8 : filters.limit}`
         const response = await axios.get(url)
         const hasMore = page * filters.limit > response.data.totalSkills
         const formattedSkills = response.data.skills.map(skill => ({
@@ -17,6 +17,7 @@ export const fetchSkills = () => async (dispatch, getState) => {
             imageUrl: skill.imageUrl,
             category: skill.category,
             level: skill.level,
+            rating: skill.rating,
             user: {
                 name: skill.user.name,
                 profileImage: skill.user.profile?.profile_image,
@@ -31,6 +32,7 @@ export const fetchSkills = () => async (dispatch, getState) => {
             })
         )
     } catch (err) {
+        console.log(err)
         dispatch(fetchSkillsFailure(err.message))
     }
 }

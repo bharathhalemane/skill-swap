@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import styles from './SkillCard.module.css'
 import { BsPersonCircle } from "react-icons/bs";
+import {Star} from "lucide-react"
 
 const SkillCard = ({ skillsData, creationPage }) => {
     const {
@@ -10,13 +11,16 @@ const SkillCard = ({ skillsData, creationPage }) => {
         category,
         level,
         description,
-        user
+        user,
+        rating
     } = skillsData;
     const { name, profileImage, userId, profile } = user
     let profile_image
     if (profile) {
         profile_image = profile.profile_image
     }
+    const avgRating = rating?.avgRating || 0 
+    const reviewCount = rating?.reviewCount || 0
 
     return (
         <Link
@@ -46,6 +50,15 @@ const SkillCard = ({ skillsData, creationPage }) => {
                 <p className={styles.skillDescription}>
                     {description}
                 </p>
+                {
+                    reviewCount > 0 && (
+                        <div className={styles.ratingRow}>
+                            <Star size={14} className={styles.ratingStar} />
+                            <span className={styles.ratingValue}>{avgRating}</span>
+                            <span className={styles.ratingCount}>{reviewCount}</span>
+                        </div>
+                    )
+                }
                 <div className={styles.instructorInfo}>
                     {
                         profileImage || profile_image ? <img

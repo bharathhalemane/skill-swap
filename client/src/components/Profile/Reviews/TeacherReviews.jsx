@@ -11,14 +11,15 @@ const Stars = ({ value }) => (
     </span>
 )
 
-const TeacherReviews = ({ teacherId }) => {
+const TeacherReviews = ({ teacherId, limit, compact = false }) => {
     const [reviews, setReviews] = useState([])
     const [average, setAverage] = useState(0)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (!teacherId) return
-        axios.get(`${import.meta.env.VITE_BACKEND_API}/reviews/teacher/${teacherId}`)
+        setLoading(true)
+        axios.get(`${import.meta.env.VITE_BACKEND_API}/reviews/teacher/${teacherId}` + (limit ? `?limit=${limit}` : ""))
             .then((res) => {
                 setReviews(res.data.data)
                 setAverage(res.data.average)
@@ -37,11 +38,13 @@ const TeacherReviews = ({ teacherId }) => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.summary}>
-                <span className={styles.avgScore}>{average}</span>
-                <Stars value={Math.round(average)} />
-                <span className={styles.totalCount}>({reviews.length} review {reviews.length !== 1 ? "s" : ""})</span>
-            </div>
+            {
+                !compact && (<div className={styles.summary}>
+                    <span className={styles.avgScore}>{average}</span>
+                    <Stars value={Math.round(average)} />
+                    <span className={styles.totalCount}>({reviews.length} review {reviews.length !== 1 ? "s" : ""})</span>
+                </div>)
+            }
 
             <div className={styles.list}>
                 {
@@ -55,13 +58,13 @@ const TeacherReviews = ({ teacherId }) => {
                                         </div>
                                 }
                                 <div className={styles.meta}>
-                                    <p className={styles.reviewerName}>{r.revierer?.name ?? "Anonymous"}</p>
-                                    <Stars value={r.rating}/>
+                                    <p className={styles.reviewerName}>{r.reviewer?.name ?? "Anonymous"}</p>
+                                    <Stars value={r.rating} />
                                 </div>
                                 <span className={styles.skillTag}>{r.skill?.title}</span>
                             </div>
                             <p className={styles.reviewText}>{r.review}</p>
-                            <p className={styles.data}>{new Date(r.createdAt).toLocaleDateString()}</p>
+                            <p className={styles.date}>{new Date(r.createdAt).toLocaleDateString()}</p>
                         </div>
                     ))
                 }
