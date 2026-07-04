@@ -92,6 +92,42 @@
     display: none;
 }
 
+/* ✅ ADD: Install App button (desktop) */
+.installBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: #E8724B;
+    border: 1.5px solid #E8724B;
+    padding: 0.7rem 1.5rem;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.installBtn:hover {
+    background: linear-gradient(to right, #E8724B, #F5A623);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* ✅ ADD: Install App icon-only button (mobile) */
+.installIconBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #E8724B;
+    border: 1.5px solid #E8724B;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
 

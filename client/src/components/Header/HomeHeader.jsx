@@ -5,15 +5,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import { useState, useEffect } from 'react';
 import axios from "axios"
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux"
 import { fetchProfileData } from '../../redux/features/profile/ProfileActions';
+import {useInstallPrompt} from "../../hooks/useInstallPrompt"
 
 const HomeHeader = () => {
     const dispatch = useDispatch()
     const location = useLocation()
     const navigate = useNavigate()
-
+    const { canInstall, promptInstall } = useInstallPrompt()
+    console.log(canInstall)
     const [menuOpen, setMenuOpen] = useState(false)
     const { profileImage } = useSelector(state => state.profile)
 
@@ -79,6 +81,13 @@ const HomeHeader = () => {
                         </div>
                     </Link>
                 </li>
+                {canInstall && (
+                    <li>
+                        <button className={styles.installBtn} onClick={promptInstall}>
+                            <Download size={20} />            
+                        </button>
+                    </li>                    
+                )}
                 <li>
                     <button className={styles.logoutBtn} onClick={onClickLogout}>
                         Logout
@@ -111,6 +120,16 @@ const HomeHeader = () => {
                         </Link>
                     </li>
                 ))}
+                {
+                    canInstall && (
+                        <li>
+                            <button className={styles.installBtnMobile} onClick={() => { promptInstall(); closeMenu(); }}>
+                                <Download size={20} />
+                                Install App
+                            </button>
+                        </li>
+                    )
+                }
 
                 {/* Profile row */}
                 <li className={styles.profileLogout}>

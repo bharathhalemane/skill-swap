@@ -109,6 +109,43 @@
 .mobileMenu{
     display: none;
 }
+
+.installBtn{
+    display: flex;
+    align-items:center;
+    gap: 6px;
+    background: transparent;
+    color: #E8724B;
+    border: 1px solid #E8724B;
+    padding: 0.5rem 1.5rem;
+    border-radius: 23px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.installBtn:hover {
+    background: linear-gradient(to right, #E8724B, #F5A623);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* ✅ ADD: Install App button (mobile menu) */
+.installBtnMobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: transparent;
+    color: #E8724B;
+    border: 1.5px solid #E8724B;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
 /* ========================
    MOBILE  (≤ 768px)
    ======================== */

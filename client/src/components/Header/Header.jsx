@@ -1,9 +1,12 @@
 import styles from './Header.module.css'
 import { IoMdSwap } from "react-icons/io";
 import { useState } from 'react';
-import { LogIn, Menu } from 'lucide-react';
+import { LogIn, Menu, Download } from 'lucide-react';
+import {useInstallPrompt} from "../../hooks/useInstallPrompt"
 
 const Header = () => {
+    const { canInstall, isInstalled, promptInstall } = useInstallPrompt()
+    console.log(canInstall)
 
     return (
         <nav className={styles.header}>
@@ -24,8 +27,23 @@ const Header = () => {
                         <button>Get Started</button>
                     </a>
                 </li>
+                {canInstall && (
+                    <li>
+                        <button className={styles.installBtn} onClick={promptInstall}>
+                            <Download size={20} />
+                            Install App
+                        </button>
+                    </li>   
+                )}
             </ul>
             <ul className={styles.mobileAuthLinks}>
+                {canInstall && (
+                    <li>
+                        <button className={styles.installIconBtn} onClick={promptInstall} aria-label="Install App">
+                            <Download size={18} />
+                        </button>
+                    </li>
+                )}
                 <li>
                     <a href="/login" className={styles.login}>
                         <button><LogIn size={24}/></button>                        
