@@ -6,7 +6,6 @@ import {useInstallPrompt} from "../../hooks/useInstallPrompt"
 
 const Header = () => {
     const { canInstall, isInstalled, promptInstall } = useInstallPrompt()
-    console.log(canInstall)
 
     return (
         <nav className={styles.header}>
