@@ -10,6 +10,7 @@ import learningSkillsReducer from "../features/learningSkills/learningSkillsSlic
 import groupReducer from "../features/groups/groupsSlice"
 import createdContentReducer from "../features/creations/createdContentSlice"
 import reviewsReducer from "../features/reviews/reviewsSlice"
+import notificationsReducer from "../features/notifications/notificationsSlice"
 
 const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
         groups: groupReducer,
         createdContent: createdContentReducer,
         reviews: reviewsReducer,
+        notifications: notificationsReducer
     }
 })
 

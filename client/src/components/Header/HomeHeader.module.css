@@ -110,6 +110,18 @@
     display: none;
 }
 
+.notifDot{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff3b30;
+    border: 2px solid #fcfaf7
+
+}
+
 .installBtn{
     display: flex;
     align-items:center;
@@ -131,7 +143,7 @@
     border-color: transparent;
 }
 
-/* ✅ ADD: Install App button (mobile menu) */
+
 .installBtnMobile {
     display: flex;
     align-items: center;

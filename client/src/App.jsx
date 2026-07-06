@@ -20,6 +20,7 @@ import CompletedSkills from './Pages/CompletedSkills/CompletedSkills'
 import Creations from './Pages/Creations/Creations'
 import Feedback from './Pages/Feedback/Feedback'
 import LoadingPage from "./Pages/LoadingPage/LoadingPage"
+import NotificationListener from "./components/Notifications/NotificationListener"
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
   return (
     <>
       <ToastContainer position="bottom-right" autoClose={2500} theme='dark' />
+      <NotificationListener />
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />

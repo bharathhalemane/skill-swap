@@ -18,6 +18,7 @@ const HomeHeader = () => {
     console.log(canInstall)
     const [menuOpen, setMenuOpen] = useState(false)
     const { profileImage } = useSelector(state => state.profile)
+    const unreadCount = useSelector(state => state.notifications.unreadCount)
 
     const navLinks = [
         { href: "/home", label: "Home" },
@@ -78,6 +79,7 @@ const HomeHeader = () => {
                                 ? <img src={profileImage} alt="Profile" className={styles.profileImg} />
                                 : <IoPersonCircle className={styles.profileIcon} />
                             }
+                            {unreadCount > 0 && <span className={styles.notifDot}/>}
                         </div>
                     </Link>
                 </li>
@@ -103,6 +105,7 @@ const HomeHeader = () => {
                 aria-expanded={menuOpen}
             >
                 {menuOpen ? <X /> : <Menu />}
+                {unreadCount > 0 && <span className={styles.notifDot}/>}
             </div>
 
             {/* ── MOBILE: Single unified menu ── */}
@@ -143,6 +146,7 @@ const HomeHeader = () => {
                                 ? <img src={profileImage} alt="Profile" className={styles.profileImg} />
                                 : <IoPersonCircle className={styles.profileIcon} />
                             }
+                            {unreadCount > 0 && <span className={styles.notifDot} />}
                         </div>
                         <span className={styles.mobileProfileLabel}>My Profile</span>
                     </Link>

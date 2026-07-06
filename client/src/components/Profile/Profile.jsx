@@ -14,6 +14,7 @@ import LearningSkills from './LearningSkills/LearningSkills'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchProfileData } from '../../redux/features/profile/ProfileActions'
 import TeacherReviews from './Reviews/TeacherReviews'
+import NotificationsPanel from "../Notifications/NotificationPanel"
 
 const Profile = () => {
     const dispatch = useDispatch()
@@ -86,6 +87,7 @@ const Profile = () => {
             <HomeHeader />
             <div className={styles.profilePage}>
                 {ProfileDetails()}
+                <NotificationsPanel/>
                 <ReceivedRequest />
                 <SentRequests />
                 <hr />
