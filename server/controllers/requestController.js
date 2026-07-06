@@ -1,6 +1,7 @@
 const Request = require("../models/Request.js")
 const Skill = require("../models/Skill.js")
 const { getIO, onlineUsers } = require("../socket.js")
+const {createNotification} = require("./notificationController.js")
 
 exports.sendRequest = async (req, res) => {
     try {
@@ -72,6 +73,15 @@ exports.sendRequest = async (req, res) => {
             io.to(receiverSocketId).emit("new_request", populatedRequest, msg)
         }
 
+        await createNotification({
+            recipient: receiverId,
+            sender: req.user.userId,
+            type: "REQUEST_RECEIVED",
+            message: msg,
+            link: "/profile",
+            relatedId: request._id
+        })
+
         res.status(201).json({
             success: true,
             data: request
@@ -126,6 +136,15 @@ exports.resendRequest = async (req, res) => {
         if (receiverSocketId) {
             io.to(receiverSocketId).emit("new_request", populatedRequest, msg)
         }
+
+        await createNotification({
+            recipient: receiverId, 
+            sender: userId,
+            type: "REQUEST_RECEIVED",
+            message: msg,
+            link: "/profile",
+            relatedId: request._id
+        })
 
         res.json({
             success: true,
@@ -233,6 +252,15 @@ exports.acceptRequest = async (req, res) => {
             io.to(senderSocketId).emit("request_accepted", msg)
         }
 
+        await createNotification({
+            recipient: request.sender._id,
+            sender: req.user.userId,
+            type: "REQUEST_ACCEPTED",
+            message: msg,
+            link: "/profile",
+            relatedId: request._id
+        })
+
         res.json({ msg: "Request accepted", request })
     } catch (err) {
         res.status(500).json({ msg: err.message })
@@ -263,6 +291,15 @@ exports.rejectRequest = async (req, res) => {
         if (senderSocketId) {
             io.to(senderSocketId).emit("request_rejected", msg)
         }
+
+        await createNotification({
+            recipient: request.sender._id,
+            sender: req.user.userId,
+            type: "REQUEST_REJECTED",
+            message: msg,
+            link: "/profile",
+            relatedId: request._id
+        })
 
         res.json({ msg: "request rejected", request })
     } catch (err) {
@@ -297,6 +334,15 @@ exports.cancelRequest = async (req, res) => {
         if (receiverSocketId) {
             io.to(receiverSocketId).emit("request_cancelled", request, msg);
         }
+
+        await createNotification({
+            recipient: request.receiver,
+            sender: req.user.userId,
+            type: "REQUEST_CANCELLED",
+            message: msg,
+            link: "/profile",
+            relatedId: request._id
+        })
 
 
         res.json({ msg: "Request cancelled successfully" })
@@ -375,6 +421,7 @@ exports.endLearning = async (req, res) => {
         const userId = req.user.userId
 
         const request = await Request.findById(requestId)
+        .populate("skill","title")
 
         if (!request) {
             return res.status(404).json({ msg: "Request not found" })
@@ -391,6 +438,16 @@ exports.endLearning = async (req, res) => {
         request.updatedAt = new Date()
 
         await request.save()
+
+        const otherPartyId = request.sender.toString() === userId ? request.receiver : request.sender 
+        await createNotification({
+            recipient: otherPartyId,
+            sender: userId, 
+            type: "SESSION_COMPLETED",
+            message: `Learning session for ${request.skill.title} has been marked as completed`,
+            link: "/completed-skills",
+            relatedId: request._id
+        })
 
         res.json({
             success: true,

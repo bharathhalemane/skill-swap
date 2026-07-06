@@ -1,5 +1,6 @@
 const Review = require("../models/Review")
 const Request = require("../models/Request")
+const {createNotification} = require("./notificationController.js")
 
 
 exports.submitReview = async (req, res) => {
@@ -36,6 +37,16 @@ exports.submitReview = async (req, res) => {
             teacher: teacherId,
             rating,
             review,
+        })
+
+        await createNotification({
+            recipient: teacherId,
+            sender: reviewerId,
+            type: "REVIEW_RECEIVED",
+            message: `${request.sender.name} left you a ${rating}-star review for "${request.skill.title}"`,
+            link: "/profile",
+            relatedId: newReview._id
+        
         })
 
         res.status(201).json({ success: true, data: newReview })
