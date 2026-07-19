@@ -21,6 +21,7 @@ import Creations from './Pages/Creations/Creations'
 import Feedback from './Pages/Feedback/Feedback'
 import LoadingPage from "./Pages/LoadingPage/LoadingPage"
 import NotificationListener from "./components/Notifications/NotificationListener"
+import ChatPage from "./Pages/Chat/ChatPage"
 
 
 function App() {
@@ -78,6 +79,12 @@ function App() {
           </ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute>
             <Profile />
+          </ProtectedRoute>} />
+          <Route path="/chat" element={<ProtectedRoute>
+            <ChatPage />
+          </ProtectedRoute>} />
+          <Route path="/chat/:conversationId" element={<ProtectedRoute>
+            <ChatPage />
           </ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

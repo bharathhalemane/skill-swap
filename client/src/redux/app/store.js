@@ -11,6 +11,7 @@ import groupReducer from "../features/groups/groupsSlice"
 import createdContentReducer from "../features/creations/createdContentSlice"
 import reviewsReducer from "../features/reviews/reviewsSlice"
 import notificationsReducer from "../features/notifications/notificationsSlice"
+import chatReducer from "../features/chat/chatSlice"
 
 const store = configureStore({
     reducer: {
@@ -24,7 +25,8 @@ const store = configureStore({
         groups: groupReducer,
         createdContent: createdContentReducer,
         reviews: reviewsReducer,
-        notifications: notificationsReducer
+        notifications: notificationsReducer,
+        chat: chatReducer
     }
 })
 
