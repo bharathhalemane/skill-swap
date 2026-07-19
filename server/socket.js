@@ -14,6 +14,24 @@ const initSocket = (server) => {
             console.log("📡 Online Users:", onlineUsers);
         })
 
+        socket.on("chat:typing", ({ conversationId, toUserId, fromUserId }) => {
+            const targetSocketId = onlineUsers[toUserId]
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("chat:typing", {
+                    conversationId, fromUserId
+                })
+            }
+        })
+
+        socket.on("chat:stop_typing", ({ conversationId, toUserId, fromUserId }) => {
+            const targetSocketId = onlineUsers[toUserId]
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("chat:stop_typing", {
+                    conversationId, fromUserId
+                })
+            }
+        })
+
         socket.on("disconnect", () => {
             for (let user in onlineUsers) {
                 if (onlineUsers[user] === socket.id) {

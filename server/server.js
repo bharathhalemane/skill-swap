@@ -18,6 +18,7 @@ const groupRoutes = require("./routes/groupRoutes")
 const feedbackRoutes = require("./routes/feedbackRoutes")
 const reviewRoutes = require("./routes/reviewRoutes")
 const notificationRoutes = require("./routes/notificationRoutes")
+const chatRoutes = require("./routes/chatRoutes")
 
 require("./config/passport")
 connectDB()
@@ -42,6 +43,7 @@ app.use("/api/groups", groupRoutes)
 app.use("/api/feedback", feedbackRoutes)
 app.use("/api/reviews", reviewRoutes)
 app.use("/api/notifications", notificationRoutes)
+app.use("/api/chat",chatRoutes)
 
 const PORT = process.env.PORT || 5000
 server.listen(PORT, () => console.log(`server running on port ${PORT}`))

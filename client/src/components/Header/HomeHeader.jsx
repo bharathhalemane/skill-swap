@@ -15,7 +15,6 @@ const HomeHeader = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const { canInstall, promptInstall } = useInstallPrompt()
-    console.log(canInstall)
     const [menuOpen, setMenuOpen] = useState(false)
     const { profileImage } = useSelector(state => state.profile)
     const unreadCount = useSelector(state => state.notifications.unreadCount)

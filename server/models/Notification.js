@@ -19,7 +19,8 @@ const notificationSchema = new mongoose.Schema({
             "REQUEST_REJECTED",
             "REQUEST_CANCELLED",
             "REVIEW_RECEIVED",
-            "SESSION_COMPLETED"
+            "SESSION_COMPLETED",
+            "NEW_MESSAGE"
         ],
         required: true
     },
