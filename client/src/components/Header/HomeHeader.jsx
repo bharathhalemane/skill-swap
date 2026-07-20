@@ -8,7 +8,9 @@ import axios from "axios"
 import { Menu, X, Download } from 'lucide-react';
 import { useSelector, useDispatch } from "react-redux"
 import { fetchProfileData } from '../../redux/features/profile/ProfileActions';
-import {useInstallPrompt} from "../../hooks/useInstallPrompt"
+import { fetchUnreadTotal } from "../../redux/features/chat/chatActions"
+import { useInstallPrompt } from "../../hooks/useInstallPrompt"
+import socket from "../../Socket"
 
 const HomeHeader = () => {
     const dispatch = useDispatch()
@@ -17,11 +19,13 @@ const HomeHeader = () => {
     const { canInstall, promptInstall } = useInstallPrompt()
     const [menuOpen, setMenuOpen] = useState(false)
     const { profileImage } = useSelector(state => state.profile)
+    const unreadTotal = useSelector(state => state.chat.unreadTotal)
     const unreadCount = useSelector(state => state.notifications.unreadCount)
 
     const navLinks = [
         { href: "/home", label: "Home" },
         { href: "/find-skills", label: "Find Skills" },
+        { href: "/chat", label: "Chat", badge: unreadTotal},
         { href: "/study-groups", label: "Study Groups" },
         { href: "/completed-skills", label: "Completed Skills" },
         { href: "/creations", label: "Creations" },
@@ -33,6 +37,13 @@ const HomeHeader = () => {
             dispatch(fetchProfileData())
         }
     }, [dispatch])
+
+    useEffect(() => {
+        dispatch(fetchUnreadTotal())
+        const handleIncoming = () => dispatch(fetchUnreadTotal())
+        socket.on("chat:message", handleIncoming)
+        return () => socket.off("chat:message", handleIncoming)
+    },[dispatch])
 
     const isActive = (path) => location.pathname === path ? styles.active : ""
 
@@ -64,6 +75,7 @@ const HomeHeader = () => {
                             className={`${styles.link} ${isActive(link.href)}`}
                         >
                             {link.label}
+                            {!!link.badge && <span className={styles.navBadge}>{link.badge}</span>}
                         </Link>
                     </li>
                 ))}
@@ -78,16 +90,16 @@ const HomeHeader = () => {
                                 ? <img src={profileImage} alt="Profile" className={styles.profileImg} />
                                 : <IoPersonCircle className={styles.profileIcon} />
                             }
-                            {unreadCount > 0 && <span className={styles.notifDot}/>}
+                            {unreadCount > 0 && <span className={styles.notifDot} />}
                         </div>
                     </Link>
                 </li>
                 {canInstall && (
                     <li>
                         <button className={styles.installBtn} onClick={promptInstall}>
-                            <Download size={20} />            
+                            <Download size={20} />
                         </button>
-                    </li>                    
+                    </li>
                 )}
                 <li>
                     <button className={styles.logoutBtn} onClick={onClickLogout}>
@@ -104,7 +116,7 @@ const HomeHeader = () => {
                 aria-expanded={menuOpen}
             >
                 {menuOpen ? <X /> : <Menu />}
-                {unreadCount > 0 && <span className={styles.notifDot}/>}
+                {unreadCount > 0 && <span className={styles.notifDot} />}
             </div>
 
             {/* ── MOBILE: Single unified menu ── */}
@@ -119,6 +131,7 @@ const HomeHeader = () => {
                             onClick={closeMenu}
                         >
                             {link.label}
+                            {!!link.badge && <span className={styles.navBadge}>{link.badge}</span>}
                         </Link>
                     </li>
                 ))}

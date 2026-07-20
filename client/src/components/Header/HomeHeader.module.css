@@ -49,10 +49,26 @@
 .link {
     text-decoration: none;
     color: #555;
+    position: relative;
 }
 
 .link:hover {
     color: #E8724B;
+}
+
+.navBadge{
+    background: #e8724b;
+    color: white;
+    font-size: 0.65rem;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    margin-left: 6px;
+    vertical-align: middle;
 }
 
 .active {

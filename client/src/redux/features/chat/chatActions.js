@@ -10,7 +10,7 @@ import {
     markConversationRead,
     setUnreadTotal
 } from "./chatSlice"
-import { fetchUnreadCount } from "../notifications/notificationsActions"
+
 
 const authHeader = () => ({
     headers: {Authorization: `Bearer ${Cookies.get("jwtToken")}`}
