@@ -78,7 +78,7 @@ const chatSlice = createSlice({
             state.typingByConversation[conversationId] = isTyping
         },
         setUnreadTotal(state, action) {
-            state.unreadTotal=10
+            state.unreadTotal=action.payload
         }
 
     }

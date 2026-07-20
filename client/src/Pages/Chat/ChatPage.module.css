@@ -1,0 +1,54 @@
+.page{
+    max-width: 100%;
+    margin: auto;    
+    padding: 20px 0 40px;
+}
+
+.shell{
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 95vh;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.listPane{
+    width: 320px;
+    flex-shrink: 0;
+    border-right: 1px solid #eee;
+}
+
+.windowPane{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.emptyState{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #9ca3af;
+}
+
+@media(max-width: 780px){
+    .page{
+        max-width: 100%;
+        padding: 0;
+    }
+    .shell{
+        border-radius:0;
+        min-height: calc(100vh - 70px);        
+    }
+    .listPane, .windowPane{
+        width: 100%;
+    }
+    .hideOnMobile{
+        display:none;
+    }
+}
