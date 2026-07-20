@@ -28,6 +28,14 @@ export default defineConfig({
         ],
       },
       workbox: {
+        navigateFallback: "/index.html",
+        navigateFallbackAllowlist: [
+          /^\/$/,
+          /^\/home$/,
+          /^\/profile$/,
+          /^\/feedback$/,
+          /^\/chat(\/.*)?$/,
+        ],
         globPatterns: ['**/*.{js,css,html,svg,png,ico,txt}'],
         runtimeCaching: [
           {
@@ -53,7 +61,9 @@ export default defineConfig({
           },
         ],
       },
-      devOptions: { enabled: true, type: 'module' },
+      devOptions: { enabled: false },
     })
   ],
 })
+
+//devOptions: {enabled: true, type: "module"}

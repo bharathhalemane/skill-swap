@@ -9,7 +9,6 @@ const ICONS = {
     REQUEST_ACCEPTED: CheckCircle2, 
     REQUEST_REJECTED: XCircle, 
     REQUEST_CANCELLED: Ban,
-    REQUEST_RECEIVED: Star, 
     SESSION_COMPLETED: GraduationCap
 }
 

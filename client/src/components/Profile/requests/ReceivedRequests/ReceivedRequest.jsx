@@ -1,18 +1,32 @@
 import { acceptRequest, rejectRequest } from "../../requestAPi"
 import { useEffect, useState } from "react"
 import styles from "./ReceivedRequest.module.css"
-import { ArrowRight, ArrowRightLeft, Calendar, Check, X } from "lucide-react"
+import { ArrowRight, ArrowRightLeft, Calendar, Check, X, MessageCircle } from "lucide-react"
 import { BsPersonCircle } from "react-icons/bs"
 import Cookies from "js-cookie"
 import { socket } from "../../../../Socket"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
+import {useNavigate} from "react-router-dom"
 import { fetchReceivedRequest } from "../../../../redux/features/requests/requestsAction"
+import {getOrCreateConversationByRequest} from "../../../../redux/features/chat/chatActions"
 
 const ReceivedRequest = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [callData, setCallData] = useState(false)
     const requestsData = useSelector(state => state.requests.receivedRequest)
+
+    const handleMessageClick = async (requestId) => {
+        try{
+            const conversation = await getOrCreateConversationByRequest(requestId)
+            navigate(`/chat/${conversation._id}`)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+
     useEffect(() => {
         if (requestsData.length === 0) {
             dispatch(fetchReceivedRequest())
@@ -164,6 +178,11 @@ const ReceivedRequest = () => {
                                     </div>
                                 </div>
                                 <div className={styles.right}>
+                                    {req.status === "ACCEPTED" && (
+                                        <button className={styles.messageBtn} onClick={()=> handleMessageClick(req._id)}>
+                                            <MessageCircle size={16}/> Message
+                                        </button>
+                                    )}
                                     <div className={`${styles.status} ${styles[req.status]}`}>
                                         {req.status}
                                     </div>

@@ -1,16 +1,29 @@
 import { useEffect, useState } from 'react'
 import styles from './SentRequests.module.css'
 import { resendRequest, cancelRequest } from '../../requestAPi'
-import { ArrowRight, ArrowRightLeft, RotateCcw, Send, X } from 'lucide-react'
+import { ArrowRight, ArrowRightLeft, MessageCircle, RotateCcw, Send, X } from 'lucide-react'
 import { BsPersonCircle } from 'react-icons/bs'
 import { socket } from '../../../../Socket'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from "react-redux"
+import {useNavigate} from "react-router-dom"
 import { fetchSentRequests } from '../../../../redux/features/requests/requestsAction'
+import {getOrCreateConversationByRequest} from '../../../../redux/features/chat/chatActions'
+
 
 const SentRequests = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const data = useSelector(state => state.requests.sentRequest)
+
+    const handleMessageClick = async ( requestId )=> {
+        try {
+            const conversation = await getOrCreateConversationByRequest(requestId)
+            navigate(`/chat/${conversation._id}`)
+        }catch(err){
+            console.log(err)
+        }
+    }
 
     useEffect(() => {
         if (data.length === 0) {
@@ -162,6 +175,11 @@ const SentRequests = () => {
                                             </div>
                                         </div>
                                         <div className={styles.right}>
+                                            {req.status === "ACCEPTED" && (
+                                                <button className={styles.messageBtn} onCLick={() => handleMessageClick(req._id)}>
+                                                    <MessageCircle size={16}/> Message
+                                                </button>
+                                            )}
                                             <div className={`${styles.status} ${styles[req.status]}`}>
                                                 {req.status}
                                             </div>
