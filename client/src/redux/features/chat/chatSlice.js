@@ -21,11 +21,11 @@ const chatSlice = createSlice({
         },
         chatRequestFailure(state, action) {
             state.loading = false
-            state.conversations = action.payload
+            state.error = action.payload
         },
         setConversations(state, action) {
-          state.loading = false
-          state.conversations = action.payload  
+            state.loading = false
+            state.conversations = action.payload  
         },
         upsertConversation(state, action) {
             const conv= action.payload

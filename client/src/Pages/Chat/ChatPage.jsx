@@ -2,7 +2,7 @@ import {useEffect} from "react"
 import {useParams, useNavigate} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux"
 import HomeHeader from "../../components/Header/HomeHeader"
-// import ConversationList from "./components/ConversationList"
+import ConversationList from "./components/ConversationList"
 import ChatWindow from "./components/ChatWindow"
 import {fetchConversations}from "../../redux/features/chat/chatActions"
 import {MessageSquare} from "lucide-react"
@@ -14,13 +14,11 @@ const ChatPage = () => {
     const { conversationId } = useParams()
     const conversations = useSelector(state => state.chat.conversations)
     const loading = useSelector(state=> state.chat.loading)
-
     useEffect(() => {
-        dispatch(fetchConversations())
+        dispatch(fetchConversations())  
     }, [dispatch])
     
-    const activeConversation = false
-    // conversations.find(c => c._id === conversationId) 
+    const activeConversation = conversations.find(c => c._id === conversationId) 
 
 
     return <>
@@ -28,12 +26,17 @@ const ChatPage = () => {
         <div className={styles.page}>
             <div className={styles.shell}>
                 <div className={`${styles.listPane} ${conversationId ? styles.hideOnMobile : ""}`}>
-                    
+                    <ConversationList
+                        conversations={conversations}
+                        loading={loading}
+                        activeId={conversationId}
+                        onSelect={(id) => navigate(`/chat/${id}`)}
+                    />
                 </div>
                 <div className={`${styles.windowPane} ${!conversationId ? styles.hideOnMobile : ""}`}>
                     {
                         activeConversation?(
-                        <ChatWindow />
+                        <ChatWindow conversation={activeConversation} onBack={() => navigate("/chat")}/>
                         ) : (
                                 <div className={styles.emptyState}>
                                     <MessageSquare size={48} strokeWidth={1.5} />

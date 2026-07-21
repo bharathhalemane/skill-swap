@@ -22,6 +22,7 @@ export const fetchConversations = () => async (dispatch) => {
     try {
         dispatch(chatRequestFailure())
         const res = await axios.get(`${BASE}/conversations`, authHeader())
+        
         dispatch(setConversations(res.data.data))
     } catch (err) {
         dispatch(chatRequestFailure(err.message))
