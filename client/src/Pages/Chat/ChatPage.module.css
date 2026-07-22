@@ -1,7 +1,6 @@
+
 .page{
-    max-width: 100%;
-    margin: auto;    
-    padding: 20px 0 40px;
+    max-width: 100%; 
     padding-top: 9vh;
 }
 
@@ -12,6 +11,7 @@
     overflow: hidden;
     height: 90vh;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding-bottom:0 ;
 }
 
 .listPane{
@@ -37,7 +37,13 @@
     color: #9ca3af;
 }
 
-@media(max-width: 780px){
+@media(max-width: 780px) {
+    .listPane{
+        width:280px;
+    }
+}
+
+@media(max-width: 480px){
     .page{
         max-width: 100%;
         padding: 0;

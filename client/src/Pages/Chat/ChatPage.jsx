@@ -1,28 +1,43 @@
-import {useEffect} from "react"
-import {useParams, useNavigate} from "react-router-dom"
-import {useDispatch, useSelector} from "react-redux"
+import { useEffect } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import HomeHeader from "../../components/Header/HomeHeader"
 import ConversationList from "./components/ConversationList"
 import ChatWindow from "./components/ChatWindow"
-import {fetchConversations}from "../../redux/features/chat/chatActions"
-import {MessageSquare} from "lucide-react"
+import { fetchConversations } from "../../redux/features/chat/chatActions"
+import { MessageSquare } from "lucide-react"
 import styles from "./ChatPage.module.css"
+import socket from '../../Socket'
+
 
 const ChatPage = () => {
-    const dispatch = useDispatch() 
-    const navigate = useNavigate() 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { conversationId } = useParams()
     const conversations = useSelector(state => state.chat.conversations)
-    const loading = useSelector(state=> state.chat.loading)
+    const loading = useSelector(state => state.chat.loading)
+
     useEffect(() => {
-        dispatch(fetchConversations())  
+        dispatch(fetchConversations())
     }, [dispatch])
-    
-    const activeConversation = conversations.find(c => c._id === conversationId) 
+
+    useEffect(() => {
+        const handleConversationUpdate = () => {
+            dispatch(fetchConversations());
+        };
+
+        socket.on("chat:newConv", handleConversationUpdate);
+
+        return () => {
+            socket.off("chat:newConv", handleConversationUpdate);
+        };
+    }, [dispatch]);
+
+    const activeConversation = conversations.find(c => c._id === conversationId)
 
 
     return <>
-        <HomeHeader />
+        <div className={styles.header}><HomeHeader /></div>
         <div className={styles.page}>
             <div className={styles.shell}>
                 <div className={`${styles.listPane} ${conversationId ? styles.hideOnMobile : ""}`}>
@@ -35,14 +50,14 @@ const ChatPage = () => {
                 </div>
                 <div className={`${styles.windowPane} ${!conversationId ? styles.hideOnMobile : ""}`}>
                     {
-                        activeConversation?(
-                        <ChatWindow conversation={activeConversation} onBack={() => navigate("/chat")}/>
+                        activeConversation ? (
+                            <ChatWindow conversation={activeConversation} onBack={() => navigate("/chat")} />
                         ) : (
-                                <div className={styles.emptyState}>
-                                    <MessageSquare size={48} strokeWidth={1.5} />
-                                    <p>Pick a conversation to start chatting</p>
-                                </div>
-                    )}
+                            <div className={styles.emptyState}>
+                                <MessageSquare size={48} strokeWidth={1.5} />
+                                <p>Pick a conversation to start chatting</p>
+                            </div>
+                        )}
                 </div>
             </div>
         </div>

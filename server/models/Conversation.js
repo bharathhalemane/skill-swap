@@ -5,19 +5,24 @@ const conversationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "request",
         required: true,
-         unique: true
+        unique: true
     },
     participants: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     }],
+    unreadCount: {
+        type: Map,
+        of: Number,
+        default: {}
+    },
     lastMessage: {
         type: String,
         default: ""
     },
     lastMessageAt: {
-        type: Date, 
+        type: Date,
         default: Date.now
     },
     lastMessageSender: {

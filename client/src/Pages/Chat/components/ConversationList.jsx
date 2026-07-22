@@ -1,6 +1,10 @@
 import Cookies from "js-cookie"
 import { BsPersonCircle } from "react-icons/bs"
 import styles from "./ConversationList.module.css"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import socket from '../../../Socket'
+
 
 const timeAgo = (date) => {
     if (!date) return ""
@@ -9,16 +13,19 @@ const timeAgo = (date) => {
 
     const minutes = Math.floor(seconds / 60)
     if (minutes < 60) return `${minutes}m`
-    
+
     const hours = Math.floor(minutes / 60)
     if (hours < 24) return `${hours}h`
-    
-    const days = Math.floor(hours / 24) 
+
+    const days = Math.floor(hours / 24)
     return `${days}d`
 }
 
 const ConversationList = ({ conversations, loading, activeId, onSelect }) => {
     const myId = Cookies.get("userId")
+    const dispatch = useDispatch()
+
+
     if (loading && conversations.length === 0) {
         return <div className={styles.state}>Loading conversations...</div>
     }
@@ -35,11 +42,11 @@ const ConversationList = ({ conversations, loading, activeId, onSelect }) => {
         <ul className={styles.list}>
             {conversations.map((conv) => {
                 const otherUser = conv.participants?.find(p => p._id !== myId)
-                const skillTitle = conv.requestId?.skill?.title 
+                const skillTitle = conv.requestId?.skill?.title
 
                 return (
                     <li className={`${styles.item} ${activeId === conv._id ? styles.active : ""}`} key={conv._id} onClick={() => onSelect(conv._id)}>
-                        {otherUser?.profile?.profile_image ? <img src={otherUser.profile.profile_image} alt="" classname={styles.avatar} /> : <BsPersonCircle className={styles.avatarFallback} />}
+                        {otherUser?.profile?.profile_image ? <img src={otherUser.profile.profile_image} alt="" className={styles.avatar} /> : <BsPersonCircle className={styles.avatarFallback} />}
                         <div className={styles.info}>
                             <div className={styles.topRow}>
                                 <span className={styles.name}>{otherUser?.name}</span>

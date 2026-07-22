@@ -40,6 +40,8 @@ exports.getOrCreateConversation = async (req, res) => {
             }
         })
 
+
+
         res.json({ success: true, data: conversation })
     } catch (err) {
         res.status(500).json({ msg: err.message })
@@ -128,6 +130,11 @@ exports.sendMessage = async (req, res) => {
             text: text.trim(),
             status: recipientSocketId ? "delivered" : 'sent'
         })
+        const currentUnread = conversation.unreadCount.get(recipientId.toString()) || 0;
+        conversation.unreadCount.set(
+            recipientId.toString(),
+            currentUnread + 1
+        );
 
         conversation.lastMessage = text.trim()
         conversation.lastMessageAt = new Date()
@@ -142,6 +149,10 @@ exports.sendMessage = async (req, res) => {
                 conversationId,
                 message: populatedMessage
             })
+
+            io.to(recipientSocketId).emit("chat:newConv", {
+                conversationId
+            });
         } else {
             await createNotification({
                 recipient: recipientId,

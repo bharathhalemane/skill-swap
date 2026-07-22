@@ -16,7 +16,7 @@ const NotificationListener = () => {
         const userId = Cookies.get("userId")
         if (!userId) return 
         
-        dispatch(fetchUnreadCount)
+        dispatch(fetchUnreadCount())
 
         const handleNewNotification = (payload) => {
             dispatch(addNotification(payload))

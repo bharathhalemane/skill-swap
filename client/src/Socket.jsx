@@ -6,7 +6,13 @@ export const socket = io("http://localhost:5000", {
 })
 
 socket.on("connect", () => {
-    // console.log("✅ Connected to server:", socket.id)
+    console.log("connected", socket.id)
+})
+socket.on("disconnect", (reason) => {
+    console.log("disconnected:", reason)
+})
+socket.on("connect_error", (err) => {
+    console.log("connect error:", err.message)
 })
 
 export default socket

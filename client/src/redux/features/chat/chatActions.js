@@ -66,7 +66,7 @@ export const sendChatMessage = (conversationId, text) => async (dispatch) => {
 export const markConversationAsRead = (conversationId) => async (dispatch) => {
     try {
         await axios.put(`${BASE}/${conversationId}/read`, {}, authHeader())
-        dispatch(markConversationAsRead(conversationId))
+        dispatch(markConversationRead(conversationId))
         dispatch(fetchUnreadTotal())
     }catch(err){
         console.log(err)

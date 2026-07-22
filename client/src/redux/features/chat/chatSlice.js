@@ -52,7 +52,7 @@ const chatSlice = createSlice({
             const { conversationId, message } = action.payload
             const existing = state.messagesByConversation[conversationId] || []
             
-            if (existing.some(m => m._id === messages._id)) return
+            if (existing.some(m => m._id === message._id)) return
             state.messagesByConversation[conversationId] = [...existing, message]
             
             const convIdx = state.conversations.findIndex(c => c._id === conversationId)
