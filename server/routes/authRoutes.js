@@ -2,10 +2,16 @@ const express = require("express")
 const { signup, login, forgotPassword, resetPassword } = require("../controllers/authController")
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
+const {
+    loginLimiter,
+    signupLimiter,
+    forgotPasswordLimiter,
+    resetPasswordLimiter
+} = require("../middleware/rateLimiter")
 const router = express.Router()
 
-router.post("/signup", signup)
-router.post("/login", login)
+router.post("/signup", signupLimiter, signup)
+router.post("/login", loginLimiter, login)
 
 
 router.get("/google", passport.authenticate("google", {
@@ -36,8 +42,8 @@ router.get('/github/callback', passport.authenticate('github', { session: false 
     )
 })
 
-router.post("/forgot-password", forgotPassword)
-router.post("/reset-password/:token", resetPassword)
+router.post("/forgot-password", forgotPasswordLimiter, forgotPassword)
+router.post("/reset-password/:token", resetPasswordLimiter, resetPassword)
 
 
 

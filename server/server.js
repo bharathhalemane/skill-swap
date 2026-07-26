@@ -6,6 +6,7 @@ const { initSocket } = require("./socket")
 
 const connectDB = require("./config/db")
 const cors = require("cors")
+const helmet = require("helmet")
 const passport = require("passport")
 
 const userRoutes = require("./routes/user")
@@ -28,7 +29,11 @@ const app = express()
 const server = http.createServer(app)
 initSocket(server)
 
-app.use(cors())
+app.user(helmet())
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(passport.initialize())
@@ -43,7 +48,7 @@ app.use("/api/groups", groupRoutes)
 app.use("/api/feedback", feedbackRoutes)
 app.use("/api/reviews", reviewRoutes)
 app.use("/api/notifications", notificationRoutes)
-app.use("/api/chat",chatRoutes)
+app.use("/api/chat", chatRoutes)
 
 const PORT = process.env.PORT || 5000
 server.listen(PORT, () => console.log(`server running on port ${PORT}`))
