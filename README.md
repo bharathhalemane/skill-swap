@@ -8,7 +8,7 @@
 
 ## 📖 About
 
-Skill Swap is a community-driven platform where users can list skills they offer and skills they want to learn, then connect with others for a mutual exchange. Browse skill listings, send swap requests, join study groups, and schedule sessions — all in one place.
+Skill Swap is a community-driven platform where users can list skills they offer and skills they want to learn, then connect with others for a mutual exchange. Browse skill listings, send swap requests, chat in real time once a request is accepted, join study groups, schedule sessions, and rate your teachers — all in one installable, app-like experience.
 
 ---
 
@@ -20,10 +20,14 @@ Skill Swap is a community-driven platform where users can list skills they offer
 - 📚 **Skill Listings** — Post skills with title, category, level (Beginner / Intermediate / Advanced), duration, and a cover image
 - 🔍 **Browse & Discover** — Search and filter skills posted by other users
 - 🤝 **Swap Requests** — Send, receive, and manage skill exchange requests
-- ✅ **Completed Swaps** — Track your finished skill exchanges
+- 💬 **Real-Time Chat** — Per-request chat that unlocks once a swap request is accepted, with a dedicated chat page, conversation list, typing indicators, and unread badges (Socket.IO)
+- 🔔 **Real-Time Notifications** — In-app notification center with unread counts, live socket-based updates, and a browser tab badge (Badging API) for new activity
+- ⭐ **Ratings & Reviews** — Leave a 5-star rating and written review for a teacher after a completed swap; view aggregated reviews on skill and profile pages
+- ✅ **Completed Swaps** — Track your finished skill exchanges and leave reviews
 - 👥 **Study Groups** — Create or join online/offline study groups with capacity limits and join-request approval
 - 🗓️ **Class Scheduling & Availability** — Set your availability and schedule sessions with matched users
-- 💬 **Real-time Presence** — Socket.IO tracks online users in real time
+- 📡 **Real-time Presence** — Socket.IO tracks online users in real time
+- 📲 **Installable PWA** — Installable on desktop and mobile with offline-friendly caching (Workbox), a custom install prompt, and app icons/manifest
 - 📱 **Responsive Design** — Fully usable on desktop and mobile
 
 ---
@@ -38,7 +42,9 @@ Skill Swap is a community-driven platform where users can list skills they offer
 | React Router v7 | Client-side routing |
 | Redux Toolkit | Global state management |
 | Tailwind CSS v4 | Utility-first styling |
-| Socket.IO Client | Real-time online presence |
+| CSS Modules | Component-scoped styling (Chat, Notifications, Reviews) |
+| Socket.IO Client | Real-time presence, chat, and notifications |
+| vite-plugin-pwa (Workbox) | PWA manifest, service worker, and caching strategies |
 | Axios | HTTP requests |
 | Lucide React / React Icons | Icon libraries |
 | React Toastify | Toast notifications |
@@ -55,7 +61,7 @@ Skill Swap is a community-driven platform where users can list skills they offer
 | Bcryptjs | Password hashing |
 | Cloudinary + Multer | Image upload and storage |
 | Nodemailer | Email (password reset) |
-| Socket.IO | Real-time online-user tracking |
+| Socket.IO | Real-time presence, chat messaging, and notification delivery |
 
 ### Deployment
 
@@ -73,14 +79,16 @@ Skill Swap is a community-driven platform where users can list skills they offer
 ```
 skill-swap/
 ├── client/                    # React + Vite frontend
-│   ├── public/
+│   ├── public/                # PWA icons, manifest assets
 │   └── src/
 │       ├── assets/
 │       ├── components/
 │       │   ├── Auth/
 │       │   ├── Footer/
 │       │   ├── Header/
+│       │   ├── Notifications/     # Notification panel & unread indicators
 │       │   ├── Profile/
+│       │   │   └── Reviews/       # TeacherReviews, ReviewModal
 │       │   ├── Skill/
 │       │   └── Utils/
 │       ├── Pages/
@@ -88,17 +96,26 @@ skill-swap/
 │       │   ├── Auth/
 │       │   ├── Dashboard/
 │       │   ├── BrowseSkills/
+│       │   ├── Chat/               # ChatPage, ConversationList, ChatWindow, MessageBubble
+│       │   │   └── components/
 │       │   ├── CompletedSkills/
+│       │   ├── Feedback/
 │       │   ├── GroupPage/
 │       │   └── StudyGroups/
-│       ├── redux/             # Redux slices & store
+│       ├── redux/              # Redux slices & store (chat, notifications, reviews, etc.)
+│       ├── hooks/               # useInstallPrompt, useAppBadge
 │       ├── ProtectedRoute/
-│       ├── Socket.jsx         # Socket.IO client setup
+│       ├── Socket.jsx           # Socket.IO client setup
+│       ├── vite.config.js       # PWA plugin & Workbox config
 │       └── App.jsx
 │
 └── server/                    # Node.js / Express backend
     ├── config/                # DB connection, Cloudinary, Passport
     ├── controllers/           # Route logic
+    │   ├── chatController.js
+    │   ├── notificationController.js
+    │   ├── reviewController.js
+    │   └── ...
     ├── middleware/            # Auth middleware
     ├── models/
     │   ├── User.js
@@ -106,7 +123,11 @@ skill-swap/
     │   ├── Request.js
     │   ├── Group.js
     │   ├── Availability.js
-    │   └── ClassSchedule.js
+    │   ├── ClassSchedule.js
+    │   ├── Conversation.js    # Per-request chat conversations
+    │   ├── Message.js         # Chat messages
+    │   ├── Notification.js    # Persisted notifications
+    │   └── Review.js          # Ratings & reviews
     ├── routes/
     │   ├── authRoutes.js
     │   ├── skillsRoutes.js
@@ -114,10 +135,13 @@ skill-swap/
     │   ├── groupRoutes.js
     │   ├── availabilityRoutes.js
     │   ├── classScheduleRoutes.js
+    │   ├── chatRoutes.js
+    │   ├── notificationRoutes.js
+    │   ├── reviewRoutes.js
     │   ├── user.js
     │   └── upload.js
-    ├── utils/
-    ├── socket.js              # Socket.IO server setup
+    ├── utils/                 # createNotification() helper, etc.
+    ├── socket.js              # Socket.IO server setup (presence, chat, notifications)
     └── server.js
 ```
 
@@ -218,6 +242,20 @@ npm run dev
 ```
 
 The app will open at `http://localhost:5173`.
+
+> 💡 **PWA note:** the install prompt and full offline caching behavior are best tested against a production build (`npm run build && npm run preview`), since Workbox service workers are disabled by default in Vite's dev server.
+
+---
+
+## 💬 Real-Time Features
+
+Skill Swap uses a single shared Socket.IO connection (`Socket.jsx`) for three real-time systems:
+
+- **Presence** — tracks which users are currently online.
+- **Chat** — once a swap request is accepted, a per-request conversation is unlocked. Messages, typing indicators, and read state are relayed live, with an unread badge shown in the header.
+- **Notifications** — actions like new messages, accepted requests, and reviews trigger a non-blocking `createNotification()` call on the server, which persists the notification to MongoDB and emits it over the socket. The client shows a live-updating unread count and a browser tab badge (Badging API) while the app is open.
+
+> Push notifications for when the app is fully closed (OS-level badges via Web Push / VAPID) are planned as a future enhancement — the integration hook already exists in the codebase.
 
 ---
 

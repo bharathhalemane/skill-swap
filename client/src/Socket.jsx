@@ -1,6 +1,7 @@
 import { io } from "socket.io-client"
 
-export const socket = io("http://localhost:5000", {
+const socketUrl = import.meta.env.VITE_BACKEND
+export const socket = io(socketUrl, {
     transports: ["websocket"],
     withCredentials: true
 })
