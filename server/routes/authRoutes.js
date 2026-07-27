@@ -1,18 +1,21 @@
 const express = require("express")
-const { signup, login, forgotPassword, resetPassword } = require("../controllers/authController")
+const { signup, login, forgotPassword, resetPassword, verifyOtp, resendOtp } = require("../controllers/authController")
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
 const {
     loginLimiter,
     signupLimiter,
     forgotPasswordLimiter,
-    resetPasswordLimiter
+    resetPasswordLimiter,
+    verifyOtpLimiter,
+    resendOtpLimiter
 } = require("../middleware/rateLimiter")
 const router = express.Router()
 
 router.post("/signup", signupLimiter, signup)
 router.post("/login", loginLimiter, login)
-
+router.post("/verify-otp", verifyOtpLimiter, verifyOtp)
+router.post("/resend-otp", resendOtpLimiter, resendOtp)
 
 router.get("/google", passport.authenticate("google", {
     scope: ["profile", "email"]

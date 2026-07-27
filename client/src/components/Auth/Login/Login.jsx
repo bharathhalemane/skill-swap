@@ -70,7 +70,7 @@ const Login = () => {
             }
             setApiStatus(apiProgress.success)
         } catch (err) {
-            console.log(err)
+            // console.log(err)
             setErrorMessage("Sorry, we are fixing try after sometime")
             setError(true)
             setApiStatus(apiProgress.success)

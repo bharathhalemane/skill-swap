@@ -44,6 +44,7 @@ passport.use(
             email,
             googleId: profile.id,
             password: "google-auth",
+            isVerified: true,
             profile: {
               profile_image: imageUrl,
               imageType: "cloudinary"
@@ -118,6 +119,7 @@ passport.use(
             name: profile.displayName || profile.username, email,
             github: profile.id,
             password: 'github-auth',
+            isVerified: true,
             profile: {
               profile_image: imageUrl,
               imageType: "cloudinary"

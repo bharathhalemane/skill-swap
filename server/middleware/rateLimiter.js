@@ -32,4 +32,27 @@ const signupLimiter = rateLimit({
     message: { message: "Too many accounts created from this network. Please try again later." }
 })
 
-module.exports = { loginLimiter, forgotPasswordLimiter, resetPasswordLimiter, signupLimiter }
+const verifyOtpLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {message: "Too many verification attempts. Please try again later."}
+})
+
+const resendOtpLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 3,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {message: "Too many OTP requests. Please wait before requesting another."},
+})
+
+module.exports = {
+    loginLimiter,
+    forgotPasswordLimiter,
+    resetPasswordLimiter,
+    signupLimiter,
+    verifyOtpLimiter,
+    resendOtpLimiter,
+}

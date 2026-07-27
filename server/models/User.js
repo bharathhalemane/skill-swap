@@ -42,6 +42,20 @@ const userSchema = new mongoose.Schema({
     lockUntil: {
         type: Date,
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    emailOTP: {
+        type: String,
+    },
+    emailOTPExpire: {
+        type: Date,
+    },
+    otpAttempts: {
+        type: Number,
+        default: 0,
+    },
     profile: {
         name: {
             type: String

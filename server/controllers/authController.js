@@ -4,9 +4,47 @@ const bcrypt = require("bcryptjs");
 const crypto = require('node:crypto')
 const sendEmail = require('../utils/sendEmail')
 const { isStrongPassword, PASSWORD_POLICY_MESSAGE } = require('../utils/passwordPolicy')
+const { generateOtp, hashOtp, OTP_EXPIRY_MS } = require("../utils/otp")
 
 const MAX_FAILED_ATTEMPTS = 5
 const LOCK_DURATION_MS = 15 * 60 * 1000
+
+const MAX_OTP_ATTEMPTS = 5
+
+const sendOtpEmail = async (user, otp) => {
+    const message = `
+        <div style="font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f5; padding: 32px 0;">
+          <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <div style="background-color: #E8724B; padding: 24px 32px;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 600;">Skill Swap</h1>
+            </div>
+            <div style="padding: 32px;">
+              <h2 style="margin: 0 0 16px; color: #1a1a1a; font-size: 18px;">Verify your email</h2>
+              <p style="margin: 0 0 16px; color: #4b5563; font-size: 14px; line-height: 1.6;">
+                Use the code below to verify your Skill Swap account. It expires in 10 minutes.
+              </p>
+              <div style="text-align: center; margin: 28px 0;">
+                <span style="display: inline-block; background-color: #f9fafb; border: 1px solid #f0f0f0; border-radius: 8px; padding: 16px 32px; font-size: 28px; font-weight: 700; letter-spacing: 8px; color: #E8724B;">
+                  ${otp}
+                </span>
+              </div>
+              <p style="margin: 0; color: #6b7280; font-size: 13px; line-height: 1.5;">
+                If you didn't create a Skill Swap account, you can safely ignore this email.
+              </p>
+            </div>
+            <div style="background-color: #f9fafb; padding: 16px 32px; border-top: 1px solid #f0f0f0;">
+              <p style="margin: 0; color: #9ca3af; font-size: 11px;">Skill Swap · Peer-to-peer skill exchange for students</p>
+            </div>
+          </div>
+        </div>
+    `
+
+    await sendEmail({
+        to: user.email,
+        subject: "verify your Skill Swap account",
+        html: message,
+    })
+}
 
 exports.signup = async (req, res) => {
     try {
@@ -15,6 +53,15 @@ exports.signup = async (req, res) => {
 
         if (!name || !email || !password || !confirmPassword) {
             return res.status(400).json({ message: "All fields are required" });
+        }
+
+        if (!isValidEmailFormat(email)) {
+            return res.status(400).json({ message: "Please enter a valid email address" });
+        }
+
+        const domainOk = await domainHasMailServer(email)
+        if (!domainOk) {
+            return res.status(400).json({ message: "This email domain doesn't appear to accept mail. Please check for typos." })
         }
 
         if (password !== confirmPassword) {
@@ -30,16 +77,96 @@ exports.signup = async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        const otp = generateOtP()
+
         const newUser = await User.create({
-            name, email, password: hashedPassword
+            name, email, password: hashedPassword,
+            isVerified: true,
+            emailOTP: hashOtp(otp),
+            emailOTPExpire: Date.now() + OTP_EXPIRY_MS,
         })
 
-        res.status(201).json({ message: "User registered successfully", userId: newUser._id });
+        await sendOtpEmail(newUser, otp)
+
+        res.status(201).json({ message: "Account created. Please check your email for verification code.", userId: newUser._id });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
+    }
+}
+
+exports.verifyOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body || {}
+        if (!email || !top) {
+            return res.status(400).json({ message: "Email and code are required" })
+        }
+
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or code" })
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({ message: "Account is already verified" })
+        }
+
+        if (!user.emailOTP || !user.emailOTPExpire || user.emailOTPExpire < Date.now()) {
+            return res.status(400).json({ message: "Code expired. Please request a new one." })
+        }
+
+        if (hashOtp(otp) !== user.emailOTP) {
+            user.otpAttempts = (user.otpAttempts || 0) + 1
+            if (user.otpAttempts >= MAX_OTP_ATTEMPTS) {
+                user.emailOTP = undefined
+                user.emailOTPExpire = undefined
+                user.otpAttempts = 0
+                await user.save()
+                return res.status(400).json({ message: "Too many incorrect attempts. Please request a new code." })
+            }
+            await user.save()
+            return res.status(400).json({ message: "Incorrect code" })
+        }
+
+        user.isVerified = true
+        user.emailOTP = undefined
+        user.emailOTPExpire = undefined
+        user.otpAttempts = 0
+        await user.save()
+
+        res.json({ message: "Email verified successfully, You can now log in." })
+    } catch (err) {
+        res.status(500).json({ message: "Server error" })
+    }
+}
+
+exports.resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body || {}
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" })
+        }
+
+        const user = await User.findOne({ email })
+
+        if (!user || user.isVerified) {
+            return res.json({ message: "If an unverified account exists for this email, a new code has been sent." })
+        }
+
+        const otp = generateOtp()
+        user.emailOTP = hashOtp(otp)
+        user.emailOTPExpire = Date.now() + OTP_EXPIRY_MS
+        user.otpAttempts = 0
+        await user.save()
+
+        await sendOtpEmail(user, otp)
+
+        res.json({ message: "If an unverified account exists for this email, a new code has been sent." })
+    } catch (err) {
+        res.status(500).json({ message: "Server error" })
     }
 }
 
@@ -56,7 +183,7 @@ exports.login = async (req, res) => {
         }
 
         if (user.lockUntil && user.lockUntil > Date.now()) {
-            const minutesLeft = Math.ceil((user.lockUntil - Date.now()) / 6000)
+            const minutesLeft = Math.ceil((user.lockUntil - Date.now()) / 60000)
             return res.status(423).json({
                 message: `Account temporarily locked due to repeated failed login attempts. Try again in ${minutesLeft} minutes(s).`
             })
@@ -75,6 +202,13 @@ exports.login = async (req, res) => {
             }
             await user.save()
             return res.status(400).json({ message: "Invalid Password" });
+        }
+
+        if (!user.isVerified) {
+            return rs.status(403).json({
+                message: "Please verify your email before logging in.",
+                requiresVerification: true,
+            })
         }
 
         user.failedLoginAttempts = 0
@@ -120,12 +254,44 @@ exports.forgotPassword = async (req, res) => {
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
 
         const message = `
-            <h2>Password Reset</h2>
-            <p>You requested a password reset.</p>
-            <p>Click the link below to reset your password:</p>
-            <a href="${resetUrl}">Reset Password</a>
-            <p>This link expires in 15 minutes.</p>
-        `
+<div style="font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f5; padding: 32px 0;">
+  <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+    
+    <div style="background-color: #E8724B; padding: 24px 32px;">
+      <h1 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 600;">Skill Swap</h1>
+    </div>
+
+    <div style="padding: 32px;">
+      <h2 style="margin: 0 0 16px; color: #1a1a1a; font-size: 18px;">Reset your password</h2>
+      <p style="margin: 0 0 16px; color: #4b5563; font-size: 14px; line-height: 1.6;">
+        We received a request to reset the password for your Skill Swap account. Click the button below to choose a new password.
+      </p>
+
+      <div style="text-align: center; margin: 28px 0;">
+        <a href="${resetUrl}" style="background-color: #E8724B; color: #ffffff; text-decoration: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 600; display: inline-block;">
+          Reset Password
+        </a>
+      </div>
+
+      <p style="margin: 0 0 8px; color: #6b7280; font-size: 13px; line-height: 1.5;">
+        This link will expire in <strong>15 minutes</strong>. If you didn't request this, you can safely ignore this email — your password will remain unchanged.
+      </p>
+
+      <p style="margin: 20px 0 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
+        Having trouble with the button? Copy and paste this link into your browser:<br>
+        <span style="color: #E8724B; word-break: break-all;">${resetUrl}</span>
+      </p>
+    </div>
+
+    <div style="background-color: #f9fafb; padding: 16px 32px; border-top: 1px solid #f0f0f0;">
+      <p style="margin: 0; color: #9ca3af; font-size: 11px;">
+        Skill Swap · Peer-to-peer skill exchange for students
+      </p>
+    </div>
+
+  </div>
+</div>
+`
 
         await sendEmail({
             to: user.email,
@@ -134,7 +300,7 @@ exports.forgotPassword = async (req, res) => {
         })
 
 
-        res.json({ message: "Password reset link sent to email if it exists" })
+        res.json({ message: "Password reset link sent to email" })
 
     } catch (error) {
         res.status(500).json({
@@ -158,7 +324,7 @@ exports.resetPassword = async (req, res) => {
         }
 
         if (!isStrongPassword(password)) {
-            return res.status(400).json({message: PASSWORD_POLICY_MESSAGE})
+            return res.status(400).json({ message: PASSWORD_POLICY_MESSAGE })
         }
 
         const hashedToken = crypto
