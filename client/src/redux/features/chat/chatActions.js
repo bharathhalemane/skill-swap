@@ -47,7 +47,6 @@ export const fetchMessages = (conversationId, before) => async (dispatch) => {
         }
         return res.data.data
     } catch (err) {
-        console.log(err)
         return []        
     }
 }
@@ -58,7 +57,6 @@ export const sendChatMessage = (conversationId, text) => async (dispatch) => {
         dispatch(addMessage({conversationId,message: res.data.data}))
         return res.data.data 
      } catch (err) {
-        console.log(err)   
         return null
     }
 }

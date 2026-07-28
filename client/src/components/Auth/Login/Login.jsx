@@ -2,7 +2,7 @@ import { IoMdSwap } from "react-icons/io";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { FiLock, FiMail } from "react-icons/fi";
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import Cookies from "js-cookie"
 import "./Login.css";
@@ -17,13 +17,15 @@ const apiProgress = {
 }
 
 const Login = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const location = useLocation()
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [passwordShow, setPasswordShow] = useState(false);
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [passwordShow, setPasswordShow] = useState(false)
     const [apiStatus, setApiStatus] = useState(apiProgress.success)
+    const [verifiedMessage, setVerifiedMessage] = useState(location.state?.verified ? "Email verified! You can now log in.":"")
 
     const onChangeEmail = e => {
         setEmail(e.target.value);
@@ -64,13 +66,15 @@ const Login = () => {
                 setEmail('')
                 setPassword('')
                 onSubmitSuccess(data)
+            } else if (data.requiresVerification) {
+                navigate("/verify-otp", { state: { email } })
+                return
             } else {
                 setErrorMessage(data.message)
                 setError(true)
             }
             setApiStatus(apiProgress.success)
         } catch (err) {
-            // console.log(err)
             setErrorMessage("Sorry, we are fixing try after sometime")
             setError(true)
             setApiStatus(apiProgress.success)
@@ -107,9 +111,12 @@ const Login = () => {
             if (response.ok) {
                 alert(data.message);
                 setApiStatus(apiProgress.success)
+                setErrorMessage("")
+                setError(false)
             } else {
                 setErrorMessage(data.message)
                 setError(true)
+                setApiStatus(apiProgress.success)
             }
         } catch (err) {
             setErrorMessage("error")

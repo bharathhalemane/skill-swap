@@ -14,7 +14,6 @@ const LoadingPage = () => {
     
     useEffect(() => {
         const timer = setTimeout(() => {
-            console.log(location.state.redirectUrl)
             window.location.href = location.state.redirectUrl
         },30000)
 

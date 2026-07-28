@@ -18,7 +18,6 @@ export const fetchCreatedContent = createAsyncThunk(
                     }
                 }
             )
-            console.log(response)
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(

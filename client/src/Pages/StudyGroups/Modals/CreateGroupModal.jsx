@@ -26,7 +26,6 @@ const CreateGroupModal = ({ title }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        console.log(data)
         await dispatch(createGroup(data))
         await dispatch(fetchGroups())
 

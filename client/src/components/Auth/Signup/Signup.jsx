@@ -4,7 +4,7 @@ import { FiLock, FiMail } from "react-icons/fi";
 import { GoPerson } from "react-icons/go";
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi";
 import "./Signup.css";
-import {TailSpin} from "react-loader-spinner"
+import { TailSpin } from "react-loader-spinner"
 
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
@@ -45,9 +45,10 @@ const Signup = () => {
     }
 
     const onSubmitSuccess = () => {
-        Cookies.set('jwtToken', data.jwtToken, { expires: 1 })
-        Cookies.set("userId", data.userId, {expires: 1})
-        navigate("/home", {replace: true});
+        // Cookies.set('jwtToken', data.jwtToken, { expires: 1 })
+        // Cookies.set("userId", data.userId, {expires: 1})
+        // navigate("/home", {replace: true});
+        navigate("/verify-otp", { state: { email } })
     }
 
     const onClickPasswordShow = () => {
@@ -63,7 +64,7 @@ const Signup = () => {
         setApiStatus(apiProgress.loading)
         setError(false)
         try {
-            const userDetails = {name:fullname, email:email, password:password, confirmPassword:confirmPassword}
+            const userDetails = { name: fullname, email: email, password: password, confirmPassword: confirmPassword }
             const url = `${ApiURL}/signup`
             const options = {
                 method: 'POST',
@@ -86,10 +87,10 @@ const Signup = () => {
                 setErrorMessage(data.message)
                 setError(true)
             }
-        setApiStatus(apiProgress.success)
+            setApiStatus(apiProgress.success)
         } catch (err) {
             setErrorMessage("Sorry, we are fixing try after sometime")
-            setError(true)   
+            setError(true)
         }
     }
 
@@ -123,7 +124,7 @@ const Signup = () => {
                 </div>
                 <form className="form-container" onSubmit={onSubmitForm}>
                     <div className="username-input-container">
-                        
+
                         <label htmlFor="username">Full Name</label>
                         <div className="input-with-icon">
                             <GoPerson className="input-icon" />
@@ -156,7 +157,7 @@ const Signup = () => {
                     <button type="submit" className="signup-button">
                         {
                             apiStatus === apiProgress.success ? "Create Free Account" :
-                                <TailSpin width={20} height={20} color="#fff"/>
+                                <TailSpin width={20} height={20} color="#fff" />
                         }
                     </button>
                     {error && <p className="error-message">*{errorMessage}</p>}

@@ -22,7 +22,6 @@ export const sendRequest = async (dispatch, groupId, setRequestLoading) => {
         return response
     } catch (err) {
         setRequestLoading(false)
-        console.log(err)
         return err
     }
 }
@@ -86,8 +85,6 @@ export const acceptRequest = async (dispatch, groupId, senderId) => {
 
 export const rejectRequest = async (dispatch, groupId, senderId) => {
     try {
-        console.log(groupId, senderId)
-
         const token = Cookies.get("jwtToken")
 
         const response = await axios.post(
@@ -100,7 +97,6 @@ export const rejectRequest = async (dispatch, groupId, senderId) => {
         dispatch(fetchGroups())
         toast.info(response.data.message)
     } catch (err) {
-        console.log(err)
         toast.error(err.response?.data?.message || "Something went wrong")
     }
 }

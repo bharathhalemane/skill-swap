@@ -18,8 +18,7 @@ exports.createNotification = async ({ recipient, sender, type, message, link, re
         }
 
         return notification
-    } catch (error) {
-        console.log("createNotification error: ", error.message)
+    } catch (error) {        
         return null
     }
 }

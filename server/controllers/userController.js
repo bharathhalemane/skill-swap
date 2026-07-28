@@ -113,7 +113,6 @@ exports.updatePhoneNumber = async (req, res) => {
             phoneNumber: user.phoneNumber
         })
     } catch (err) {
-        console.log(err)
         res.status(500).json({
             message: "server error",
             error: err.message            
@@ -133,7 +132,6 @@ exports.getCreatedContent = async (req, res) => {
 
         res.status(200).json({ skills, groups })
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             message: "Server error",
             error: error.message

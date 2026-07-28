@@ -53,7 +53,6 @@ const ManageModal = ({ dispatch, title, host, groupId, disabled }) => {
     }
 
     const requestCard = (data) => {
-        console.log(data)
         const { user, _id } = data
         const { profile_image } = user.profile
         const time = data.requestedAt

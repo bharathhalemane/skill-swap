@@ -32,7 +32,6 @@ export const fetchSkills = () => async (dispatch, getState) => {
             })
         )
     } catch (err) {
-        console.log(err)
         dispatch(fetchSkillsFailure(err.message))
     }
 }

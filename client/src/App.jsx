@@ -5,6 +5,7 @@ import Login from './components/Auth/Login/Login'
 import Signup from './components/Auth/Signup/Signup'
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
+import VerifyOtp from './components/Auth/VerifyOtp/VerifyOtp'
 import Home from './Pages/Home/Home'
 import Profile from './components/Profile/Profile'
 import GroupPage from './Pages/GroupPage/GroupPage'
@@ -89,6 +90,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
           <Route path="/loading-page" element={<LoadingPage />} />
         </Routes>
       </Router>

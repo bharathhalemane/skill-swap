@@ -35,8 +35,7 @@ const initSocket = (server) => {
         socket.on("disconnect", () => {
             for (let user in onlineUsers) {
                 if (onlineUsers[user] === socket.id) {
-                    delete onlineUsers[user]
-                    // console.log("User offline:", user);
+                    delete onlineUsers[user]                    
                 }
             }
         })

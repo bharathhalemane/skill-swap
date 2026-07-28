@@ -20,7 +20,6 @@ const AboutGroup = ({ data, groupId }) => {
         setDescription(tempDescription)
         setIsEditing(false)
         const response = await updateBriefDescription(groupId, tempDescription)
-        console.log(response)
     }
 
     const handleCancel = () => {

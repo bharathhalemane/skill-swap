@@ -53,7 +53,6 @@ const ReviewModal = ({ isOpen, onClose, learningItem }) => {
             setReview("")
             onClose()
         } catch (err) {
-            console.log(err)
             const msg = err.response?.data?.msg || "Failed to submit review"
             toast.error(msg)
         } finally {

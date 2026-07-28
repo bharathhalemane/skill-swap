@@ -55,7 +55,6 @@ const CreateSkillModal = ({ buttonTitle }) => {
       data.append("image", formData.image)
 
       const url = `${import.meta.env.VITE_SKILL_API}/add-skill`
-      console.log(url)
       const response = await axios.post(url, data,{
         headers: {
           Authorization: `Bearer ${token}`
@@ -75,7 +74,6 @@ const CreateSkillModal = ({ buttonTitle }) => {
       dispatch(fetchTeachingSkills())
       setIsOpen(false)
     }catch(err){
-      console.log(err)
       setIsOpen(false)
     }
   }

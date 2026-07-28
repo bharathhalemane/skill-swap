@@ -208,7 +208,6 @@ exports.addSkill = async (req, res) => {
 
         res.status(201).json(newSkill)
     } catch (error) {
-        console.error("FULL ERROR OBJECT:", error);
         res.status(500).json({
             message: error.message,
             stack: error.stack
@@ -305,7 +304,6 @@ exports.updateSkill = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             success: false,
             message: error.message
@@ -384,7 +382,6 @@ exports.getFourSkills = async (req, res) => {
             data: skills
         })
     } catch (err) {
-        console.log(err)
         res.status(500).json({
             success: false,
             message: err.message
@@ -435,7 +432,6 @@ exports.getCategoryWiseSkillCount = async (req, res) => {
             data: finalData
         })
     } catch (err) {
-        console.log(err)
         res.status(500).json({
             success: false,
             message: err.message

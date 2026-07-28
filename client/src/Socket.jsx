@@ -7,13 +7,13 @@ export const socket = io(socketUrl, {
 })
 
 socket.on("connect", () => {
-    console.log("connected", socket.id)
+    // console.log("connected", socket.id)
 })
 socket.on("disconnect", (reason) => {
-    console.log("disconnected:", reason)
+    // console.log("disconnected:", reason)
 })
 socket.on("connect_error", (err) => {
-    console.log("connect error:", err.message)
+    // console.log("connect error:", err.message)
 })
 
 export default socket

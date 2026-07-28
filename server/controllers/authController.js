@@ -101,7 +101,7 @@ exports.signup = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
     try {
         const { email, otp } = req.body || {}
-        if (!email || !top) {
+        if (!email || !otp) {
             return res.status(400).json({ message: "Email and code are required" })
         }
 
@@ -139,6 +139,7 @@ exports.verifyOtp = async (req, res) => {
 
         res.json({ message: "Email verified successfully, You can now log in." })
     } catch (err) {
+        
         res.status(500).json({ message: "Server error" })
     }
 }
@@ -205,7 +206,7 @@ exports.login = async (req, res) => {
         }
 
         if (!user.isVerified) {
-            return rs.status(403).json({
+            return res.status(403).json({
                 message: "Please verify your email before logging in.",
                 requiresVerification: true,
             })
@@ -302,7 +303,7 @@ exports.forgotPassword = async (req, res) => {
 
         res.json({ message: "Password reset link sent to email" })
 
-    } catch (error) {
+    } catch (error) {        
         res.status(500).json({
             message: 'Internal Server Error',
             error: error.message
