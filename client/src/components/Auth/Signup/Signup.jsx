@@ -20,6 +20,7 @@ const Signup = () => {
     const navigate = useNavigate();
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
+    const [phoneNo, setPhoneNo] = useState("")
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(false);
@@ -34,6 +35,10 @@ const Signup = () => {
 
     const onChangeEmail = e => {
         setEmail(e.target.value);
+    }
+    
+    const onChangePhoneNo = e => {
+        setPhoneNo(e.target.value)
     }
 
     const onChangePassword = e => {
@@ -64,7 +69,7 @@ const Signup = () => {
         setApiStatus(apiProgress.loading)
         setError(false)
         try {
-            const userDetails = { name: fullname, email: email, password: password, confirmPassword: confirmPassword }
+            const userDetails = { name: fullname, email: email, password: password, confirmPassword: confirmPassword, phoneNumber: phoneNo }
             const url = `${ApiURL}/signup`
             const options = {
                 method: 'POST',
@@ -80,6 +85,7 @@ const Signup = () => {
                 setErrorMessage('')
                 setFullname('')
                 setEmail('')
+                setPhoneNo("")
                 setPassword('')
                 setConfirmPassword('')
                 onSubmitSuccess(data)
@@ -138,12 +144,19 @@ const Signup = () => {
                             <input type="email" id="email" placeholder="you@example.com" value={email} onChange={onChangeEmail} />
                         </div>
                     </div>
+                    <div className="email-input-container">
+                        <label htmlFor="phnNo">Phone No</label>
+                        <div className="input-with-icon">
+                            <FiMail className="input-icon" />
+                            <input type="tel" id="PhnNO" placeholder="91" value={phoneNo} onChange={onChangePhoneNo} />
+                        </div>
+                    </div>
                     <div className="password-container">
                         <label htmlFor="password">Password</label>
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={passwordShow ? "text" : "password"} id="password" placeholder="*************" value={password} onChange={onChangePassword} />
-                            <button className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button type="button" className="toggle-password-btn" onClick={onClickPasswordShow}>{passwordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <div className="password-container">
@@ -151,7 +164,7 @@ const Signup = () => {
                         <div className="input-with-icon">
                             <FiLock className="input-icon" />
                             <input type={confirmPasswordShow ? "text" : "password"} id="confirm-password" placeholder="*************" value={confirmPassword} onChange={onChangeConfirmPassword} />
-                            <button className="toggle-password-btn" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
+                            <button type="button" className="toggle-password-btn" onClick={onClickConfirmPasswordShow}>{confirmPasswordShow ? <PiEyeBold /> : <PiEyeClosedBold />}</button>
                         </div>
                     </div>
                     <button type="submit" className="signup-button">

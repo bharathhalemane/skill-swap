@@ -4,7 +4,9 @@ const bcrypt = require("bcryptjs");
 const crypto = require('node:crypto')
 const sendEmail = require('../utils/sendEmail')
 const { isStrongPassword, PASSWORD_POLICY_MESSAGE } = require('../utils/passwordPolicy')
+const { isValidEmailFormat, domainHasMailServer } = require('../utils/emailValidator')
 const { generateOtp, hashOtp, OTP_EXPIRY_MS } = require("../utils/otp")
+
 
 const MAX_FAILED_ATTEMPTS = 5
 const LOCK_DURATION_MS = 15 * 60 * 1000
@@ -48,17 +50,16 @@ const sendOtpEmail = async (user, otp) => {
 
 exports.signup = async (req, res) => {
     try {
-        const { name, email, password, confirmPassword } = req.body || {};
+        const { name, email, password, confirmPassword, phoneNumber } = req.body || {};
 
 
-        if (!name || !email || !password || !confirmPassword) {
+        if (!name || !email || !password || !confirmPassword || !phoneNumber) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
         if (!isValidEmailFormat(email)) {
             return res.status(400).json({ message: "Please enter a valid email address" });
         }
-
         const domainOk = await domainHasMailServer(email)
         if (!domainOk) {
             return res.status(400).json({ message: "This email domain doesn't appear to accept mail. Please check for typos." })
@@ -81,10 +82,10 @@ exports.signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const otp = generateOtP()
+        const otp = generateOtp()
 
         const newUser = await User.create({
-            name, email, password: hashedPassword,
+            name, email, password: hashedPassword, phoneNumber,
             isVerified: true,
             emailOTP: hashOtp(otp),
             emailOTPExpire: Date.now() + OTP_EXPIRY_MS,
@@ -94,6 +95,7 @@ exports.signup = async (req, res) => {
 
         res.status(201).json({ message: "Account created. Please check your email for verification code.", userId: newUser._id });
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: "Server error" });
     }
 }
@@ -139,7 +141,6 @@ exports.verifyOtp = async (req, res) => {
 
         res.json({ message: "Email verified successfully, You can now log in." })
     } catch (err) {
-        
         res.status(500).json({ message: "Server error" })
     }
 }
@@ -206,6 +207,13 @@ exports.login = async (req, res) => {
         }
 
         if (!user.isVerified) {
+            const otp = generateOtp()
+            user.emailOTP = hashOtp(otp)
+            user.emailOTPExpire = Date.now() + OTP_EXPIRY_MS
+            user.otpAttempts = 0
+            await user.save()
+            await sendOtpEmail(user, otp)
+
             return res.status(403).json({
                 message: "Please verify your email before logging in.",
                 requiresVerification: true,
@@ -303,7 +311,7 @@ exports.forgotPassword = async (req, res) => {
 
         res.json({ message: "Password reset link sent to email" })
 
-    } catch (error) {        
+    } catch (error) {
         res.status(500).json({
             message: 'Internal Server Error',
             error: error.message

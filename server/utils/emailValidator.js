@@ -7,12 +7,12 @@ const isValidEmailFormat = (email) => {
     return EMAIL_FORMAT_REGEX.test(email.trim())
 }
 
-const domainHashMailServer = async (email) => {
+const domainHasMailServer = async (email) => {
     const domain = email.split("@")[1]
     if (!domain) return false 
     
     try {
-        const records = await dns.resolveMax(domain)
+        const records = await dns.resolveMx(domain)
         return Array.isArray(records) && records.length > 0
     } catch (err) {
         return false
@@ -20,4 +20,4 @@ const domainHashMailServer = async (email) => {
 }
 
 
-module.exports = { isValidEmailFormat, domainHashMailServer}
+module.exports = { isValidEmailFormat, domainHasMailServer}

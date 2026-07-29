@@ -6,7 +6,7 @@ const OTP_EXPIRY_MS = 10 * 60 * 1000
 const generateOtp = () => {
     const min = 10 ** (OTP_LENGTH - 1)
     const max = 10 ** OTP_LENGTH - 1
-
+    
     return crypto.randomInt(min, max + 1).toString()
 }
 
