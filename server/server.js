@@ -38,6 +38,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(passport.initialize())
 
+app.get("/api/health", (req, res) => {
+    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() })
+})
+
 app.use("/api/auth", authRoutes)
 app.use("/api/skills", skillsRoutes)
 app.use("/api/profile", userRoutes)
