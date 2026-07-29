@@ -1,0 +1,19 @@
+
+name: Keep Render backend awake
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub's schedule can drift a few minutes under
+    # load, so 10 min gives margin under Render's ~15 min sleep threshold.
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab to test
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: |
+          curl -sf -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
+            "https://skill-swap-owth.onrender.com/api/health" \
+            || (echo "Health check failed" && exit 1)
