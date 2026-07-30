@@ -68,8 +68,6 @@ const Home = () => {
     const categoriesRef = useScrollReveal();
     const featuresRef = useScrollReveal();
     const spaceRef = useScrollReveal();
-    const userId = Cookies.get("userId")
-    const token = Cookies.get("jwtToken")
 
     useEffect(() => {
         const getCategoriesCount = async () => {
@@ -79,6 +77,8 @@ const Home = () => {
         }
 
         const getUserData = async () => {
+            const userId = Cookies.get("userId")
+            const token = Cookies.get("jwtToken")
             const url = `${import.meta.env.VITE_PROFILE_API}/${userId}`
             const response = await axios.get(url, {
                 headers: {
@@ -86,7 +86,7 @@ const Home = () => {
                 }
             })
             const user = response.data.user
-            if (!user.phoneNumber ) {
+            if (!user.phoneNumber) {
                 setShowPhoneUpdateModal(true)
             }
         }

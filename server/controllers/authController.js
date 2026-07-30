@@ -233,6 +233,7 @@ exports.login = async (req, res) => {
 
         res.status(200).json({ jwt_token, userId: user._id });
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: "Server error" });
     }
 }
@@ -312,6 +313,7 @@ exports.forgotPassword = async (req, res) => {
         res.json({ message: "Password reset link sent to email" })
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             message: 'Internal Server Error',
             error: error.message
@@ -362,6 +364,7 @@ exports.resetPassword = async (req, res) => {
         res.json({ message: "Password reset successful" })
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: "server error" })
     }
 }
