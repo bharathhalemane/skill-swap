@@ -1,5 +1,9 @@
 
 require("dotenv").config()
+
+const dns = require("node:dns")
+dns.setDefaultResultOrder("ipv4first")
+
 const express = require("express")
 const http = require("http")
 const { initSocket } = require("./socket")
