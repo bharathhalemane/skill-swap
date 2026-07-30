@@ -86,7 +86,7 @@ exports.signup = async (req, res) => {
 
         const newUser = await User.create({
             name, email, password: hashedPassword, phoneNumber,
-            isVerified: true,
+            isVerified: false,
             emailOTP: hashOtp(otp),
             emailOTPExpire: Date.now() + OTP_EXPIRY_MS,
         })
