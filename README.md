@@ -15,7 +15,9 @@ Skill Swap is a community-driven platform where users can list skills they offer
 ## ✨ Features
 
 - 🔐 **User Authentication** — Secure sign up / login with email, Google OAuth, and GitHub OAuth
-- 🔑 **Password Reset** — Email-based password reset flow via Nodemailer
+- 📧 **OTP Email Verification** — New signups verify their email via a 6-digit one-time code (hashed, expiring, attempt-limited) before their account is activated; OAuth signups are auto-verified
+- 🔑 **Password Reset** — Email-based password reset flow
+- 🛡️ **Security Hardening** — Rate limiting on auth routes, account lockout after repeated failed logins, and CORS/Helmet-based request protection
 - 👤 **Profile Management** — Set your username, bio, location, and profile photo (hosted on Cloudinary)
 - 📚 **Skill Listings** — Post skills with title, category, level (Beginner / Intermediate / Advanced), duration, and a cover image
 - 🔍 **Browse & Discover** — Search and filter skills posted by other users
@@ -60,7 +62,8 @@ Skill Swap is a community-driven platform where users can list skills they offer
 | Passport.js | Google & GitHub OAuth strategies |
 | Bcryptjs | Password hashing |
 | Cloudinary + Multer | Image upload and storage |
-| Nodemailer | Email (password reset) |
+| Resend | Transactional email (OTP verification, password reset) over HTTPS API |
+| express-rate-limit + Helmet | Rate limiting and security headers |
 | Socket.IO | Real-time presence, chat messaging, and notification delivery |
 
 ### Deployment
@@ -155,6 +158,7 @@ skill-swap/
 - [npm](https://www.npmjs.com/)
 - [MongoDB](https://www.mongodb.com/) (local or Atlas)
 - A [Cloudinary](https://cloudinary.com/) account (free tier works)
+- A [Resend](https://resend.com/) account for sending OTP/password-reset emails (free tier works; a verified sending domain is recommended for production)
 - A [Google Cloud](https://console.cloud.google.com/) project with OAuth credentials (optional)
 - A [GitHub OAuth App](https://github.com/settings/developers) (optional)
 
@@ -190,11 +194,9 @@ GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
 GITHUB_CALLBACK_URL=http://localhost:5000/api/auth/github/callback
 
-# Email (for password reset)
-EMAIL_SERVICE=gmail
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-EMAIL_FROM=SkillSwap <your_email@gmail.com>
+# Email (Resend — used for OTP verification & password reset)
+RESEND_API_KEY=your_resend_api_key
+EMAIL_FROM=SkillSwap <noreply@yourdomain.com>
 
 # Cloudinary (for profile & skill images)
 CLOUDINARY_API_KEY=your_api_key
@@ -244,6 +246,8 @@ npm run dev
 The app will open at `http://localhost:5173`.
 
 > 💡 **PWA note:** the install prompt and full offline caching behavior are best tested against a production build (`npm run build && npm run preview`), since Workbox service workers are disabled by default in Vite's dev server.
+
+> 📧 **Email note:** without a verified domain on Resend, `EMAIL_FROM` can use Resend's sandbox address (`onboarding@resend.dev`), but sandbox mode only delivers to the email address tied to your own Resend account — not arbitrary user emails. Verify a domain (Resend → Domains → Add Domain) to send OTP/reset emails to real users.
 
 ---
 
